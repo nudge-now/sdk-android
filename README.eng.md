@@ -130,31 +130,25 @@ You can see the following if everything is correct.
 
 ### In-App Purchase Count
 
-사용자가 In-App Purchase를 구매한 경우, _AD fresca_에 해당 정보를 기록하여 관리하실 수 있습니다.
+If your app users use 'in-app-purchase', AD fresca can record this information on our database for your user targeting features.
 
-사용자가 In-App Purchase 를 구매한 횟수를  AdFresca 객체의 setInAppPurchaseCount(int) 메소드를 사용하여  설정해 주시면 간단히 적용이 가능합니다.
+If you want to use this feature, just call `AdFresca.setIsInAppPurchasedUser(int)`.
 
 ```java
   AdFresca adfresca = AdFresca.getInstance(this);
   AdFresca.setIsInAppPurchasedUser(User.getInAppPurchaseCount());
   adfresca.startSession();
-  adfresca.loadAd();
-  adfresca.showAd();
+  adfresca.load();
+  adfresca.show();
 ```
-
-위와 같은 방식으로 호출이 가능합니다.
-
-정확한 기록을 위해 반드시 앱이 실행되었다고 판단되는 시점에서 호출하는 것을 권장합니다.
-
-추후 보다 편하게 해당 기능을 이용하실 수 있도록 지원해드릴 예정입니다.
 
 ### Custom Parameter
 
-_AD fresca_는 앱 사용자의 특수한 정보들 (레벨, 스테이지, 성별, 나이 등)을 입력 받아 타겟팅 및 분석 기능을 제공 합니다.
+AD fresca can recored user specific information such as level, stage, gender and etc to use targeting and analytics features.
 
-SDK에서는 **setCustomParameter** 메소드를 사용하여 각 커스텀 파라미터의 인덱스 번호에 맞게 값을 설정하면 됩니다.
+In SDK, you can just set custom parameters using setCustomParameter method with passing parameter's index and value.
 
-(각 파라미터의 정보는 Admin 사이트를 접속하여 앱의 Overview 메뉴 -> 각 앱스토어의 Details 버튼을 눌러 설정 및 확인이 가능합니다.)
+(You can set and see the custom parameter's index in our Admin website: 1) Select App 2) In 'Overview' menu, click 'Details' button for each app store)
 
 ```java
   AdFresca adfresca = AdFresca.getInstance(this);
@@ -164,22 +158,21 @@ SDK에서는 **setCustomParameter** 메소드를 사용하여 각 커스텀 파�
   adfresca.setCustomParameter(CUSTOM_PARAM_INDEX_HAS_FB_ACCOUNT, User.hasFacebookAccount);
   
   adfresca.startSession();
-  adfresca.loadAd();
-  adfresca.showAd();
+  adfresca.load();
+  adfresca.show();
 ```
 
 ### Event Index
 
-Event 기능을 사용하면 앱에서 일어나는 다양한 사용자들의 활동, 페이지 이동 등에 Event를 설정한 후 그러한 Event 발생 시에 그에 적합한 공지사항, 광고 노출 등의 캠페인을 노출할 수 있습니다.
+Using 'Event' feature, you can define your in-app events such as user's behavior, page navigation, and etc. Then you can target your campaigns for each event. 
 
-Event 설정은 Admin 을 통해 가능하며 '[Event 설정하기](https://adfresca.zendesk.com/entries/23359141)' 가이드를 참고해주시기 바랍니다.
+For defining events on Dashboard, see ['Event Guide (Korean)'](https://adfresca.zendesk.com/entries/23359141)  
 
-Event 설정하신 후, SDK 적용을 위해서는 각 Event 'Index' 값이 필요합니다. Index 값은 1,2,3,4 와 같은 Integer 형태의 고유 값이며 소스코드에 Constant 형태로 미리 입력하여 이용하시는 것을 권장합니다.
+After you finished defining events, you need 'Event Index' value for each event. The index value is an integer value like '1,2,3,4'. We recommend to manage these values with Constant or Enum types in your source code.
 
-각 Event 발생 시, loadAd() 메소드에 원하는 Event의  Index 값을 인자로 넘겨주시면 간단히 적용이 완료됩니다.
+To simply apply codes,  just pass event index into `AdFresca.load(int eventIndex)` method when the event occurs.
 
-_(기존의 ['AD Slot 지정하기](https://adfresca.zendesk.com/entries/23359131)' 기능은 Deprecated 되어 현재 Event로 대체 되었습니다. 자세한 내용은 SDK Changed Log를 확인하여 주세요. )_
-
+(If you don't specify event index on `AdFresca.load(int eventIndex)`, a default value is set to 1)
 
 **Example**:  사용자가 메인 페이지로 이동할 시에 설정한 캠페인을 노출
 
@@ -187,8 +180,8 @@ _(기존의 ['AD Slot 지정하기](https://adfresca.zendesk.com/entries/2335913
   public class MainPageActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
       AdFresca adfresca = AdFresca.getInstance(this);     
-      adfresca.loadAd(EVENT_INDEX_MAIN_PAGE);  // 메인 페이지에 설정한  캠페인을 노출
-      adfresca.showAd();
+      adfresca.load(EVENT_INDEX_MAIN_PAGE);  // 메인 페이지에 설정한  캠페인을 노출
+      adfresca.show();
     }
   }
 ```
@@ -199,19 +192,19 @@ _(기존의 ['AD Slot 지정하기](https://adfresca.zendesk.com/entries/2335913
   public void **onUserLevelChanged**(int level) {
     AdFresca adfresca = AdFresca.getInstance(this);
     adfresca.setCustomParameter(CUSTOM_PARAM_INDEX_LEVEL, level); // 사용자 level 정보를 가장 최신으로 업데이트
-    adfresca.loadAd(EVENT_INDEX_LEVEL_UP);  // 레벨업 이벤트에 설정한 캠페인을 노출
-    adfresca.showAd();
+    adfresca.load(EVENT_INDEX_LEVEL_UP);  // 레벨업 이벤트에 설정한 캠페인을 노출
+    adfresca.show();
   }
 ```
 * * *
 
 ## Custom Banner
 
-Android SDK 에서는 Floating View 와 Banner View 두가지 종류의 커스텀 배너를 제공합니다. 커스텀 배너는 dashboard 에서 이미지 사이즈를 등록한 후 해당 이미지 사이즈를 사용하는 캠페인이 매칭되었을 때 이미지를 커스텀 배너에 보여줍니다.
+_Android SDK_ provides with two kinds of _Custom Banner_ that makes it possible to show the images of various sizes. One is [Floating View](#floating-view) and the other is [Banner View](#banner-view).
 
-AdFresca.load() 와 AdFresca.show() 를 통해 이미지를 보여주는 점은 기존 캠페인과 같습니다. Floating View 는 다른 UI Component 위에 위치하며 닫을 수 있으며, Banner View 는 Floating View 와는 반대로 화면의 일정 영역을 차지하며 닫을 수 없습니다. 
+[Floating View](#floating-view) is supposed to overlay other UI components and is closable by user interaction. On the other hand, [Banner View](#banner-view) is supposed to occupy the part of screen and is not closable.
 
-커스텀 배너를 사용하기 위해서는 아래와 같이 namespace 를 layout xml 파일에 추가해야합니다.
+In order to use _Custom Banner_, you have to add the namespace like the following.
 
 ```xml
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -221,9 +214,11 @@ AdFresca.load() 와 AdFresca.show() 를 통해 이미지를 보여주는 점은 
 </LinearLayout>
 ```
 
+_Android SDK_ matchs _Image Size Index_ of the loaded image with _Image Size Index_ of _Custom Banner_. If the image is matched, it is set to the matched _Custom Banner_. If not, it is not shown.
+
 ### Floating View
 
-Floating View 를 사용하기 위해 태그를 추가합니다.
+Add the following tag to layout xml to use _Floating View_.
 
 ```xml
 <com.adfresca.sdk.view.AFFloatingView
@@ -232,11 +227,11 @@ Floating View 를 사용하기 위해 태그를 추가합니다.
     adfresca:image_size_index="1" />
 ```
 
-*   `adfresca:image_size_index=1` 이미지 사이즈 인덱스를 설정합니다.
+*   `adfresca:image_size_index=1` Set _Image Size Index_.
 
 ### Banner View
 
-Banner View 를 사용하기 위해 태그를 추가합니다.
+Add the following tag to layout xml to use _Banner View_.
 
 ```xml
 <com.adfresca.sdk.view.AFBannerView
@@ -246,8 +241,8 @@ Banner View 를 사용하기 위해 태그를 추가합니다.
     adfresca:image_size_index="1"/>
 ```
 
-*   `adfresca:image_size_index="1"` 이미지 사이즈 인덱스를 설정합니다.
-*   `adfresca:default_image="@drawable/default_image"` 이미지가 로드되기 전 표시할 디폴트 이미지를 지정합니다.
+*   `adfresca:image_size_index="1"` Set _Image Size Index_.
+*   `adfresca:default_image="@drawable/default_image"` Set _Default Image_ that is displayed before the image is matched.
 
 * * *
 
@@ -384,7 +379,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 ### AFLoadListener
 
-AFLoadListener는 [Custom Parameter](#custom-parameter), [In-App-Purchase](#in-app-purchase) 등을 편리하게 업데이트 할 수 있도록 합니다. `AFLoadListener.onStart()`는 `AdFresca.load()`가 호출될 때 마다 호출되기 때문에 다음과 같이 `AFLoadListener`를 구현하고 설정하면 언제든지 최신 값으로 캠페인을 로드할 수 있습니다.
+_AFLoadListener_ makes it easier to update [Custom Parameter](#custom-parameter), [In-App-Purchase](#in-app-purchase). Because `AFLoadListener.onStart()` is always called when `AdFresca.load()` starts, you can easily update them by implementing _AFLoadListener_.
 
 ```
 AdFresca.setLoadListener(new AFLoadListener(){
@@ -401,17 +396,17 @@ AdFresca.setLoadListener(new AFLoadListener(){
 
 ### AFShowListener
 
-`AFShowListener`는 캠패인이 끝났을 때 처리를 위한 _이벤트 리스너_입니다.
+_AFShowListener_ is called when a campaign is finished.
 
-캠패인이 끝났다는 것은 다음 두가지를 의미합니다.
+That, a campaign is finished, means the following two cases.
 
-1. 캠패인이 정상적으로 화면에 보여지고 닫혀진 경우
-2. load 된 캠패인이 만료되었거나 캠패인에 맞는 view를 찾을 수 없어서 보여지지 않고 끝난 경우
+1. The campaign was shown and it has been closed.
+2. A campaign was failed because it was expired or there was no [Custom Banner](#custom-banner) for its _Image Size Index_.
 
-이 두가지 경우를 `AFShowListener.show(int eventIndex, AFView view)`의 두번째 인자 `view`로 판별할 수 있습니다.
+You can differentiate these two cases by `view` that is given by `AFShowListener.show(int eventIndex, AFView view)`
 
-- `view != null`이면 캠패인이 정상적으로 보여진 경우입니다. 이때 `view`는 [ _Default View_ | _Floating View_ | _Banner View_ ] 가 됩니다. `AFView.isDefaultView()`로 _Default View_ 인지 판별할 수 있습니다.
-- `view == null`이면 캠패인이 보여지지 않고 끝난 경우입니다.
+- if `view != null`, it was the first case. At this time, `view` is one of [ _Default View_ | _Floating View_ | _Banner View_ ]. (`view` is _Default View_ if `view.isDefaultView()` returns true.)
+- if `view == null`, it was the second case.
 
 ```java
 AdFresca adfresca = AdFresca.getInstance(this);
@@ -432,7 +427,9 @@ adfresca.show(new AFShowListener(){
 	}
 });
 ```
-**Example:** _인트로 액티비티_에서 캠패인을 하고 끝나면 _메인 액티비티_로 이동
+**Example:** The following code show a campaign at _Intro Activity_ and will move to _Main Activity_ when it is finished.
+
+_인트로 액티비티_에서 캠패인을 하고 끝나면 _메인 액티비티_로 이동
 
 ```java
 AdFresca adfresca = AdFresca.getInstance(this);
@@ -485,8 +482,8 @@ textView.setText(deviceId);
   AdFresca adfresca = AdFresca.getInstance(this);
   Log.d(TAG, "AD fresca Test Device ID is = " + adfresca.getTestDeviceId());
   adfresca.setPrintTestDeviceId(true);
-  adfresca.loadAd();
-  adfresca.showAd();
+  adfresca.load();
+  adfresca.show();
 ```
 
 ### Timeout Interval
@@ -498,8 +495,8 @@ textView.setText(deviceId);
 ```java
   AdFresca adfresca = AdFresca.getInstance(this);
   AdFresca.setTimeoutInterval(5) // # 5 seconds
-  adfresca.loadAd();
-  adfresca.showAd();
+  adfresca.load();
+  adfresca.show();
 ```
 
 * * *
