@@ -95,7 +95,7 @@ Add _User Permission_ like the following codes.
 
 ### Code
 
-_AD fresca SDK_는 아래 코드 처럼 단 몇줄의 코드만으로도 캠페인을 시작할 수 있습니다.
+You need only several lines of code to start a campaign like the following.
 
 ```java
 @Override
@@ -111,15 +111,15 @@ protected void onCreate(Bundle savedInstanceState) {
 }
 ```
 
-`AdFresca.setApiKey(API_KEY);` API Key 를 설정합니다.
+`AdFresca.setApiKey(API_KEY);` Set API Key
 
-`adfresca.startSession();` 세션이 시작됨을 서버에 알립니다. 어플리케이션이 시작될 때 **한번만** 실행되도록 합니다.
+`adfresca.startSession();` Start requesting the session logging. Please make sure that it is called once while your app is running.
 
-`adfresca.load();` 서버로부터 캠페인을 내려받습니다.
+`adfresca.load();` Load a campaign.
 
-`adfresca.show();` 내려받은 캠페인을 보여줍니다.
+`adfresca.show();` Show the loaded campaign.
 
-정상적으로 실행이 되면 다음과 같은 화면이 보여집니다.
+You can see the following if everything is correct.
 
 <img src="https://adfresca.zendesk.com/attachments/token/zngvftbmcccyajk/?name=device-2013-03-18-133517.png" width="240" />
 &nbsp;
