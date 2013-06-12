@@ -26,7 +26,7 @@
 
 ## Introduction
 
-AD fresca 는 기본적으로 전면 이미지를 사용해서 캠페인을 합니다. Android SDK 는 단 몇줄의 코드만으로 이를 가능하게 합니다. 뿐만 아니라 다양한 형태의 캠페인 템플릿과 뷰를 통해 캠페인을 할 수 있습니다.
+_AD fresca_ 는 기본적으로 전면 이미지를 사용해서 캠페인을 합니다. Android SDK 는 단 몇줄의 코드만으로 이를 가능하게 합니다. 뿐만 아니라 다양한 형태의 캠페인 템플릿과 뷰를 통해 캠페인을 할 수 있습니다.
 
 * * *
 
@@ -48,11 +48,11 @@ AD fresca 는 기본적으로 전면 이미지를 사용해서 캠페인을 합�
 
 <img src="https://adfresca.zendesk.com/attachments/token/ogcnzf3kmyzbcvg/?name=add_jar.png" width="600" />
 
-**AndroidManifest.xml**의 Permission 추가하기 AD fresca 는 사용자의 네트워크 접속 상태, 기기ID를 수집하여, 광고 매칭에 사용합니다. 이를 위해 관련 퍼미션을 등록 및 허용해 주어야 합니다. 수집되는 모든 데이터는 암호화 처리되어 전송되며 광고 매칭 이외의 목적에 사용되지 않습니다 아래와 같이 Permission을 추가합니다.
+**AndroidManifest.xml**의 Permission 추가하기 _AD fresca_ 는 사용자의 네트워크 접속 상태, 기기ID를 수집하여, 광고 매칭에 사용합니다. 이를 위해 관련 퍼미션을 등록 및 허용해 주어야 합니다. 수집되는 모든 데이터는 암호화 처리되어 전송되며 광고 매칭 이외의 목적에 사용되지 않습니다 아래와 같이 Permission을 추가합니다.
 
 ### Code
 
-AD fresca SDK는 아래 코드 처럼 단 몇줄의 코드만으로도 캠페인을 시작할 수 있습니다.
+_AD fresca SDK_는 아래 코드 처럼 단 몇줄의 코드만으로도 캠페인을 시작할 수 있습니다.
 
 ```java
 @Override
@@ -87,7 +87,7 @@ protected void onCreate(Bundle savedInstanceState) {
 
 ### In-App Purchase Count
 
-사용자가 In-App Purchase를 구매한 경우, AD fresca에 해당 정보를 기록하여 관리하실 수 있습니다.
+사용자가 In-App Purchase를 구매한 경우, _AD fresca_에 해당 정보를 기록하여 관리하실 수 있습니다.
 
 사용자가 In-App Purchase 를 구매한 횟수를  AdFresca 객체의 setInAppPurchaseCount(int) 메소드를 사용하여  설정해 주시면 간단히 적용이 가능합니다.
 
@@ -107,7 +107,7 @@ protected void onCreate(Bundle savedInstanceState) {
 
 ### Custom Parameter
 
-AD fresca는 앱 사용자의 특수한 정보들 (레벨, 스테이지, 성별, 나이 등)을 입력 받아 타겟팅 및 분석 기능을 제공 합니다.
+_AD fresca_는 앱 사용자의 특수한 정보들 (레벨, 스테이지, 성별, 나이 등)을 입력 받아 타겟팅 및 분석 기능을 제공 합니다.
 
 SDK에서는 **setCustomParameter** 메소드를 사용하여 각 커스텀 파라미터의 인덱스 번호에 맞게 값을 설정하면 됩니다.
 
@@ -163,7 +163,7 @@ _(기존의 ['AD Slot 지정하기](https://adfresca.zendesk.com/entries/2335913
 
 ### Push Notification
 
-AD fresca를 통해 Push Notification을 보내고 받을 수 있습니다.
+_AD fresca_를 통해 Push Notification을 보내고 받을 수 있습니다.
 
 SDK를 적용하기 이전에 구글의 ["GCM: Getting Started" ](http://developer.android.com/google/gcm/gs.html)가이드 문서를 읽어보시길 권장합니다.
 
@@ -423,7 +423,7 @@ Admin 사이트에서 Push Notification Campaign 생성 시, URI Schema를 입�
 
 ### Test Device ID
 
-AD fresca는 테스트 모드 기능을 지원하며 테스트에 사용할 수 있는 기기를 별도로 등록하여 관리할 수 있습니다.
+_AD fresca_는 테스트 모드 기능을 지원하며 테스트에 사용할 수 있는 기기를 별도로 등록하여 관리할 수 있습니다.
 
 테스트 기기 ID는 SDK를 통해 추출이 가능하며 2가지 방법을 지원 합니다.
 
@@ -500,7 +500,7 @@ textView.setText(deviceId);
 - v0.9.6
     - closeAd() 메소드가 추가 되었습니다.  사용자가  Back 버튼을 터치 시 광고뷰를 직접 닫을 수 있습니다. (자세한 내용은 'AdFrescaView 적용하기'를 참고해주세요)
     - 광고 로딩 시 특정 상황에서 Exception이 발생하던 문제를 해결하였습니다.
-    - AD fresca 로고가 왼쪽으로 정렬 됩니다. 
+    - _AD fresca_ 로고가 왼쪽으로 정렬 됩니다. 
 - v0.9.5 
     - 공지사항 기능이 추가 되면서 AD Slot 관리 기능이 추가 되었습니다. (자세한 내용은 'AD Slot 관리하기' 를 참고해 주세요)
     - 테스트 모드 기능 지원을 위한 테스트 기기 ID 확인 기능을 지원 합니다. (자세한 내용은 '테스트 기기 ID 확인하기'를 참고해 주세요)
@@ -519,4 +519,4 @@ textView.setText(deviceId);
     - 0.9.1
     - 광고 호출 시 Timeout 처리 부분이 제대로 작동하지 않던 문제를 해결 하였습니다.
 - v0.9.0
-    - AD fresca Android SDK가 출시 되었습니다. 기본적인 광고 호출 및 세션 로깅 기능을 지원 합니다.
+    - _AD fresca_ Android SDK가 출시 되었습니다. 기본적인 광고 호출 및 세션 로깅 기능을 지원 합니다.
