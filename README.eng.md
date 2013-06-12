@@ -7,14 +7,14 @@
     - [In-App-Purchase Count](#in-app-purchase-count)
     - [Custom Parameter](#custom-parameter)
     - [Event Index](#event-index)
-    - [Push Notification](#push-notification)
 - [Custom Banner](#custom-banner)
     - [Floating View](#floating-view)
     - [Banner View](#banner-view)
+- [Push Notification](#push-notification)
+    - [Custom Notification](#custom-notification)
 - [Advanced Features](#advanced-features)
     - [AFLoadListener](#afloadlistener)
     - [AFShowListener](#afshowlistener)
-    - [Custom Notification](#custom-notification)
     - [Custom URI](#custom-uri)
     - [Test Device ID](#test-device-id)
     - [Timeout Interval](#timeout-interval)
@@ -165,6 +165,54 @@ _(기존의 ['AD Slot 지정하기](https://adfresca.zendesk.com/entries/2335913
     adfresca.showAd();
   }
 ```
+* * *
+
+## Custom Banner
+
+Android SDK 에서는 Floating View 와 Banner View 두가지 종류의 커스텀 배너를 제공합니다. 커스텀 배너는 dashboard 에서 이미지 사이즈를 등록한 후 해당 이미지 사이즈를 사용하는 캠페인이 매칭되었을 때 이미지를 커스텀 배너에 보여줍니다.
+
+AdFresca.load() 와 AdFresca.show() 를 통해 이미지를 보여주는 점은 기존 캠페인과 같습니다. Floating View 는 다른 UI Component 위에 위치하며 닫을 수 있으며, Banner View 는 Floating View 와는 반대로 화면의 일정 영역을 차지하며 닫을 수 없습니다. 
+
+커스텀 배너를 사용하기 위해서는 아래와 같이 namespace 를 layout xml 파일에 추가해야합니다.
+
+```xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:adfresca="http://schemas.android.com/apk/res/Your.Package.Name"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+</LinearLayout>
+```
+
+### Floating View
+
+Floating View 를 사용하기 위해 태그를 추가합니다.
+
+```xml
+<com.adfresca.sdk.view.AFFloatingView
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    adfresca:image_size_index="1" />
+```
+
+*   `adfresca:image_size_index=1` 이미지 사이즈 인덱스를 설정합니다.
+
+### Banner View
+
+Banner View 를 사용하기 위해 태그를 추가합니다.
+
+```xml
+<com.adfresca.sdk.view.AFBannerView
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    adfresca:default_image="@drawable/ic_launcher"
+    adfresca:image_size_index="1"/>
+```
+
+*   `adfresca:image_size_index="1"` 이미지 사이즈 인덱스를 설정합니다.
+*   `adfresca:default_image="@drawable/default_image"` 이미지가 로드되기 전 표시할 디폴트 이미지를 지정합니다.
+
+* * *
+
 
 ### Push Notification
 
@@ -275,54 +323,25 @@ SDK를 적용하기 이전에 구글의 ["GCM: Getting Started" ](http://develop
   }
 ```
 
+### Custom Notification
+
+```java
+public class GCMIntentService extends GCMBaseIntentService {
+	@Override
+	protected void onMessage(Context context, Intent intent) {
+		if (AdFresca.isFrescaNotification(intent)) {
+			String title = context.getString(R.string.app_name);
+			int icon = R.drawable.icon;
+			long when = System.currentTimeMillis();
+			Notification notification = AdFresca.generateNotification(context, intent, DemoIntroActivity.class, title, icon, when);
+			notification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+			notificationManager.notify(0, notification);
+		}
+	}
+}
+```
 * * *
-
-## Custom Banner
-
-Android SDK 에서는 Floating View 와 Banner View 두가지 종류의 커스텀 배너를 제공합니다. 커스텀 배너는 dashboard 에서 이미지 사이즈를 등록한 후 해당 이미지 사이즈를 사용하는 캠페인이 매칭되었을 때 이미지를 커스텀 배너에 보여줍니다.
-
-AdFresca.load() 와 AdFresca.show() 를 통해 이미지를 보여주는 점은 기존 캠페인과 같습니다. Floating View 는 다른 UI Component 위에 위치하며 닫을 수 있으며, Banner View 는 Floating View 와는 반대로 화면의 일정 영역을 차지하며 닫을 수 없습니다. 
-
-커스텀 배너를 사용하기 위해서는 아래와 같이 namespace 를 layout xml 파일에 추가해야합니다.
-
-```xml
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:adfresca="http://schemas.android.com/apk/res/Your.Package.Name"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-</LinearLayout>
-```
-
-### Floating View
-
-Floating View 를 사용하기 위해 태그를 추가합니다.
-
-```xml
-<com.adfresca.sdk.view.AFFloatingView
-    android:layout_width="match_parent"
-    android:layout_height="80dp"
-    adfresca:image_size_index="1" />
-```
-
-*   `adfresca:image_size_index=1` 이미지 사이즈 인덱스를 설정합니다.
-
-### Banner View
-
-Banner View 를 사용하기 위해 태그를 추가합니다.
-
-```xml
-<com.adfresca.sdk.view.AFBannerView
-    android:layout_width="match_parent"
-    android:layout_height="80dp"
-    adfresca:default_image="@drawable/ic_launcher"
-    adfresca:image_size_index="1"/>
-```
-
-*   `adfresca:image_size_index="1"` 이미지 사이즈 인덱스를 설정합니다.
-*   `adfresca:default_image="@drawable/default_image"` 이미지가 로드되기 전 표시할 디폴트 이미지를 지정합니다.
-
-* * *
-
 ## Advanced Features
 
 ### AFLoadListener
@@ -387,25 +406,6 @@ adfresca.show(EVENT_INDEX_INTRO, new AFShowListener(){
 		startActivity(new Intent(IntroActivity.this, MainActivity.class));
 	}
 });
-```
-
-### Custom Notification
-```java
-
-public class GCMIntentService extends GCMBaseIntentService {
-	@Override
-	protected void onMessage(Context context, Intent intent) {
-		if (AdFresca.isFrescaNotification(intent)) {
-			String title = context.getString(R.string.app_name);
-			int icon = R.drawable.icon;
-			long when = System.currentTimeMillis();
-			Notification notification = AdFresca.generateNotification(context, intent, DemoIntroActivity.class, title, icon, when);
-			notification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-			notificationManager.notify(0, notification);
-		}
-	}
-}
 ```
 ### Custom URI
 
