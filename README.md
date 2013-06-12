@@ -138,8 +138,8 @@ protected void onCreate(Bundle savedInstanceState) {
   AdFresca adfresca = AdFresca.getInstance(this);
   AdFresca.setIsInAppPurchasedUser(User.getInAppPurchaseCount());
   adfresca.startSession();
-  adfresca.loadAd();
-  adfresca.showAd();
+  adfresca.load();
+  adfresca.show();
 ```
 
 위와 같은 방식으로 호출이 가능합니다.
@@ -164,8 +164,8 @@ SDK에서는 **setCustomParameter** 메소드를 사용하여 각 커스텀 파�
   adfresca.setCustomParameter(CUSTOM_PARAM_INDEX_HAS_FB_ACCOUNT, User.hasFacebookAccount);
   
   adfresca.startSession();
-  adfresca.loadAd();
-  adfresca.showAd();
+  adfresca.load();
+  adfresca.show();
 ```
 
 ### Event Index
@@ -176,7 +176,7 @@ Event 설정은 Admin 을 통해 가능하며 '[Event 설정하기](https://adfr
 
 Event 설정하신 후, SDK 적용을 위해서는 각 Event 'Index' 값이 필요합니다. Index 값은 1,2,3,4 와 같은 Integer 형태의 고유 값이며 소스코드에 Constant 형태로 미리 입력하여 이용하시는 것을 권장합니다.
 
-각 Event 발생 시, loadAd() 메소드에 원하는 Event의  Index 값을 인자로 넘겨주시면 간단히 적용이 완료됩니다.
+각 Event 발생 시, load() 메소드에 원하는 Event의  Index 값을 인자로 넘겨주시면 간단히 적용이 완료됩니다.
 
 _(기존의 ['AD Slot 지정하기](https://adfresca.zendesk.com/entries/23359131)' 기능은 Deprecated 되어 현재 Event로 대체 되었습니다. 자세한 내용은 SDK Changed Log를 확인하여 주세요. )_
 
@@ -187,8 +187,8 @@ _(기존의 ['AD Slot 지정하기](https://adfresca.zendesk.com/entries/2335913
   public class MainPageActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
       AdFresca adfresca = AdFresca.getInstance(this);     
-      adfresca.loadAd(EVENT_INDEX_MAIN_PAGE);  // 메인 페이지에 설정한  캠페인을 노출
-      adfresca.showAd();
+      adfresca.load(EVENT_INDEX_MAIN_PAGE);  // 메인 페이지에 설정한  캠페인을 노출
+      adfresca.show();
     }
   }
 ```
@@ -199,8 +199,8 @@ _(기존의 ['AD Slot 지정하기](https://adfresca.zendesk.com/entries/2335913
   public void **onUserLevelChanged**(int level) {
     AdFresca adfresca = AdFresca.getInstance(this);
     adfresca.setCustomParameter(CUSTOM_PARAM_INDEX_LEVEL, level); // 사용자 level 정보를 가장 최신으로 업데이트
-    adfresca.loadAd(EVENT_INDEX_LEVEL_UP);  // 레벨업 이벤트에 설정한 캠페인을 노출
-    adfresca.showAd();
+    adfresca.load(EVENT_INDEX_LEVEL_UP);  // 레벨업 이벤트에 설정한 캠페인을 노출
+    adfresca.show();
   }
 ```
 
@@ -490,8 +490,8 @@ textView.setText(deviceId);
   AdFresca adfresca = AdFresca.getInstance(this);
   Log.d(TAG, "AD fresca Test Device ID is = " + adfresca.getTestDeviceId());
   adfresca.setPrintTestDeviceId(true);
-  adfresca.loadAd();
-  adfresca.showAd();
+  adfresca.load();
+  adfresca.show();
 ```
 
 ### Timeout Interval
@@ -503,8 +503,8 @@ textView.setText(deviceId);
 ```java
   AdFresca adfresca = AdFresca.getInstance(this);
   AdFresca.setTimeoutInterval(5) // # 5 seconds
-  adfresca.loadAd();
-  adfresca.showAd();
+  adfresca.load();
+  adfresca.show();
 ```
 
 * * *
