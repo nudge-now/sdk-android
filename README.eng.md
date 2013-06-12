@@ -67,7 +67,7 @@ Add _User Permission_ like the following codes.
         </intent-filter>
       </service>
 
-      <!-- Push Notification 기능을 사용할 경우, 아래 내용을 추가합니다. -->
+      <!-- Add following codes if you need a push notification feature -->
       <activity android:name="com.adfresca.ads.AdFrescaPushActivity" />
         <receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">  
           <intent-filter>
@@ -76,14 +76,14 @@ Add _User Permission_ like the following codes.
             <category android:name="your_app_package" />
           </intent-filter>
       </receiver>
-      <service android:name=".GCMIntentService" />  <!-- GCM 메시지를 처리하기 위하여 GCMIntentService 클래스를 구현해야 합니다. (9번 항목에서 상세 설명)  -->
+      <service android:name=".GCMIntentService" />  <!-- To handle GCM messages, you need to implement GCMIntentService class (See 'Push Notification' for detail  -->
 
    </application>
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
-    <!-- Push Notification 기능을 사용할 경우, 아래 내용을 추가합니다. -->
+    <!-- Add following codes if you need a push notification feature -->
     <permission android:name="your_app_pakcage.permission.C2D_MESSAGE" android:protectionLevel="signature" />
     <uses-permission android:name="your_app_package.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
@@ -174,7 +174,7 @@ To simply apply codes,  just pass event index into `AdFresca.load(int eventIndex
 
 (If you don't specify event index on `AdFresca.load(int eventIndex)`, a default value is set to 1)
 
-**Example**:  사용자가 메인 페이지로 이동할 시에 설정한 캠페인을 노출
+**Example**:  When user entered a main page
 
 ```java
   public class MainPageActivity extends Activity {
@@ -186,7 +186,7 @@ To simply apply codes,  just pass event index into `AdFresca.load(int eventIndex
   }
 ```
 
-**Example**: 사용자의 게임 캐릭터가 레벨업을 했을 때 설정한 캠페인을 노출
+**Example**: When user's character level increased
 
 ```java
   public void **onUserLevelChanged**(int level) {
@@ -249,15 +249,15 @@ Add the following tag to layout xml to use _Banner View_.
 
 ### Push Notification
 
-_AD fresca_를 통해 Push Notification을 보내고 받을 수 있습니다.
+You can send a push notification and see the result of how users respond a notification by AD fresca
 
-SDK를 적용하기 이전에 구글의 ["GCM: Getting Started" ](http://developer.android.com/google/gcm/gs.html)가이드 문서를 읽어보시길 권장합니다.
+Before you start, we recommend reading ["GCM: Getting Started" ](http://developer.android.com/google/gcm/gs.html) from Google.
 
-1) GCM Helper Library 설치하기.
-    - 구글에서 제공하는 [GCM Helper Library](http://code.google.com/p/gcm/source/browse/) 를 다운로드 받습니다. (Download zip 혹은 git clone을 이용)
-    - /gcm-client/dist/**gcm.jar** 파일을 프로젝트에 복사하여 설치합니다.
+1) Install GCM Helper Library
+    - Download [GCM Helper Library](http://code.google.com/p/gcm/source/browse/) from Google. (Download zip or use 'git clone')
+    - Import /gcm-client/dist/**gcm.jar** into your project
     
-2) AndroidManifest.xml 확인하기.
+2) Add additional permissions and activities to AndroidManifest.xml.
 
 ```xml
 <manifest>   
@@ -272,7 +272,7 @@ SDK를 적용하기 이전에 구글의 ["GCM: Getting Started" ](http://develop
           <category android:name="your_app_package" />
          </intent-filter>
       </receiver>
-      <service android:name=".GCMIntentService" />  <!-- GCM 메시지를 처리하기 위하여 GCMIntentService 클래스를 구현해야 합니다 -->
+      <service android:name=".GCMIntentService" />  <!-- You must implement your own GCMIntentService class -->
    </application>
     ..........
     <permission android:name="your_app_pakcage.permission.C2D_MESSAGE" android:protectionLevel="signature" />
@@ -284,11 +284,11 @@ SDK를 적용하기 이전에 구글의 ["GCM: Getting Started" ](http://develop
 </manifest>
 ```
 
-3) Registration ID를 등록하고 SDK에 셋팅하기.
+3) Get GCM device registration id and set it into SDK.
 
 ```java
     /*
-    * GCM_SENDER_ID는 Google API project number를 의미 합니다.
+    * GCM_SENDER_ID means Google API project number.
     * https://code.google.com/apis/console/#project:1234567890
     */
    final String GCM_SENDER_ID = "1234567890";
@@ -307,13 +307,13 @@ SDK를 적용하기 이전에 구글의 ["GCM: Getting Started" ](http://develop
   adfresca.startSession();
 ```
 
-4) GCMIntentService 클래스 구현하기
+4) Implement GCMIntentService class
 
 ```java
   public class GCMIntentService extends GCMBaseIntentService {
 
     /*
-    * GCM_SENDER_ID는 Google API project number를 의미 합니다.
+    * GCM_SENDER_ID means Google API project number.
     * https://code.google.com/apis/console/#project:1234567890
     */
     private static final String GCM_SENDER_ID = "1234567890";
@@ -335,14 +335,14 @@ SDK를 적용하기 이전에 구글의 ["GCM: Getting Started" ](http://develop
     @Override
     protected void onMessage(Context context, Intent intent) {
 
-      // AD fresca를 통해서 수신한 notification인지 확입합니다.
+      // Check a push notification is form AD fresca.
       if (AdFresca.isFrescaNotification(intent)) { 
         String title = context.getString(R.string.app_name);
         int icon = R.drawable.icon;
         long when = System.currentTimeMillis();
 
-        // 수신 받은 notification을 status bar에 표시합니다.
-        // notification에 URI Schema가 설정된 경우, 해당 URI를 실행하며 기본적으로는 targetClass에 설정한 액티비티를 실행하여 줍니다. 
+        // Show this notification in the status bar
+        // If this notification has URI Schema, SDK will open URI. otherwise, the activity from targetClass will be opened 
         AdFresca.showNotification(context, intent, MainActivity.class, title, icon, when);
 
       } 
@@ -429,8 +429,6 @@ adfresca.show(new AFShowListener(){
 ```
 **Example:** The following code show a campaign at _Intro Activity_ and will move to _Main Activity_ when it is finished.
 
-_인트로 액티비티_에서 캠패인을 하고 끝나면 _메인 액티비티_로 이동
-
 ```java
 AdFresca adfresca = AdFresca.getInstance(this);
 adfresca.startSession();
@@ -444,9 +442,9 @@ adfresca.show(EVENT_INDEX_INTRO, new AFShowListener(){
 ```
 ### Custom URI
 
-Admin 사이트에서 Push Notification Campaign 생성 시, URI Schema를 입력받아 사용자가 notification 클릭 시 특정 액티비티로 바로 이동하도록 할 수 있습니다.
+You can set URI Schema to your Push Notification Campaign. When your app user clicks a notification with URI Schema, user will be forward to a specific activity you choose
 
-해당 기능을 지원하기 위해서는 AndroidManifest.xml 파일을 수정하여 URI 정보를 추가해야 합니다.
+To use this feature, add URI information in AndroidManifest.xml
 
 ```xml
   <activity android:name=".DemoZoneActivity">
@@ -459,16 +457,16 @@ Admin 사이트에서 Push Notification Campaign 생성 시, URI Schema를 입�
   </activity>
 ```
 
-위와 같이 설정한 경우, Campaign의 URI Schema 값을 myapp://com.adfresca.zone 으로 설정하여 DemoZoneActivity가 바로 실행되도록 할 수 있습니다.
+In this example above, DemoZoneActivity will be opened when you set URI Schema value as 'myapp://com.adfresca.zon' in your Push Notification Campaign
 
 ### Test Device ID
 
-_AD fresca_는 테스트 모드 기능을 지원하며 테스트에 사용할 수 있는 기기를 별도로 등록하여 관리할 수 있습니다.
+AD fresca supports a test mode feature. you can easily register test devices and manage them.
 
-테스트 기기 ID는 SDK를 통해 추출이 가능하며 2가지 방법을 지원 합니다.
+To check test device id, we provide two methods on our SDK.
 
 
-1. testDeviceId를 얻어와서 원하는 곳에 출력하는 방법
+1. Using getTestDeviceId() Method
 
 ```java
 AdFresca adfresca = AdFresca.getInstance(this);
@@ -476,7 +474,7 @@ String deviceId = adfresca.getTestDeviceId();
 textView.setText(deviceId);
 ```
 
-2. printTestDeviceId Property를 설정하여 광고 화면에 Device ID를 표시하는 방법
+2. Displaying test device id on your app screen using setPrintTestDeviceId method
  
 ```java
   AdFresca adfresca = AdFresca.getInstance(this);
@@ -488,9 +486,9 @@ textView.setText(deviceId);
 
 ### Timeout Interval
 
-광고의 최대 로딩 시간을 직접 지정하실 수 있습니다. 지정된 시간 내에 광고가 로딩되지 못한 경우, 사용자에게 광고룰 노출하지 않습니다.
+You can set a timeout interval for AD request. If AD is not loaded within this time interval, AD won't be displayed to users and SDK will return the control to your app.
 
-최소 1초 이상 지정이 가능하며, 지정하지 않을 시 기본 값으로 5초가 지정 됩니다.
+Default is 5 seconds and you can set from 1 seconds to 5 seconds.
 
 ```java
   AdFresca adfresca = AdFresca.getInstance(this);
@@ -510,53 +508,53 @@ textView.setText(deviceId);
 ## Release Notes
 
 - v2.0.0-beta.1 _(06/05/2013 Updated)_
-    - `AdFrescaView`가 deprecated 되었습니다. 새로 추가된 `AdFresca`를 사용해 주세요.
-    - [Custom Banner](#custom-banner)([Floating View](#floating-view), [Banner View](#banner-view))가 추가되었습니다.
+    - Deprecated `AdFrescaView`. Use `AdFresca` instead.
+    - Added [Custom Banner](#custom-banner)([Floating View](#floating-view), [Banner View](#banner-view)).
 - v1.1.2
-    - setIsInAppPurchasedCount(int) 메소드가  추가 되었습니다. In-App Purchase 구매 횟수를 관리 할 수 있습니다. (적용 방법은 5. In-App Purchase Count 관리 항목을 참고해주세요)
-    - setIsInAppPurchasedUser(boolean) 메소드가 Deprecated 되었습니다. 새로 추가된 setIsInAppPurchasedCount(int) 메소드를 사용하여 주세요.
+    - Added `setIsInAppPurchasedCount(int)` that makes it possible to manage user's In-App Purchase. (See [In-App Purchase](#in-app-purchase))
+    - Deprecated `setIsInAppPurchasedUser(boolean)`. Use `setIsInAppPurchasedCount(int)` instead.
 - v1.1.1
-    - 광고 이미지 클릭 시 광고 뷰가 닫히도록 변경되었습니다.
-    - 광고를 일정 시간 후 자동으로 닫을수 있는 Auto Close Timer 기능이 추가 되었습니다. Dashboard 에서 설정할 수 있습니다.
-    - onAdClicked 이벤트가 Deprecated 되었습니다. onAdClicked 함수를 구현하지 않기를 권장합니다.
+    - Ad is closed when user click the image.
+    - Ad can be automatically closed. You can set it on dashboard.
+    - Deprecated `onAdClicked`. It is recommended not to implement `onAdClicked`.
 - v1.1.0
-    - Event 기능을 지원합니다. loadAd() 메소드에 Event Index 값을 설정할 수 있습니다. 자세한 내용은 '7. Event 지정하기'를 참고해주세요.
-    - AD Slot 기능이 Deprecated 되었습니다. 기존의 Default Slot은 '1'번 이벤트 인덱스,  AD Only Slot은 '2'번 이벤트 인덱스로 적용됩니다.
-    - 광고 데이터를 요청하는 중에 새로 loadAd()가 호출된 경우, 가장 최근에 요청된 광고가 화면에 표시됩니다. (기존에는 광고 데이터를 요청 중에 새 요청을 할 수 없었습니다.)
-    - AdListener에 onAdWillLoad, onAdClicked 이벤트가 추가 되었습니다. 광고 클릭 시 뷰를 다는 방법을 지원합니다. 자세한 내용은 '10. AdListener의 구현 및 다른 다양한 사용방법'을 참고해주세요.
-- v1.0.1 
-    - Push Notification 설정을 위하여 isFrescaNotification(), showNotification(), generateNotification() 메소드가 추가되었습니다. 자세한 내용은 'Push Notification 설정하기'를 참고해주세요
-- v1.0.0 
-    - 캐시 기능 및 퍼포먼스가 향상 되었습니다.
-    - 서로 다른 액티비티 간에 loadAd(), showAd() 를 사용할 경우, 광고 이미지 클릭이 되지 않던 버그를 해결하였습니다.
-    - setPushRegistrationId() 메소드가 추가되었습니다. 이후 업데이트될 푸시 서비스를 위해 사용자 GCM 아이디를 수집할 수 있습니다. (자세한 내용은 곧 업데이트 됩니다.)
+    - Added `Event Index`. It is set with `loadAd()`. See [Event Index](#event-index).
+    - Deprecated `AD Slot`.
+    - Display latest Ad. (It was not available to request while the previous request was in progress.
+    - Added `onAdWillLoad` and `onAdClicked` to `AdListener`. You can close Ad when user click Ad.
+- v1.0.1
+    - SDK supports 'Push Notification' feature (See '9. Push Notification Setting' for detail)
+- v1.0.0
+    - The AD Caching feature is more optimized for better performance.
+    - Bug fixed that user was not able to touch AD image when loadAd() and showAd() were called in different activities.
+    - setPushRegistrationId() method is added. You can collect user's GCM ID to send a push notification in the near future. (More detailed guide will be available soon)
 - v0.9.9 
-    - Custom Parameter를 지원합니다.  (자세한 내용은 'Custom Parameter 관리하기'를 참고해주세요)
+    - SDK supports 'Custom Parameter' feature (See 'Custom Parameter Management')
 - v0.9.8 
-    - SDK 퍼포먼스가 향상 되었습니다.
-    - 특정 조건에서 Request Timeout 문제 발생시 onAdClosed() 이벤트가 중복 호출되던 버그를 해결하였습니다.
+    - SDK Performance Improved
+    - Bug fixed that onAdClosed() event was called twice after request timed out in specific condition.
 - v0.9.7 
-    - HTML5 형태의 View를 지원합니다. (SDK 적용 코드는 전혀 변경하지 않아도 됩니다.)
-- v0.9.6
-    - closeAd() 메소드가 추가 되었습니다.  사용자가  Back 버튼을 터치 시 광고뷰를 직접 닫을 수 있습니다. (자세한 내용은 'AdFrescaView 적용하기'를 참고해주세요)
-    - 광고 로딩 시 특정 상황에서 Exception이 발생하던 문제를 해결하였습니다.
-    - _AD fresca_ 로고가 왼쪽으로 정렬 됩니다. 
-- v0.9.5 
-    - 공지사항 기능이 추가 되면서 AD Slot 관리 기능이 추가 되었습니다. (자세한 내용은 'AD Slot 관리하기' 를 참고해 주세요)
-    - 테스트 모드 기능 지원을 위한 테스트 기기 ID 확인 기능을 지원 합니다. (자세한 내용은 '테스트 기기 ID 확인하기'를 참고해 주세요)
-    - 캐시 기능 및 퍼포먼스가 향상 되었습니다.
-- v0.9.4
-    - SDK가 광고 데이터를 캐싱하여 보여 줍니다. 광고를 1회 이상 노출 시 캐시가 자동으로 적용되어 빠른 노출이 가능하여 졌습니다.
-    - AdFrescaView가 싱글톤 객체로 생성 됩니다. 각 액티비티 전환 시에도 동일한 뷰 객체를 사용 할 수 있으며 API Key는 최초 1회만 입력하면 됩니다.
-    - timeoutInterval 설정 값이 추가 되었습니다. 지정된 시간 내에 광고를 로딩하지 못한 경우, 사용자에게 광고를 노출하지 않습니다. 최소 1초 이상 지정이 가능하며 기본 값은 기존의 5초로 설정 됩니다.
-    - testModeEnabled 설정 값이 deprecated 되었습니다. 이후 모든 테스트 모드의 제어는 웹 Admin 페이지에서 가능합니다.
-    - 안드로이드 4.1 버전을 지원합니다.
+    - HTML5 View is added (There is no need to change any SDK code in your app!)
+- v0.9.6 
+    - closeAd() method is added. When a user touches 'back' button on the device, AD can be closed using closeAd() (See 'Adding AD view into App')
+    - Bug fixed that there was a exception occurred in specific condition in loading AD.
+    - 'AD fresca' logo is now located on the left of top bar.
+- v0.9.5
+    - AD Slot feature added as an announcement feature added (See 'AD Slot Setting')
+    - getTestDeviceId(), setPrintTestDeviceId() methods are added to support a test mode (See 'Checking Test Device ID)
+    - The AD Caching feature is optimized for better performance.
+- v0.9.4 
+    - Now, SDK use the AD Caching feature for faster ad display. If the cached AD exists, the cached AD will be shown up automatically.
+    - AdFrescaView supports a shared object. Developers can use a single shared object and do not need to set API Key in different activities.
+    - timeoutInterval property is added. You can set a timeout interval for AD request. If AD is not loaded within the time interval, AD won't be displayed to users.
+    - testModeEnabled property is deprecated . All the test mode control will be proceed on our admin website from now on.
+    - SDK supports Android 4.1.
 - v0.9.3
-    - setIsInAppPurchasedUser(boolean) 메소드가  추가 되었습니다. In-App Purchase를 구매한 사용자들을 분류하여 관리 할 수 있습니다. (적용 방법은 5. In-App Purchased User 관리 항목을 참고해주세요)
+    - setIsInAppPurchasedUser(boolean) method is added. You can manage your in-app purchased users with our service.
 - v0.9.2
-    - 라이브러리 dependency 에러를 해결하였습니다.
-    - Google Gson 및 OpenUDID를 별도로 사용하시는 경우, Duplicate 에러가 발생 할 수 있습니다. 추후 해당 이슈 해결이 포함된 버전을 릴리즈 할 예정입니다.
+    - Library dependency error is solved
+    - SDK is released with Google Gson and OpenUDID as a default. Some developers may get Duplicate Error if they already added them in project. A separated version will be released in the future. (Please contact us if you need it right a way)
     - 0.9.1
-    - 광고 호출 시 Timeout 처리 부분이 제대로 작동하지 않던 문제를 해결 하였습니다.
+    - Bug fixed that timeout feature did not work correctly
 - v0.9.0
-    - _AD fresca_ Android SDK가 출시 되었습니다. 기본적인 광고 호출 및 세션 로깅 기능을 지원 합니다.
+    - AD fresca iOS SDK is now released! basic AD feature is included.
