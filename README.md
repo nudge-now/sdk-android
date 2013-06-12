@@ -38,17 +38,17 @@ AD fresca 는 기본적으로 전면 이미지를 사용해서 캠페인을 합�
 
 [Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android-beta.zip) (v2.0.0-beta.1)
 
-AdFresca.jar 파일은 lib 폴더에, adfresca_attr.xml 파일은 res/values 폴더에 각각 복사합니다.
+**AdFresca.jar** 파일은 **lib** 폴더에, **adfresca_attr.xml** 파일은 **res/values** 폴더에 각각 복사합니다.
 
 <img src="https://adfresca.zendesk.com/attachments/token/bja88u9zake4knm/?name=add_adfresca_jar_and_attr_xml.png" width="300"/>
 
-프로젝트를 오른쪽 클릭 후, **Properties 메뉴를 클릭합니다.**
+프로젝트를 오른쪽 클릭 후, **Properties** 메뉴를 클릭합니다.
 
-좌측 Java Build Path 메뉴에서 Libraries 탭을 들어간 후, Add JARs 버튼을 클릭하여 **AdFresca.jar** 파일을 추가합니다.
+좌측 **Java Build Path** 메뉴에서 **Libraries** 탭을 들어간 후, **Add JARs** 버튼을 클릭하여 **AdFresca.jar** 파일을 추가합니다.
 
 <img src="https://adfresca.zendesk.com/attachments/token/ogcnzf3kmyzbcvg/?name=add_jar.png" width="600" />
 
-AndroidManifest.xml의 Permission 추가하기 AD fresca 는 사용자의 네트워크 접속 상태, 기기ID를 수집하여, 광고 매칭에 사용합니다. 이를 위해 관련 퍼미션을 등록 및 허용해 주어야 합니다. 수집되는 모든 데이터는 암호화 처리되어 전송되며 광고 매칭 이외의 목적에 사용되지 않습니다 아래와 같이 Permission을 추가합니다.
+**AndroidManifest.xml**의 Permission 추가하기 AD fresca 는 사용자의 네트워크 접속 상태, 기기ID를 수집하여, 광고 매칭에 사용합니다. 이를 위해 관련 퍼미션을 등록 및 허용해 주어야 합니다. 수집되는 모든 데이터는 암호화 처리되어 전송되며 광고 매칭 이외의 목적에 사용되지 않습니다 아래와 같이 Permission을 추가합니다.
 
 ### Code
 
