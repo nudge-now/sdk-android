@@ -20,7 +20,7 @@
     - [Timeout Interval](#timeout-interval)
 - [Trouble Shooting](#trouble-shooting)
     - [Error Code](#error-code)
-- [Release Notes](#Release Notes)
+- [Release Notes](#release-notes)
 
 * * *
 
