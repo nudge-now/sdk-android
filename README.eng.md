@@ -53,6 +53,44 @@ You have to add _User Permission_ to **AndroidManifest.xml**. _Android SDK_ need
 Add _User Permission_ like the following codes.
 
 ```xml
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.adfresca.demo" android:versionName="1.0">
+    <application android:icon="@drawable/icon" android:label="@string/app_name">
+       <activity android:name=".DemoIntroActivity"android:label="@string/app_name"
+        …………….
+      </activity>
+
+      <service android:name="org.openudid.OpenUDID_service">
+        <intent-filter>
+          <action android:name="org.openudid.GETUDID" />
+        </intent-filter>
+      </service>
+
+      <!-- Push Notification 기능을 사용할 경우, 아래 내용을 추가합니다. -->
+      <activity android:name="com.adfresca.ads.AdFrescaPushActivity" />
+        <receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">  
+          <intent-filter>
+            <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+            <category android:name="your_app_package" />
+          </intent-filter>
+      </receiver>
+      <service android:name=".GCMIntentService" />  <!-- GCM 메시지를 처리하기 위하여 GCMIntentService 클래스를 구현해야 합니다. (9번 항목에서 상세 설명)  -->
+
+   </application>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <!-- Push Notification 기능을 사용할 경우, 아래 내용을 추가합니다. -->
+    <permission android:name="your_app_pakcage.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <uses-permission android:name="your_app_package.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+</manifest>
 ```
 
 ### Code

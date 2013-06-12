@@ -48,7 +48,50 @@ _AD fresca_ 는 기본적으로 전면 이미지를 사용해서 캠페인을 �
 
 <img src="https://adfresca.zendesk.com/attachments/token/ogcnzf3kmyzbcvg/?name=add_jar.png" width="600" />
 
-**AndroidManifest.xml**의 Permission 추가하기 _AD fresca_ 는 사용자의 네트워크 접속 상태, 기기ID를 수집하여, 광고 매칭에 사용합니다. 이를 위해 관련 퍼미션을 등록 및 허용해 주어야 합니다. 수집되는 모든 데이터는 암호화 처리되어 전송되며 광고 매칭 이외의 목적에 사용되지 않습니다 아래와 같이 Permission을 추가합니다.
+**AndroidManifest.xml**의 Permission 추가하기
+
+_AD fresca_ 는 사용자의 네트워크 접속 상태, 기기ID를 수집하여, 광고 매칭에 사용합니다. 이를 위해 관련 퍼미션을 등록 및 허용해 주어야 합니다. 수집되는 모든 데이터는 암호화 처리되어 전송되며 광고 매칭 이외의 목적에 사용되지 않습니다 아래와 같이 Permission을 추가합니다.
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.adfresca.demo" android:versionName="1.0">
+    <application android:icon="@drawable/icon" android:label="@string/app_name">
+       <activity android:name=".DemoIntroActivity"android:label="@string/app_name"
+        …………….
+      </activity>
+
+      <service android:name="org.openudid.OpenUDID_service">
+        <intent-filter>
+          <action android:name="org.openudid.GETUDID" />
+        </intent-filter>
+      </service>
+
+      <!-- Push Notification 기능을 사용할 경우, 아래 내용을 추가합니다. -->
+      <activity android:name="com.adfresca.ads.AdFrescaPushActivity" />
+        <receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">  
+          <intent-filter>
+            <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+            <category android:name="your_app_package" />
+          </intent-filter>
+      </receiver>
+      <service android:name=".GCMIntentService" />  <!-- GCM 메시지를 처리하기 위하여 GCMIntentService 클래스를 구현해야 합니다. (9번 항목에서 상세 설명)  -->
+
+   </application>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <!-- Push Notification 기능을 사용할 경우, 아래 내용을 추가합니다. -->
+    <permission android:name="your_app_pakcage.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <uses-permission android:name="your_app_package.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+</manifest>
+```
 
 ### Code
 
