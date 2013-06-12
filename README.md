@@ -282,7 +282,7 @@ AdFresca.load() 와 AdFresca.show() 를 통해 이미지를 보여주는 점은 
 
 ```xml
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:adfresca="http://schemas.android.com/apk/res/Your.Package_.Name"
+    xmlns:adfresca="http://schemas.android.com/apk/res/Your.Package.Name"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 </LinearLayout>
