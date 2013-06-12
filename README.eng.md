@@ -26,7 +26,7 @@
 
 ## Introduction
 
-_AD fresca_ 는 기본적으로 전면 이미지를 사용해서 캠페인을 합니다. Android SDK 는 단 몇줄의 코드만으로 이를 가능하게 합니다. 뿐만 아니라 다양한 형태의 캠페인 템플릿과 뷰를 통해 캠페인을 할 수 있습니다.
+_AD fresca_ basically display a campaign on a full screen. _Android SDK_ makes it possible to display a campaign by only several lines of code. In addition, A campaign is able to be displayed on diverse views and templates.
 
 * * *
 
@@ -34,21 +34,26 @@ _AD fresca_ 는 기본적으로 전면 이미지를 사용해서 캠페인을 �
 
 ### Installation
 
-아래 링크를 통해 SDK 파일을 다운로드 합니다.
+Download SDK at the following link.
 
 [Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android-beta.zip) (v2.0.0-beta.1)
 
-**AdFresca.jar** 파일은 **lib** 폴더에, **adfresca_attr.xml** 파일은 **res/values** 폴더에 각각 복사합니다.
+Copy **AdFresca.jar** and **adfresca_attr.xml** to **lib** and **res/values** repectively.
 
 <img src="https://adfresca.zendesk.com/attachments/token/bja88u9zake4knm/?name=add_adfresca_jar_and_attr_xml.png" width="300"/>
 
-프로젝트를 오른쪽 클릭 후, **Properties** 메뉴를 클릭합니다.
-
-좌측 **Java Build Path** 메뉴에서 **Libraries** 탭을 들어간 후, **Add JARs** 버튼을 클릭하여 **AdFresca.jar** 파일을 추가합니다.
+- Right-click on your project and click **Properties**.
+- Select **Java Build Path** and **Libraries** tab.
+- Click **Add JARs** and select **lib/AdFresca.jar**.
 
 <img src="https://adfresca.zendesk.com/attachments/token/ogcnzf3kmyzbcvg/?name=add_jar.png" width="600" />
 
-**AndroidManifest.xml**의 Permission 추가하기 _AD fresca_ 는 사용자의 네트워크 접속 상태, 기기ID를 수집하여, 광고 매칭에 사용합니다. 이를 위해 관련 퍼미션을 등록 및 허용해 주어야 합니다. 수집되는 모든 데이터는 암호화 처리되어 전송되며 광고 매칭 이외의 목적에 사용되지 않습니다 아래와 같이 Permission을 추가합니다.
+You have to add _User Permission_ to **AndroidManifest.xml**. _Android SDK_ needs _User Permission_ to get network statuses and device id to match a campaign. The collected data is encrypted and only used for matching.
+
+Add _User Permission_ like the following codes.
+
+```xml
+```
 
 ### Code
 
