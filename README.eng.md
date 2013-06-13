@@ -189,7 +189,7 @@ To simply apply codes,  just pass event index into `AdFresca.load(int eventIndex
 **Example**: When user's character level increased
 
 ```java
-  public void **onUserLevelChanged**(int level) {
+  public void onUserLevelChanged(int level) {
     AdFresca adfresca = AdFresca.getInstance(this);
     adfresca.setCustomParameter(CUSTOM_PARAM_INDEX_LEVEL, level); // 사용자 level 정보를 가장 최신으로 업데이트
     adfresca.load(EVENT_INDEX_LEVEL_UP);  // 레벨업 이벤트에 설정한 캠페인을 노출
@@ -303,7 +303,7 @@ Before you start, we recommend reading ["GCM: Getting Started" ](http://develope
    }
    
   AdFresca adfresca = AdFresca.getInstance(this);
-  adfresca.setPushRegistrationId(gcmDeviceId);</strong> 
+  adfresca.setPushRegistrationId(gcmDeviceId);
   adfresca.startSession();
 ```
 

@@ -196,7 +196,7 @@ _(기존의 ['AD Slot 지정하기](https://adfresca.zendesk.com/entries/2335913
 **Example**: 사용자의 게임 캐릭터가 레벨업을 했을 때 설정한 캠페인을 노출
 
 ```java
-  public void **onUserLevelChanged**(int level) {
+  public void onUserLevelChanged(int level) {
     AdFresca adfresca = AdFresca.getInstance(this);
     adfresca.setCustomParameter(CUSTOM_PARAM_INDEX_LEVEL, level); // 사용자 level 정보를 가장 최신으로 업데이트
     adfresca.load(EVENT_INDEX_LEVEL_UP);  // 레벨업 이벤트에 설정한 캠페인을 노출
@@ -308,7 +308,7 @@ SDK를 적용하기 이전에 구글의 ["GCM: Getting Started" ](http://develop
    }
    
   AdFresca adfresca = AdFresca.getInstance(this);
-  adfresca.setPushRegistrationId(gcmDeviceId);</strong> 
+  adfresca.setPushRegistrationId(gcmDeviceId);
   adfresca.startSession();
 ```
 
