@@ -26,7 +26,9 @@
 
 ## Introduction
 
-_AD fresca_ basically display a campaign on a full screen. _Android SDK_ makes it possible to display a campaign by only several lines of code. In addition, A campaign is able to be displayed on diverse views and templates.
+The _AD fresca SDK_ provides a full size interstitial, which takes 80% of the the device screen except the upper status bar. _Android SDK_ is implemented as a simple View so developers can easily integrate our SDK into their application by following two steps: 1) SDK Installation and 2) Adding `AdFresca` into an app with a few lines of codes.
+
+Unlike other SDKs by other AD networks, AD fresca SDK does not show content to users until the data is loaded and ready for display. Also, if an content request takes more than 5 seconds (default value: you can customize it easily,) SDK will quit the process and return the control to the app. These features ensure that users will not have any bad user experience with our content even if they suffer from a bad mobile network connection. (which happens a lot.) 
 
 * * *
 
