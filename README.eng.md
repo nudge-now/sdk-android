@@ -50,7 +50,7 @@ Copy **AdFresca.jar** and **adfresca_attr.xml** to **lib** and **res/values** re
 
 <img src="https://adfresca.zendesk.com/attachments/token/ogcnzf3kmyzbcvg/?name=add_jar.png" width="600" />
 
-You have to add _User Permission_ to **AndroidManifest.xml**. _Android SDK_ needs _User Permission_ to get network statuses and device id to match a campaign. The collected data is encrypted and only used for matching.
+You have to add _User Permission_ to **AndroidManifest.xml**. _Android SDK_ needs _User Permission_ to get network statuses and device id to match a content. The collected data is encrypted and only used for matching.
 
 Add _User Permission_ like the following codes.
 
@@ -117,9 +117,9 @@ protected void onCreate(Bundle savedInstanceState) {
 
 `adfresca.startSession();` Start requesting the session logging. Please make sure that it is called once while your app is running.
 
-`adfresca.load();` Load a campaign.
+`adfresca.load();` Load a content.
 
-`adfresca.show();` Show the loaded campaign.
+`adfresca.show();` Show the loaded content.
 
 You can see the following if everything is correct.
 
@@ -404,7 +404,7 @@ _AFShowListener_ is called when a campaign is finished.
 
 That, a campaign is finished, means the following two cases.
 
-1. The campaign was shown and it has been closed.
+1. The content was shown and it has been closed.
 2. A campaign was failed because it was expired or there was no [Custom Banner](#custom-banner) for its _Image Size Index_.
 
 You can differentiate these two cases by `view` that is given by `AFShowListener.show(int eventIndex, AFView view)`
@@ -431,7 +431,7 @@ adfresca.show(new AFShowListener(){
 	}
 });
 ```
-**Example:** The following code show a campaign at _Intro Activity_ and will move to _Main Activity_ when it is finished.
+**Example:** The following code show a content at _Intro Activity_ and will move to _Main Activity_ when it is finished.
 
 ```java
 AdFresca adfresca = AdFresca.getInstance(this);
