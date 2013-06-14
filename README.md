@@ -50,7 +50,7 @@ _AD fresca_ 는 기본적으로 전면 이미지를 사용해서 캠페인을 �
 
 **AndroidManifest.xml**의 Permission 추가하기
 
-_AD fresca_ 는 사용자의 네트워크 접속 상태, 기기ID를 수집하여, 광고 매칭에 사용합니다. 이를 위해 관련 퍼미션을 등록 및 허용해 주어야 합니다. 수집되는 모든 데이터는 암호화 처리되어 전송되며 광고 매칭 이외의 목적에 사용되지 않습니다 아래와 같이 Permission을 추가합니다.
+_AD fresca_ 는 사용자의 네트워크 접속 상태, 기기ID를 수집하여, 컨텐츠 매칭에 사용합니다. 이를 위해 관련 퍼미션을 등록 및 허용해 주어야 합니다. 수집되는 모든 데이터는 암호화 처리되어 전송되며 컨텐츠 매칭 이외의 목적에 사용되지 않습니다 아래와 같이 Permission을 추가합니다.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -170,7 +170,7 @@ SDK에서는 **setCustomParameter** 메소드를 사용하여 각 커스텀 파�
 
 ### Event
 
-Event 기능을 사용하면 앱에서 일어나는 다양한 사용자들의 활동, 페이지 이동 등에 Event를 설정한 후 그러한 Event 발생 시에 그에 적합한 공지사항, 광고 노출 등의 캠페인을 노출할 수 있습니다.
+Event 기능을 사용하면 앱에서 일어나는 다양한 사용자들의 활동, 페이지 이동 등에 Event를 설정한 후 그러한 Event 발생 시에 그에 적합한 공지사항, 컨텐츠 노출 등의 캠페인을 노출할 수 있습니다.
 
 Event 설정은 Admin 을 통해 가능하며 '[Event 설정하기](https://adfresca.zendesk.com/entries/23359141)' 가이드를 참고해주시기 바랍니다.
 
@@ -451,13 +451,13 @@ adfresca.show(EVENT_INDEX_INTRO, new AFShowListener(){
 ```
 
 **_주의!_**
-사용자가 마켓이나 다른 애플리케이션의 URI가 설정된 광고뷰를 클릭한 경우, 화면이 다른 애플리케이션으로 이동할 수 있습니다.
+사용자가 마켓이나 다른 애플리케이션의 URI가 설정된 컨텐츠를 클릭한 경우, 화면이 다른 애플리케이션으로 이동할 수 있습니다.
 
 이 때 onAdClosed 에 다른 Activity 로 이동하도록 구현하였다면, 사용자가 다른 화면에 있는 동안 앱의 Activity 가 미리 이동해버릴 수 있습니다.
 
 아래와 같은 방법으로 해당 문제를 해결할 수 있습니다.
 
-Dashboard 에서 Event 의 Close Mode 를 Override 로 변경 합니다.(광고를 클릭해도 광고가 닫히지 않는다.)
+Dashboard 에서 Event 의 Close Mode 를 Override 로 변경 합니다.(컨텐츠를 클릭해도 컨텐츠가 닫히지 않는다.)
 onResume() 을 다음과 같이 구현합니다.
 
 ```java
@@ -509,7 +509,7 @@ String deviceId = adfresca.getTestDeviceId();
 textView.setText(deviceId);
 ```
 
-2. printTestDeviceId Property를 설정하여 광고 화면에 Device ID를 표시하는 방법
+2. printTestDeviceId Property를 설정하여 화면에 Device ID를 표시하는 방법
  
 ```java
   AdFresca adfresca = AdFresca.getInstance(this);
@@ -521,7 +521,7 @@ textView.setText(deviceId);
 
 ### Timeout Interval
 
-컨텐츠의 최대 로딩 시간을 직접 지정하실 수 있습니다. 지정된 시간 내에 컨텐츠가 로딩되지 못한 경우, 사용자에게 광고를 노출하지 않습니다.
+컨텐츠의 최대 로딩 시간을 직접 지정하실 수 있습니다. 지정된 시간 내에 컨텐츠가 로딩되지 못한 경우, 사용자에게 컨텐츠를 노출하지 않습니다.
 
 최소 1초 이상 지정이 가능하며, 지정하지 않을 시 기본 값으로 5초가 지정 됩니다.
 
