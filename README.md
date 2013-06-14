@@ -450,6 +450,29 @@ adfresca.show(EVENT_INDEX_INTRO, new AFShowListener(){
 });
 ```
 
+**_주의!_**
+사용자가 마켓이나 다른 애플리케이션의 URI가 설정된 광고뷰를 클릭한 경우, 화면이 다른 애플리케이션으로 이동할 수 있습니다.
+
+이 때 onAdClosed 에 다른 Activity 로 이동하도록 구현하였다면, 사용자가 다른 화면에 있는 동안 앱의 Activity 가 미리 이동해버릴 수 있습니다.
+
+아래와 같은 방법으로 해당 문제를 해결할 수 있습니다.
+
+Dashboard 에서 Event 의 Close Mode 를 Override 로 변경 합니다.(광고를 클릭해도 광고가 닫히지 않는다.)
+onResume() 을 다음과 같이 구현합니다.
+
+```java
+@Override
+public void onResume() {
+  super.onResume();
+
+  AdFresca adfresca = AdFresca.getInstance(this);
+  
+  if (adfresca.getDefaultViewVisibility() == View.VISIBLE && adfresca.isUserClickedDefaultView()) {   
+    adfresca.closeAd();
+  }
+}
+```
+
 ### Custom URI
 
 Admin 사이트에서 Push Notification Campaign 생성 시, URI Schema를 입력받아 사용자가 notification 클릭 시 특정 액티비티로 바로 이동하도록 할 수 있습니다.

@@ -442,6 +442,30 @@ adfresca.show(EVENT_INDEX_INTRO, new AFShowListener(){
 	}
 });
 ```
+
+**_Caution!_**
+If user clicked contents that opens Google Play or other applications, user will leave our of your app screen.
+
+In this case, if you implemented onFinish() event like above example, user may see unnatural paging animation since app was temporally paused by other application.
+
+To fix this issue, follow the steps below:
+
+In admin dashboard, you should change 'Close mode' to 'Override' in your event settings. (it will prevent to close view when user clicked)
+In app codes, override Activity's onResume() method like below:
+
+```java
+@Override
+public void onResume() {
+  super.onResume();
+
+  AdFresca adfresca = AdFresca.getInstance(this);
+  
+  if (adfresca.getDefaultViewVisibility() == View.VISIBLE && adfresca.isUserClickedDefaultView()) {   
+    adfresca.closeAd();
+  }
+}
+```
+
 ### Custom URI
 
 You can set URI Schema to your Push Notification Campaign. When your app user clicks a notification with URI Schema, user will be forward to a specific activity you choose
