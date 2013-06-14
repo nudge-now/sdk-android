@@ -6,7 +6,7 @@
 - [Basic Features](#basic-features)
     - [In-App-Purchase Count](#in-app-purchase-count)
     - [Custom Parameter](#custom-parameter)
-    - [Event Index](#event-index)
+    - [Event](#event)
 - [Custom Banner](#custom-banner)
     - [Floating View](#floating-view)
     - [Banner View](#banner-view)
@@ -164,7 +164,7 @@ In SDK, you can just set custom parameters using setCustomParameter method with 
   adfresca.show();
 ```
 
-### Event Index
+### Event
 
 Using 'Event' feature, you can define your in-app events such as user's behavior, page navigation, and etc. Then you can target your campaigns for each event. 
 

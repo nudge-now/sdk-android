@@ -6,7 +6,7 @@
 - [Basic Features](#basic-features)
     - [In-App-Purchase Count](#in-app-purchase-count)
     - [Custom Parameter](#custom-parameter)
-    - [Event Index](#event-index)
+    - [Event](#event)
 - [Custom Banner](#custom-banner)
     - [Floating View](#floating-view)
     - [Banner View](#banner-view)
@@ -168,7 +168,7 @@ SDK에서는 **setCustomParameter** 메소드를 사용하여 각 커스텀 파�
   adfresca.show();
 ```
 
-### Event Index
+### Event
 
 Event 기능을 사용하면 앱에서 일어나는 다양한 사용자들의 활동, 페이지 이동 등에 Event를 설정한 후 그러한 Event 발생 시에 그에 적합한 공지사항, 광고 노출 등의 캠페인을 노출할 수 있습니다.
 
