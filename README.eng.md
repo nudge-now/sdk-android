@@ -486,7 +486,7 @@ textView.setText(deviceId);
 
 ### Timeout Interval
 
-You can set a timeout interval for AD request. If AD is not loaded within this time interval, AD won't be displayed to users and SDK will return the control to your app.
+You can set a timeout interval for content request. If content is not loaded within this time interval, Content won't be displayed to users and SDK will return the control to your app.
 
 Default is 5 seconds and you can set from 1 seconds to 5 seconds.
 
