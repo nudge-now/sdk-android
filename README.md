@@ -15,7 +15,7 @@
 - [Advanced Features](#advanced-features)
     - [AFLoadListener](#afloadlistener)
     - [AFShowListener](#afshowlistener)
-    - [Custom URI](#custom-uri)
+    - [Custom URL](#custom-url)
     - [Test Device ID](#test-device-id)
     - [Timeout Interval](#timeout-interval)
 - [Trouble Shooting](#trouble-shooting)
@@ -473,11 +473,13 @@ public void onResume() {
 }
 ```
 
-### Custom URI
+### Custom URL
 
-Admin 사이트에서 Push Notification Campaign 생성 시, URI Schema를 입력받아 사용자가 notification 클릭 시 특정 액티비티로 바로 이동하도록 할 수 있습니다.
+Announcement 캠페인의 Click URL, Push Notification 캠페인의 URL Schema 설정 시에 자신의 앱 URL Schema를 사용할 수 있습니다.
 
-해당 기능을 지원하기 위해서는 AndroidManifest.xml 파일을 수정하여 URI 정보를 추가해야 합니다.
+이를 통해 사용자가 콘텐츠를 클릭할 경우, 자신이 원하는 특정 앱 페이지로 이동하는 등의 액션을 지정할 수 있습니다.
+
+해당 기능을 지원하기 위해서는 AndroidManifest.xml 파일을 수정하여 scheme 정보를 추가해야 합니다.
 
 ```xml
   <activity android:name=".DemoZoneActivity">
@@ -490,7 +492,7 @@ Admin 사이트에서 Push Notification Campaign 생성 시, URI Schema를 입�
   </activity>
 ```
 
-위와 같이 설정한 경우, Campaign의 URI Schema 값을 myapp://com.adfresca.zone 으로 설정하여 DemoZoneActivity가 바로 실행되도록 할 수 있습니다.
+위와 같이 설정한 경우, Campaign의 _Click URL_ 값을 myapp://com.adfresca.zone 으로 설정하여 DemoZoneActivity가 바로 실행되도록 할 수 있습니다.
 
 ### Test Device ID
 

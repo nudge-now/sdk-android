@@ -15,7 +15,7 @@
 - [Advanced Features](#advanced-features)
     - [AFLoadListener](#afloadlistener)
     - [AFShowListener](#afshowlistener)
-    - [Custom URI](#custom-uri)
+    - [Custom URL](#custom-url)
     - [Test Device ID](#test-device-id)
     - [Timeout Interval](#timeout-interval)
 - [Trouble Shooting](#trouble-shooting)
@@ -466,11 +466,13 @@ public void onResume() {
 }
 ```
 
-### Custom URI
+### Custom URL
 
-You can set URI Schema to your Push Notification Campaign. When your app user clicks a notification with URI Schema, user will be forward to a specific activity you choose
+You can set your own URL Schema as _Click URL_ of AD fresca campaigns.
 
-To use this feature, add URI information in AndroidManifest.xml
+So, you can navigate your users to the specific page or do some custom actions when user clicked the content view.
+
+To use this feature, add scheme in AndroidManifest.xml
 
 ```xml
   <activity android:name=".DemoZoneActivity">
@@ -483,7 +485,7 @@ To use this feature, add URI information in AndroidManifest.xml
   </activity>
 ```
 
-In this example above, DemoZoneActivity will be opened when you set URI Schema value as 'myapp://com.adfresca.zon' in your Push Notification Campaign
+In this example above, DemoZoneActivity will be opened when you set _Click URL_ value as 'myapp://com.adfresca.zon' in your Campaign.
 
 ### Test Device ID
 
