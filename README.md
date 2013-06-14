@@ -409,13 +409,13 @@ AdFresca.setLoadListener(new AFLoadListener(){
 
 캠패인이 끝났다는 것은 다음 두가지를 의미합니다.
 
-1. 캠패인이 정상적으로 화면에 보여지고 닫혀진 경우
-2. load 된 캠패인이 만료되었거나 캠패인에 맞는 view를 찾을 수 없어서 보여지지 않고 끝난 경우
+1. 컨텐츠가 정상적으로 화면에 보여지고 닫혀진 경우
+2. load 된 컨텐츠가 만료되었거나 컨텐츠에 맞는 view를 찾을 수 없어서 보여지지 않고 끝난 경우
 
 이 두가지 경우를 `AFShowListener.show(int eventIndex, AFView view)`의 두번째 인자 `view`로 판별할 수 있습니다.
 
-- `view != null`이면 캠패인이 정상적으로 보여진 경우입니다. 이때 `view`는 [ _Default View_ | _Floating View_ | _Banner View_ ] 가 됩니다. `AFView.isDefaultView()`로 _Default View_ 인지 판별할 수 있습니다.
-- `view == null`이면 캠패인이 보여지지 않고 끝난 경우입니다.
+- `view != null`이면 컨텐츠가 정상적으로 보여진 경우입니다. 이때 `view`는 [ _Default View_ | _Floating View_ | _Banner View_ ] 가 됩니다. `AFView.isDefaultView()`로 _Default View_ 인지 판별할 수 있습니다.
+- `view == null`이면 컨텐츠가 보여지지 않고 끝난 경우입니다.
 
 ```java
 AdFresca adfresca = AdFresca.getInstance(this);
@@ -436,7 +436,7 @@ adfresca.show(new AFShowListener(){
 	}
 });
 ```
-**Example:** _인트로 액티비티_에서 캠패인을 하고 끝나면 _메인 액티비티_로 이동
+**Example:** _인트로 액티비티_에서 컨텐츠를 보여주고 끝나면 _메인 액티비티_로 이동
 
 ```java
 AdFresca adfresca = AdFresca.getInstance(this);
