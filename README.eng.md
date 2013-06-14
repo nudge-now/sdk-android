@@ -360,6 +360,8 @@ Before you start, we recommend reading ["GCM: Getting Started" ](http://develope
 
 ### Custom Notification
 
+You can change the settings of _Notification_. The code below shows how to do that.
+
 ```java
 public class GCMIntentService extends GCMBaseIntentService {
 	@Override
