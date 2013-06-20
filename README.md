@@ -250,7 +250,8 @@ Banner View 를 사용하기 위해 태그를 추가합니다.
 *   `adfresca:image_size_index="1"` 이미지 사이즈 인덱스를 설정합니다.
 *   `adfresca:default_image="@drawable/default_image"` 이미지가 로드되기 전 표시할 디폴트 이미지를 지정합니다.
 
-**Example:** 한 액티비티에서 기본 Interstitial View 와 Banner View 두 개의 View 사용하기
+**Example:** 한 액티비티에서 기본 Interstitial View 와 Banner View 두 개의 View를 동시에 사용하기
+이벤트 기능을 활용하여 여러 개의 뷰를 한 화면에 동시에 노출할 수 있습니다. 각 이벤트를 위한 loadAd(eventIndex) 메소드를 호출한 후, showAd() 메소드를 호출하여 각 이벤트에 매칭되는 콘텐츠를 모두 노출합니다.
 
 ```java
 @Override
@@ -261,8 +262,8 @@ protected void onCreate(Bundle savedInstanceState) {
   AdFresca.setApiKey(API_KEY);
   AdFresca adfresca = AdFresca.getInstance(this);
   adfresca.startSession();
-  adfresca.load(EVENT_INDEX_BANNER); // Banner View 를 위한 컨텐츠를 load 합니다.
-  adfresca.load(EVENT_INDEX_INTERSTITIAL); // Interstitial View 를 위한 컨텐츠를 load 합니다.
+  adfresca.load(EVENT_INDEX_MAIN_PAGE_FOR_BANNER); // Banner View 를 위한 컨텐츠를 load 합니다.
+  adfresca.load(EVENT_INDEX_MAIN_PAGE_FOR_INTERSTITIAL); // Interstitial View 를 위한 컨텐츠를 load 합니다.
   adfresca.show(); // load 된 모든 컨텐츠를 show 합니다.
 }
 ```
