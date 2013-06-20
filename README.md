@@ -262,7 +262,7 @@ protected void onCreate(Bundle savedInstanceState) {
   AdFresca adfresca = AdFresca.getInstance(this);
   adfresca.startSession();
   adfresca.load(EVENT_INDEX_BANNER); // Banner View 를 위한 컨텐츠를 load 합니다.
-  adfresca.load(EVENT_INDEX_INTERSTITIAL); Interstitial View 를 위한 컨텐츠를 load 합니다.
+  adfresca.load(EVENT_INDEX_INTERSTITIAL); // Interstitial View 를 위한 컨텐츠를 load 합니다.
   adfresca.show(); // load 된 모든 컨텐츠를 show 합니다.
 }
 ```
