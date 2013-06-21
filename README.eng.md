@@ -246,8 +246,25 @@ Add the following tag to layout xml to use _Banner View_.
 *   `adfresca:image_size_index="1"` Set _Image Size Index_.
 *   `adfresca:default_image="@drawable/default_image"` Set _Default Image_ that is displayed before the image is matched.
 
-* * *
+**Example:** Using _Default View(Interstitial View)_ and _Banner View_ in a activity.
 
+You are able to show a number of views by [Event](#event).
+
+```java
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+  super.onCreate(savedInstanceState);
+  setContentView(R.layout.activity_intro);
+  
+  AdFresca.setApiKey(API_KEY);
+  AdFresca adfresca = AdFresca.getInstance(this);
+  adfresca.startSession();
+  adfresca.load(EVENT_INDEX_MAIN_PAGE_FOR_BANNER); // load the content for Banner View of Main page
+  adfresca.load(EVENT_INDEX_MAIN_PAGE_FOR_INTERSTITIAL); // load the content for Interstitial View of Main page
+  adfresca.show(); // show all loaded contents.
+}
+```
+* * *
 
 ### Push Notification
 
