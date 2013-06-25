@@ -225,15 +225,18 @@ Android SDK 에서는 _Floating View_와 _Banner View_ 두가지 종류의 커�
 ### Floating View
 
 Floating View 를 사용하기 위해 태그를 추가합니다.
+
 ```xml
 <com.adfresca.sdk.view.AFFloatingView
     android:layout_width="match_parent"
     android:layout_height="80dp"
     adfresca:image_size_index="1" />
 ```
+
 *   `adfresca:image_size_index=1` _이미지 사이즈 인덱스_를 설정합니다.
 
 닫기 버튼 이미지를 설정하여 사용자가 _Floating View_를 닫을 수 있도록 할 수 있습니다.
+
 ```xml
 <com.adfresca.sdk.view.AFFloatingView
     android:layout_width="match_parent"
@@ -241,11 +244,13 @@ Floating View 를 사용하기 위해 태그를 추가합니다.
     adfresca:image_size_index="1"
     adfresca:close_button_image="@drawable/close_button" />
 ```
+
 *   `adfresca:close_button_image="@drawable/close_button"` 닫기 버튼 이미지를 설정합니다.
 
 ### Banner View
 
 _Banner View_ 를 사용하기 위해 태그를 추가합니다.
+
 ```xml
 <com.adfresca.sdk.view.AFBannerView
     android:layout_width="match_parent"
@@ -253,6 +258,7 @@ _Banner View_ 를 사용하기 위해 태그를 추가합니다.
     adfresca:default_image="@drawable/ic_launcher"
     adfresca:image_size_index="1"/>
 ```
+
 *   `adfresca:image_size_index="1"` 이미지 사이즈 인덱스를 설정합니다.
 *   `adfresca:default_image="@drawable/default_image"` 이미지가 로드되기 전 표시할 디폴트 이미지를 지정합니다.
 
