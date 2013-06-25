@@ -231,6 +231,18 @@ Add the following tag to layout xml to use _Floating View_.
 
 *   `adfresca:image_size_index=1` Set _Image Size Index_.
 
+You can set _close\_button\_image_ for users to be able to close _Floating View_.
+
+```xml
+<com.adfresca.sdk.view.AFFloatingView
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    adfresca:image_size_index="1"
+    adfresca:close_button_image="@drawable/close_button" />
+```
+
+*   `adfresca:close_button_image="@drawable/close_button"` Set an image of close button.
+
 ### Banner View
 
 Add the following tag to layout xml to use _Banner View_.

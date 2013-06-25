@@ -208,9 +208,9 @@ _(기존의 ['AD Slot 지정하기](https://adfresca.zendesk.com/entries/2335913
 
 ## Custom Banner
 
-Android SDK 에서는 Floating View 와 Banner View 두가지 종류의 커스텀 배너를 제공합니다. 커스텀 배너는 dashboard 에서 이미지 사이즈를 등록한 후 해당 이미지 사이즈를 사용하는 캠페인이 매칭되었을 때 이미지를 커스텀 배너에 보여줍니다.
+Android SDK 에서는 _Floating View_와 _Banner View_ 두가지 종류의 커스텀 배너를 제공합니다. 커스텀 배너는 dashboard 에서 이미지 사이즈를 등록한 후 해당 이미지 사이즈를 사용하는 캠페인이 매칭되었을 때 이미지를 커스텀 배너에 보여줍니다.
 
-AdFresca.load() 와 AdFresca.show() 를 통해 이미지를 보여주는 점은 기존 캠페인과 같습니다. Floating View 는 다른 UI Component 위에 위치하며 닫을 수 있으며, Banner View 는 Floating View 와는 반대로 화면의 일정 영역을 차지하며 닫을 수 없습니다. 
+`AdFresca.load()` 와 `AdFresca.show()` 를 통해 이미지를 보여주는 점은 기존 캠페인과 같습니다. _Floating View_는 다른 UI Component 위에 위치하며 닫을 수 있으며, _Banner View_는 _Floating View_와는 반대로 화면의 일정 영역을 차지하며 닫을 수 없습니다. 
 
 커스텀 배너를 사용하기 위해서는 아래와 같이 namespace 를 layout xml 파일에 추가해야합니다.
 
@@ -233,11 +233,23 @@ Floating View 를 사용하기 위해 태그를 추가합니다.
     adfresca:image_size_index="1" />
 ```
 
-*   `adfresca:image_size_index=1` 이미지 사이즈 인덱스를 설정합니다.
+*   `adfresca:image_size_index=1` _이미지 사이즈 인덱스_를 설정합니다.
+
+닫기 버튼 이미지를 설정하여 사용자가 _Floating View_를 닫을 수 있도록 할 수 있습니다.
+
+```xml
+<com.adfresca.sdk.view.AFFloatingView
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    adfresca:image_size_index="1"
+    adfresca:close_button_image="@drawable/close_button" />
+```
+
+*   `adfresca:close_button_image="@drawable/close_button"` 닫기 버튼 이미지를 설정합니다.
 
 ### Banner View
 
-Banner View 를 사용하기 위해 태그를 추가합니다.
+_Banner View_ 를 사용하기 위해 태그를 추가합니다.
 
 ```xml
 <com.adfresca.sdk.view.AFBannerView
@@ -250,7 +262,7 @@ Banner View 를 사용하기 위해 태그를 추가합니다.
 *   `adfresca:image_size_index="1"` 이미지 사이즈 인덱스를 설정합니다.
 *   `adfresca:default_image="@drawable/default_image"` 이미지가 로드되기 전 표시할 디폴트 이미지를 지정합니다.
 
-**Example:** 한 액티비티에서 기본 Interstitial View 와 Banner View 두 개의 View를 동시에 사용하기
+**Example:** 한 액티비티에서 기본 _Interstitial View_와 _Banner View_ 두 개의 View를 동시에 사용하기
 
 이벤트 기능을 활용하여 여러 개의 뷰를 한 화면에 동시에 노출할 수 있습니다. 
 
