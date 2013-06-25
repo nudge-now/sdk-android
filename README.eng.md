@@ -560,7 +560,43 @@ Default is 5 seconds and you can set from 1 seconds to 5 seconds.
 
 ## Trouble Shooting
 
+if you cannot see our content or get other errors, you can debug by implementing AFExceptionListener.
+
+```java
+AdFresca.setExceptionListener(new AFExceptionListener(){
+  @Override
+  public void onExceptionCaught(AFException e) {
+    Log.w("TAG", e.getCode() + ":" + e.getLocalizedMessage());
+  }
+});
+```
+
 ### Error Code
+
+Code | Message | Description
+------------ | ------------- | ------------
+UNKNOWN_ERROR = 1 | Unknown Error | Unknown error has occurred. Please contact our dev team to solve this issue.
+NO_APIKEY = 1 | No API Key set to AdFresca | There is no API Key set to AdFresca.
+NO_ACTIVITY = 2 | No Activity set to AdFresca | There is no Activity set to AdFrescaView.
+NO_INTERNET_CONNECTION = 3 | No Internet Connection | The network connection is not available. android.permission.INTERNET permission might not be added.
+NO_DEVICE_ID = 4 |  | SDK can't get a device id. OpenUDID might not be added.
+NO_NETWORK_STATUS = 5 |  | SDK can't firgure out a network status of device. ACCESS_NETWORK_STATE permission might not be added.
+INVALID_ADREQEST_IMPRESSION = 6 | We're sorry, but something went wrong. /impression | An error has occurred on our server. Please contact our dev team to solve this issue.
+INVALID_ADREQEST_IMAGE = 7 | We're sorry, but something went wrong. /image | An error has occurred on our server. Please contact our dev team to solve this issue.
+INVALID_ADREQEST_DISPLAYED = 8 | We're sorry, but something went wrong. /displayed | An error has occurred on our server. Please contact our dev team to solve this issue.
+INVALID_ADREQEST_CLICKED = 9 | We're sorry, but something went wrong. /clicked | An error has occurred on our server. Please contact our dev team to solve this issue.
+AD_TIMEOUT = 10 | Request Timed Out | Content has not been loaded after timeout interval. It usually occurs when the device has a week network connection.
+NO_APP_VERSION = 11 | No app version in manifest.xml | There is no versionName set in manifest.xml
+INVALID_SESSION_REQUEST = 12 | We're sorry, but something went wrong. /session | An error has occurred on our server. Please contact our dev team to solve this issue.
+INVALID_ADREQEST_ACTIVE = 13 | We're sorry, but something went wrong. /active | An error has occurred on our server. Please contact our dev team to solve this issue.
+AD_IMPRESSION_EXPIRED = 14 | This AD is expired | Your content that you loaded has been expired and not able show to users. Try load again.
+INVALID_PUSH_RUN_REQUEST = 15 | We're sorry, but something went wrong. /push_notification | An error has occurred on our server. Please contact our dev team to solve this issue.
+UNKNOWN_REQUEST_TYPE = 16 |  | This error occur when SDK is about to process an unknown request type. Please contact our dev team to solve this issue.
+UNKNOWN_VIEW_TYPE = 17 |  | This error occur when SDK is about to process an unknown view type. Please contact our dev team to solve this issue.
+NO_IMAGE_SIZE_TYPE_INDEX = 18 | No matched view for ImageSizeIndex=%d | This error occur when SDK cannot show a loaded content because there is no view for the image size index of the loaded content.
+INVALID_API_KEY = 102 | No app with the given api_key : | You may put wrong API Key in your code. Please check it again.
+INVALIED_LOCALE = 102 | No locale match : l | Unknown locale is used for our service.
+
 
 * * *
 

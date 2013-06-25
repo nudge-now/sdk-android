@@ -567,7 +567,42 @@ textView.setText(deviceId);
 
 ## Trouble Shooting
 
+컨텐츠 제대로 출력되지 않거나, 에러가 발생한다면 AdExceptionListener 인터페이스를 구현하여, 에러 정보를 확인 할 수 있습니다.
+
+```java
+AdFresca.setExceptionListener(new AFExceptionListener(){
+  @Override
+  public void onExceptionCaught(AFException e) {
+    Log.w("TAG", e.getCode() + ":" + e.getLocalizedMessage());
+  }
+});
+```
+
 ### Error Code
+
+Code | Message | Description
+------------ | ------------- | ------------
+UNKNOWN_ERROR = 1 | Unknown Error | 아직 처리되지 않은 에러를 뜻합니다. 자세한 내용을 AdFresca 개발팀에게 문의해주시면 대응이 가능합니다.
+NO_APIKEY = 1 | No API Key set to AdFresca | AdFresca 에 API Key 를 설정하지 않은 경우 발생합니다.
+NO_ACTIVITY = 2 | No Activity set to AdFresca | AdFresca.getInstance(Activity) 에 Activity 가 넘어오지 않은 경우 발생합니다.
+NO_INTERNET_CONNECTION = 3 | No Internet Connection | 디바이스의 인터넷 접속이 불가능할 시에 발생합니다. android.permission.INTERNET  퍼미션이 설정되지 않을 시에 발생 할 수 있습니다.
+NO_DEVICE_ID = 4 |  | OpenUDID 가 제대로 등록되지 않은 경우 발생할 수 있습니다.
+NO_NETWORK_STATUS = 5 |  | ACCESS_NETWORK_STATE 퍼미션이 설정되지 않은 경우 발생합니다.
+INVALID_ADREQEST_IMPRESSION = 6 | We're sorry, but something went wrong. /impression | 서버에서 응답을 제대로 처리하지 못하는 경우 발생 합니다. AdFresca 개발팀에게 직접 문의해주시면 대응이 가능합니다.
+INVALID_ADREQEST_IMAGE = 7 | We're sorry, but something went wrong. /image | 서버에서 응답을 제대로 처리하지 못하는 경우 발생 합니다. AdFresca 개발팀에게 직접 문의해주시면 대응이 가능합니다.
+INVALID_ADREQEST_DISPLAYED = 8 | We're sorry, but something went wrong. /displayed | 서버에서 응답을 제대로 처리하지 못하는 경우 발생 합니다. AdFresca 개발팀에게 직접 문의해주시면 대응이 가능합니다.
+INVALID_ADREQEST_CLICKED = 9 | We're sorry, but something went wrong. /clicked | 서버에서 응답을 제대로 처리하지 못하는 경우 발생 합니다. AdFresca 개발팀에게 직접 문의해주시면 대응이 가능합니다.
+AD_TIMEOUT = 10 | Request Timed Out | 컨텐츠 로딩이 지정된 시간을 초과하여 켐패인 노출이 취소된 경우 발생합니다. 
+NO_APP_VERSION = 11 | No app version in manifest.xml | manifest.xml 안에 versionName이 명시되지 않은 경우 발생합니다.
+INVALID_SESSION_REQUEST = 12 | We're sorry, but something went wrong. /session | 서버에서 응답을 제대로 처리하지 못하는 경우 발생 합니다. AdFresca 개발팀에게 직접 문의해주시면 대응이 가능합니다.
+INVALID_ADREQEST_ACTIVE = 13 | We're sorry, but something went wrong. /active | 서버에서 응답을 제대로 처리하지 못하는 경우 발생 합니다. AdFresca 개발팀에게 직접 문의해주시면 대응이 가능합니다.
+AD_IMPRESSION_EXPIRED = 14 | This AD is expired | 이전에 받아온 컨텐츠가 더이상 유효하지 않을 경우 발생 합니다.
+INVALID_PUSH_RUN_REQUEST = 15 | We're sorry, but something went wrong. /push_notification | 서버에서 응답을 제대로 처리하지 못하는 경우 발생 합니다. AdFresca 개발팀에게 직접 문의해주시면 대응이 가능합니다.
+UNKNOWN_REQUEST_TYPE = 16 |  | SDK 에 알 수 없는 요청이 들어온 경우 발생합니다. AdFresca 개발팀에게 직접 문의해주시면 대응이 가능합니다.
+UNKNOWN_VIEW_TYPE = 17 |  | SDK 에 알 수 없는 View Type 이 처리되는 경우 발생합니다. AdFresca 개발팀에게 직접 문의해주시면 대응이 가능합니다.
+NO_IMAGE_SIZE_TYPE_INDEX = 18 | No matched view for ImageSizeIndex=%d | 서버로부터 내려받은 컨텐츠의 Image Size Index 와 매칭되는 View 가 없어서 노출하지 못한 경우에 발생합니다.
+INVALID_API_KEY = 102 |  No app with the given api_key : | 유효하지 않은 API Key를 입력한 경우 발생합니다. 발급된 API Key가 맞는지 다시 한번 확인해 주세요.
+INVALIED_LOCALE = 102 | No locale match : l | 디바이스에서 아직 제공하지 않는 언어(로케일)을 사용시 발생합니다.
 
 * * *
 
