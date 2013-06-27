@@ -39,7 +39,7 @@ Unlike other SDKs by other AD networks, AD fresca SDK does not show content to u
 
 Download SDK at the following link.
 
-[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android-beta.zip) (v2.0.0-beta.1)
+[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.1.0)
 
 Copy **AdFresca.jar** and **adfresca_attr.xml** to **lib** and **res/values** repectively.
 
