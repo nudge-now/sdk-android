@@ -12,6 +12,7 @@
     - [Banner View](#banner-view)
 - [Push Notification](#push-notification)
     - [Custom Notification](#custom-notification)
+- [Reward Item](#reward-item)
 - [Advanced Features](#advanced-features)
     - [AFLoadListener](#afloadlistener)
     - [AFShowListener](#afshowlistener)
@@ -407,6 +408,103 @@ public class GCMIntentService extends GCMBaseIntentService {
 	}
 }
 ```
+
+* * *
+
+## Reward Item
+
+_Incentivzed Campaign_ makes it possible to give a reward to users who sees an ad of _Advertising App_ in _Media App_ and install _AdVertising App_.
+
+It is highly recommended to install SDK in _Advertising App_ for _CPA Campaign_ that is coming soon although it is not required at this time.
+
+Code in _Media App_:
+
+- At the place you want to reward, call `getAvailableRewardItems()` to get reward item array.
+
+- This array contains _AFRewardItem_ objects that has properties such as name, quantity and uniqueValue.
+
+- `getAvailableRewardItems()` returns available reward items when it is called, and start check available reward items asynchronously. That means the second call of `getAvailableRewardItems()` may return available reward items though the first call returns no available reward item.
+
+```java
+@Override
+public void onStart() {
+  super.onStart();
+
+  AdFresca adfresca = AdFresca.getInstance(DemoIntroActivity.this);
+  List<AFRewardItem> items = adfresca.getAvailableRewardItems();
+
+  if (items.size() > 0) {
+    for (AFRewardItem item : items) {
+      Log.d(TAG,String.format("Get AFRewardItem: item.name=%s, item.quantity=%d, item.uniqueVlaue=%s", item.name, item.quantity, item.uniqueValue));
+      // do something with item.name, item.uniqueValue and item.quantity
+    }
+    String itemNames = joinNameStringsByComma(items);
+    String alertMessage = String.format("You got the reward item(s)! (%s)", itemNames);
+    showAlert(alertMessage);
+  }
+}
+```
+
+###(Advanced) Giving a reward immediately:
+
+- Call `checkRewardItems()` to check at the time of starting app or whenever you want.
+- Call `getAvailableRewardItems()` to retrieve available reward items to give it to users.
+
+```java
+@Override
+public void onStart() {
+  super.onStart();
+
+  AdFresca adfresca = AdFresca.getInstance(DemoIntroActivity.this);
+  adfresca.checkRewardItems();
+}
+
+@Override
+public void onClick(View view) {
+  List<AFRewardItem> items = adfresca.getAvailableRewardItems();
+
+  if (items.size() > 0) {
+    for (AFRewardItem item : items) {
+      Log.d(TAG,String.format("Get AFRewardItem: item.name=%s, item.quantity=%d, item.uniqueVlaue=%s", item.name, item.quantity, item.uniqueValue));
+      // do something with item.name, item.uniqueValue and item.quantity
+    }
+    String itemNames = joinNameStringsByComma(items);
+    String alertMessage = String.format("You got the reward item(s)! (%s)", itemNames);
+    showAlert(alertMessage);
+  }
+}
+```
+
+### (Advanced) Checking and giving in sync:
+
+`checkRewardItems(true)` blocks your code flow. That `checkRewardItems(true)` returns means it is finished to check available reward item. After it returns, you may call `getAvailableRewardItems()` to give users reward items.
+
+
+```java
+new AsyncTask<Void, Void, Void>() {
+  protected Void doInBackground(Void... params) {
+    AdFresca adfresca = AdFresca.getInstance(DemoIntroActivity.this);
+    adfresca.checkRewardItems(true);
+    return null;
+  }
+
+  protected void onPostExecute(Void param) {
+    AdFresca adfresca = AdFresca.getInstance(DemoIntroActivity.this);
+    List<AFRewardItem> items = adfresca.getAvailableRewardItems();
+
+    if (items.size() > 0) {
+      for (AFRewardItem item : items) {
+        Log.d(TAG,String.format("Get AFRewardItem: item.name=%s, item.quantity=%d, item.uniqueVlaue=%s", item.name, item.quantity, item.uniqueValue));
+        // do something with item.name, item.uniqueValue and item.quantity
+      }
+      String itemNames = joinNameStringsByComma(items);
+      String alertMessage = String.format("You got the reward item(s)! (%s)", itemNames);
+      showAlert(alertMessage);
+    }
+  }
+}.execute();
+```
+
 * * *
 ## Advanced Features
 
