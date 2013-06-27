@@ -418,17 +418,17 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 ## Reward Item
 
-Incentivized Campaign을 사용하여 , 사용자가 Media App에서 Advertising App의 광고를 보고 앱을 설치하였을 때 보상으로 Media App의 아이템을 지급할 수 있습니다.
+_Incentivized Campaign_을 사용하여 , 사용자가 _Media App_에서 _Advertising App_의 광고를 보고 앱을 설치하였을 때 보상으로 _Media App_의 아이템을 지급할 수 있습니다.
 
-(현재 CPI  캠페인을 진행할 경우, Advertising App의 SDK 설치는 필수가 아닙니다. 하지만 이후 지원할 CPA 캠페인을 위해서 미리 SDK를 설치하는 것을 권장합니다.)
+(현재 CPI  캠페인을 진행할 경우, _Advertising App_의 SDK 설치는 필수가 아닙니다. 하지만 이후 지원할 CPA 캠페인을 위해서 미리 SDK를 설치하는 것을 권장합니다.)
 
 Media App에 SDK 적용하기:
 
-- 아이템 지급을 원하는 위치에서 getAvailableRewardItems() 메소드를 통해 아이템 리스트를 받습니다. 
+- 아이템 지급을 원하는 위치에서 `getAvailableRewardItems()` 메소드를 통해 아이템 리스트를 받습니다. 
 
-- Array에는 AFRewardItem 객체들이 포함되어 있으며 name, quantity, uniqueValue 프로퍼티 값을 가지고 있습니다.
+- Array에는 `AFRewardItem` 객체들이 포함되어 있으며 name, quantity, uniqueValue 프로퍼티 값을 가지고 있습니다.
 
-- getAvailableRewardItems() 메소드는 현재 지급이 가능한 아이템 리스트를 리턴하며, 아직 검사가 끝나지 않은 경우 이후 메소드 호출 시에 반영됩니다.
+- `getAvailableRewardItems()` 메소드는 현재 지급이 가능한 아이템 리스트를 리턴하며, 아직 검사가 끝나지 않은 경우 이후 메소드 호출 시에 반영됩니다.
 
 ```java
 @Override
@@ -452,7 +452,7 @@ public void onStart() {
 
 ###(Advanced) 더욱 빠르게 아이템 지급하기:
 
-getAvailableRewardItems() 메소드는 현재 지급 가능한 아이템 리스트를 리턴한 이후, 새롭게 지급 가능한 아이템들이 있는지 백그라운드로 검사를 진행하게 됩니다. 만약 앱 시작시에 미리 검사를 수동으로 진행하고 원하는 위치에서 getAvailableRewardItems() 메소드를 호출한다면, 사용자들에게 더욱 빠른 아이템 지급이 가능해집니다.
+`getAvailableRewardItems()` 메소드는 현재 지급 가능한 아이템 리스트를 리턴한 이후, 새롭게 지급 가능한 아이템들이 있는지 백그라운드로 검사를 진행하게 됩니다. 만약 앱 시작시에 미리 검사를 수동으로 진행하고 원하는 위치에서 `getAvailableRewardItems()` 메소드를 호출한다면, 사용자들에게 더욱 빠른 아이템 지급이 가능해집니다.
 
 ```java
 @Override
@@ -479,7 +479,7 @@ public void onClick(View view) {
 }
 ```
 
-checkRewardItems(synchronized) 메소드를 Synchronized 모드로 실행하면,, SDK가 모든 검사를 완료할 때 까지 기다린 후 바로 아이템을 지급할 수도 있습니다.
+`checkRewardItems(synchronized)` 메소드를 Synchronized 모드로 실행하면,, SDK가 모든 검사를 완료할 때 까지 기다린 후 바로 아이템을 지급할 수도 있습니다.
 
 ```java
 new AsyncTask<Void, Void, Void>() {

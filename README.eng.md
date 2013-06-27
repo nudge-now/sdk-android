@@ -415,7 +415,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 _Incentivzed Campaign_ makes it possible to give a reward to users who sees an ad of _Advertising App_ in _Media App_ and install _AdVertising App_.
 
-It is highly recommended to install SDK in _Advertising App_ for _CPA Campaign_ that is coming soon although it is not required at this time.
+(It is highly recommended to install SDK in _Advertising App_ for _CPA Campaign_ that is coming soon although it is not required at this time.)
 
 Code in _Media App_:
 
