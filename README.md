@@ -116,9 +116,9 @@ protected void onCreate(Bundle savedInstanceState) {
 
 `adfresca.startSession();` 세션이 시작됨을 서버에 알립니다. 어플리케이션이 시작될 때 **한번만** 실행되도록 합니다.
 
-`adfresca.load();` 서버로부터 캠페인을 내려받습니다.
+`adfresca.load();` 서버로부터 컨텐츠를 내려받습니다.
 
-`adfresca.show();` 내려받은 캠페인을 보여줍니다.
+`adfresca.show();` 내려받은 컨텐츠를 보여줍니다.
 
 정상적으로 실행이 되면 다음과 같은 화면이 보여집니다.
 
@@ -171,7 +171,7 @@ SDK에서는 **setCustomParameter** 메소드를 사용하여 각 커스텀 파�
 
 ### Event
 
-Event 기능을 사용하면 앱에서 일어나는 다양한 사용자들의 활동, 페이지 이동 등에 Event를 설정한 후 그러한 Event 발생 시에 그에 적합한 공지사항, 컨텐츠 노출 등의 캠페인을 노출할 수 있습니다.
+Event 기능을 사용하면 앱에서 일어나는 다양한 사용자들의 활동, 페이지 이동 등에 Event를 설정한 후 그러한 Event 발생 시에 그에 적합한 공지사항, 컨텐츠 등을 노출할 수 있습니다.
 
 Event 설정은 Admin 을 통해 가능하며 '[Event 설정하기](https://adfresca.zendesk.com/entries/23359141)' 가이드를 참고해주시기 바랍니다.
 
@@ -182,25 +182,25 @@ Event 설정하신 후, SDK 적용을 위해서는 각 Event 'Index' 값이 필�
 _(기존의 ['AD Slot 지정하기](https://adfresca.zendesk.com/entries/23359131)' 기능은 Deprecated 되어 현재 Event로 대체 되었습니다. 자세한 내용은 SDK Changed Log를 확인하여 주세요. )_
 
 
-**Example**:  사용자가 메인 페이지로 이동할 시에 설정한 캠페인을 노출
+**Example**:  사용자가 메인 페이지로 이동할 시에 설정한 컨텐츠를 노출
 
 ```java
   public class MainPageActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
       AdFresca adfresca = AdFresca.getInstance(this);     
-      adfresca.load(EVENT_INDEX_MAIN_PAGE);  // 메인 페이지에 설정한  캠페인을 노출
+      adfresca.load(EVENT_INDEX_MAIN_PAGE);  // 메인 페이지에 설정한  컨텐츠를 노출
       adfresca.show();
     }
   }
 ```
 
-**Example**: 사용자의 게임 캐릭터가 레벨업을 했을 때 설정한 캠페인을 노출
+**Example**: 사용자의 게임 캐릭터가 레벨업을 했을 때 설정한 컨텐츠를 노출
 
 ```java
   public void onUserLevelChanged(int level) {
     AdFresca adfresca = AdFresca.getInstance(this);
     adfresca.setCustomParameter(CUSTOM_PARAM_INDEX_LEVEL, level); // 사용자 level 정보를 가장 최신으로 업데이트
-    adfresca.load(EVENT_INDEX_LEVEL_UP);  // 레벨업 이벤트에 설정한 캠페인을 노출
+    adfresca.load(EVENT_INDEX_LEVEL_UP);  // 레벨업 이벤트에 설정한 컨텐츠를 노출
     adfresca.show();
   }
 ```
@@ -512,7 +512,7 @@ new AsyncTask<Void, Void, Void>() {
 
 ### AFLoadListener
 
-AFLoadListener는 [Custom Parameter](#custom-parameter), [In-App-Purchase](#in-app-purchase) 등을 편리하게 업데이트 할 수 있도록 합니다. `AFLoadListener.onStart()`는 `AdFresca.load()`가 호출될 때 마다 호출되기 때문에 다음과 같이 `AFLoadListener`를 구현하고 설정하면 언제든지 최신 값으로 캠페인을 로드할 수 있습니다.
+AFLoadListener는 [Custom Parameter](#custom-parameter), [In-App-Purchase](#in-app-purchase) 등을 편리하게 업데이트 할 수 있도록 합니다. `AFLoadListener.onStart()`는 `AdFresca.load()`가 호출될 때 마다 호출되기 때문에 다음과 같이 `AFLoadListener`를 구현하고 설정하면 언제든지 최신 값으로 컨텐츠를 로드할 수 있습니다.
 
 ```
 AdFresca.setLoadListener(new AFLoadListener(){
