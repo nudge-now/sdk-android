@@ -699,8 +699,11 @@ INVALIED_LOCALE = 102 | No locale match : l | Unknown locale is used for our ser
 * * *
 
 ## Release Notes
-
-- v2.0.0-beta.1 _(06/05/2013 Updated)_
+- v2.1.0 _(06/05/2013 Updated)_
+    - Add `getAvailableRewardItems()`, `checkRewardItems()`, `checkRewardItems(boolean)`. You can give users reward items with _Incentivized Campaign_.
+- v2.0.0
+    - Deprecate `AdExceptionListner`, `AdException`. Please use `AFExceptionListner`, `AFException` instead.
+- v2.0.0-beta.1
     - Deprecated `AdFrescaView`. Use `AdFresca` instead.
     - Added [Custom Banner](#custom-banner)([Floating View](#floating-view), [Banner View](#banner-view)).
 - v1.1.2
