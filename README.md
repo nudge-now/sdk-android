@@ -262,7 +262,7 @@ _Banner View_ 를 사용하기 위해 태그를 추가합니다.
 ```
 
 - `adfresca:image_size_index="1"` 이미지 사이즈 인덱스를 설정합니다.
-- `adfresca:keep_aspect_ratio="width"` _Banner View_의 가로세로 비율을 유지합니다. _width_가 세팅된 경우 _Banner View_의 세로값을 변경하여 비율을 유지합니다. 이 경우 `android:layout_height` 는 반드시 `wrap_content` 가 되어야합니다.
+- `adfresca:keep_aspect_ratio="width"` 로드된 컨텐츠에 따라 _Banner View_의 가로세로 비율을 유지합니다. _width_가 세팅된 경우 _Banner View_의 세로값을 변경하여 비율을 유지합니다. 이 경우 `android:layout_height` 는 반드시 `wrap_content` 가 되어야합니다.
 - `adfresca:default_image="@drawable/default_image"` 이미지가 로드되기 전 표시할 디폴트 이미지를 지정합니다.
 
 **Example:** 한 액티비티에서 기본 _Interstitial View_와 _Banner View_ 두 개의 View를 동시에 사용하기
