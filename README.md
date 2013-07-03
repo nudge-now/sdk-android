@@ -442,8 +442,8 @@ public void onStart() {
 
   if (items.size() > 0) {
     for (AFRewardItem item : items) {
-      Log.d(TAG,String.format("Get AFRewardItem: item.name=%s, item.quantity=%d, item.uniqueVlaue=%s", item.name, item.quantity, item.uniqueValue));
-      // do something with item.name, item.uniqueValue and item.quantity
+      Log.d(TAG,String.format("Get AFRewardItem: name=%s, quantity=%d, uniqueVlaue=%s", item.getName(), item.getQuantity(), item.getUniqueValue())));
+      // do something with tem.getName(), item.getQuantity(), item.getUniqueValue()
     }
     String itemNames = joinNameStringsByComma(items);
     String alertMessage = String.format("You got the reward item(s)! (%s)", itemNames);
@@ -471,8 +471,8 @@ public void onClick(View view) {
 
   if (items.size() > 0) {
     for (AFRewardItem item : items) {
-      Log.d(TAG,String.format("Get AFRewardItem: item.name=%s, item.quantity=%d, item.uniqueVlaue=%s", item.name, item.quantity, item.uniqueValue));
-      // do something with item.name, item.uniqueValue and item.quantity
+      Log.d(TAG,String.format("Get AFRewardItem: name=%s, quantity=%d, uniqueVlaue=%s", item.getName(), item.getQuantity(), item.getUniqueValue())));
+      // do something with tem.getName(), item.getQuantity(), item.getUniqueValue()
     }
     String itemNames = joinNameStringsByComma(items);
     String alertMessage = String.format("You got the reward item(s)! (%s)", itemNames);
@@ -497,8 +497,8 @@ new AsyncTask<Void, Void, Void>() {
 
     if (items.size() > 0) {
       for (AFRewardItem item : items) {
-        Log.d(TAG,String.format("Get AFRewardItem: item.name=%s, item.quantity=%d, item.uniqueVlaue=%s", item.name, item.quantity, item.uniqueValue));
-        // do something with item.name, item.uniqueValue and item.quantity
+      Log.d(TAG,String.format("Get AFRewardItem: name=%s, quantity=%d, uniqueVlaue=%s", item.getName(), item.getQuantity(), item.getUniqueValue())));
+      // do something with tem.getName(), item.getQuantity(), item.getUniqueValue()
       }
       String itemNames = joinNameStringsByComma(items);
       String alertMessage = String.format("You got the reward item(s)! (%s)", itemNames);
