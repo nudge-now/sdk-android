@@ -70,6 +70,9 @@ Add _User Permission_ like the following codes.
         </intent-filter>
       </service>
 
+      <!-- Activity for Incentivized Campaign -->
+      <activity android:name="com.adfresca.sdk.reward.AFRewardActivity" />
+      
       <!-- Add following codes if you need a push notification feature -->
       <activity android:name="com.adfresca.ads.AdFrescaPushActivity" />
         <receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">  
@@ -420,6 +423,18 @@ _Incentivzed Campaign_ makes it possible to give a reward to users who sees an a
 (It is highly recommended to install SDK in _Advertising App_ for _CPA Campaign_ that is coming soon although it is not required at this time.)
 
 Code in _Media App_:
+
+- Add `<activity>` tag to AndroidManifest.xml
+
+```xml
+<manifest>   
+  <application>
+      .........
+      <activity android:name="com.adfresca.sdk.reward.AFRewardActivity" />
+      .........
+   </application>
+</manifest>
+```
 
 - At the place you want to reward, call `getAvailableRewardItems()` to get reward item array.
 

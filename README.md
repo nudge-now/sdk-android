@@ -68,6 +68,9 @@ _AD fresca_ 는 사용자의 네트워크 접속 상태, 기기ID를 수집하�
         </intent-filter>
       </service>
 
+      <!-- Incentivized Campaign 을 위한 액티비티-->
+      <activity android:name="com.adfresca.sdk.reward.AFRewardActivity" />
+            
       <!-- Push Notification 기능을 사용할 경우, 아래 내용을 추가합니다. -->
       <activity android:name="com.adfresca.ads.AdFrescaPushActivity" />
         <receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">  
@@ -425,6 +428,18 @@ _Incentivized Campaign_을 사용하여 , 사용자가 _Media App_에서 _Advert
 (현재 CPI  캠페인을 진행할 경우, _Advertising App_의 SDK 설치는 필수가 아닙니다. 하지만 이후 지원할 CPA 캠페인을 위해서 미리 SDK를 설치하는 것을 권장합니다.)
 
 Media App에 SDK 적용하기:
+
+- AndroidManifest.xml 확인하기
+
+```xml
+<manifest>   
+  <application>
+      .........
+      <activity android:name="com.adfresca.sdk.reward.AFRewardActivity" />
+      .........
+   </application>
+</manifest>
+```
 
 - 아이템 지급을 원하는 위치에서 `getAvailableRewardItems()` 메소드를 통해 아이템 리스트를 받습니다. 
 
