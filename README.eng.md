@@ -701,7 +701,10 @@ INVALIED_LOCALE = 102 | No locale match : l | Unknown locale is used for our ser
 * * *
 
 ## Release Notes
-- v2.1.0 _(06/05/2013 Updated)_
+- v2.1.1 _(07/03/2013 Updated)_
+    - Add `keep_aspect_ratio` attribute to `AFBannerView` to keep aspect ratio of the content for _Banner View_.
+    - Deprecate all member variables of `AFRewardItem`. Please use getters of them instead.(They will be _private_ soon.)
+- v2.1.0
     - Add `getAvailableRewardItems()`, `checkRewardItems()`, `checkRewardItems(boolean)`. You can give users reward items with _Incentivized Campaign_.
 - v2.0.0
     - Deprecate `AdExceptionListner`, `AdException`. Please use `AFExceptionListner`, `AFException` instead.

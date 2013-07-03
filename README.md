@@ -702,7 +702,10 @@ INVALIED_LOCALE = 102 | No locale match : l | 디바이스에서 아직 제공�
 * * *
 
 ## Release Notes
-- v2.1.0 _(06/05/2013 Updated)_
+- v2.1.1 _(07/03/2013 Updated)_
+    - _Banner View_ 컨텐츠의 가로세로 비율을 유지하기 위한 `keep_aspect_ratio` attribute 가 `AFBannerView`에 추가되었습니다.
+    - `AFRewardItem` 의 멤버변수들이 Deprecated 되었습니다. 각 멤버변수들의 Getter 를 사용해주시기 바랍니다. 멤버변수들은 private 제한자로 변경될 예정입니다.
+- v2.1.0
     - `getAvailableRewardItems()`, `checkRewardItems()`, `checkRewardItems(boolean)` 메소드가 추가 되었습니다. _Incentivized Campaign_을 통해 유저에게 Reward Item 을 지급 할 수 있습니다.
 - v2.0.0
     - `AdExceptionListner`, `AdException` 클래스가 Deprecated 되었습니다. `AFExceptionListner`, `AFException` 을 사용해주세요.
