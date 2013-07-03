@@ -261,7 +261,7 @@ Add the following tag to layout xml to use _Banner View_.
 ```
 
 - `adfresca:image_size_index="1"` Set _Image Size Index_.
-- `adfresca:keep_aspect_ratio="width"` Keep _Banner View_'s aspect ratio along with  the loaded content. If it is set to _width_, _Banner View_'s height will be changed to keep aspect ratio. In this case, `android:layout_height` must be `wrap_content`.
+- `adfresca:keep_aspect_ratio="width"` Keep _Banner View_'s aspect ratio along with  the loaded content. If it is set to _width_, _Banner View_'s height will be changed to keep aspect ratio. In this case, `android:layout_height` must be `wrap_content`. (`adfresca:keep_aspect_ratio` is set to [ _none_ | _width_ | _height_ ]. _none_ is a default.)
 - `adfresca:default_image="@drawable/default_image"` Set _Default Image_ that is displayed before the image is matched.
 
 **Example:** Using _Default View(Interstitial View)_ and _Banner View_ in a activity.
