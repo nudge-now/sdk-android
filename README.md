@@ -37,7 +37,7 @@ _AD fresca_ 는 기본적으로 전면 이미지를 사용해서 캠페인을 �
 
 아래 링크를 통해 SDK 파일을 다운로드 합니다.
 
-[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.1.0)
+[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.1.1)
 
 **AdFresca.jar** 파일은 **lib** 폴더에, **adfresca_attr.xml** 파일은 **res/values** 폴더에 각각 복사합니다.
 
