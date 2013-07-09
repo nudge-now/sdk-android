@@ -37,7 +37,7 @@ _AD fresca_ 는 기본적으로 전면 이미지를 사용해서 캠페인을 �
 
 아래 링크를 통해 SDK 파일을 다운로드 합니다.
 
-[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.1.1)
+[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.1.2)
 
 **AdFresca.jar** 파일은 **lib** 폴더에, **adfresca_attr.xml** 파일은 **res/values** 폴더에 각각 복사합니다.
 
@@ -717,7 +717,9 @@ INVALIED_LOCALE = 102 | No locale match : l | 디바이스에서 아직 제공�
 * * *
 
 ## Release Notes
-- v2.1.1 _(07/03/2013 Updated)_
+- v2.1.2 _(07/09/2013 Updated)_ 
+    - `AFBannerView.setKeepAspectRatio(AFBannerView.KeepAspectRatio)` 메소드가 추가되었습니다. 자바코드에서 `keep_aspect_ratio`를 세팅할 수 있습니다.
+- v2.1.1
     - _Banner View_ 컨텐츠의 가로세로 비율을 유지하기 위한 `keep_aspect_ratio` attribute 가 `AFBannerView`에 추가되었습니다.
     - `AFRewardItem` 의 멤버변수들이 Deprecated 되었습니다. 각 멤버변수들의 Getter 를 사용해주시기 바랍니다. 멤버변수들은 private 제한자로 변경될 예정입니다.
 - v2.1.0

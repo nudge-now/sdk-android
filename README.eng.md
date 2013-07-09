@@ -39,7 +39,7 @@ Unlike other SDKs by other AD networks, AD fresca SDK does not show content to u
 
 Download SDK at the following link.
 
-[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.1.1)
+[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.1.2)
 
 Copy **AdFresca.jar** and **adfresca_attr.xml** to **lib** and **res/values** repectively.
 
@@ -716,7 +716,9 @@ INVALIED_LOCALE = 102 | No locale match : l | Unknown locale is used for our ser
 * * *
 
 ## Release Notes
-- v2.1.1 _(07/03/2013 Updated)_
+- v2.1.2 _(07/09/2013 Updated)_ 
+    - Add `AFBannerView.setKeepAspectRatio(AFBannerView.KeepAspectRatio)`. It is able to set `keep_aspect_ratio` in java code.
+- v2.1.1
     - Add `keep_aspect_ratio` attribute to `AFBannerView` to keep aspect ratio of the content for _Banner View_.
     - Deprecate all member variables of `AFRewardItem`. Please use getters of them instead.(They will be _private_ soon.)
 - v2.1.0
