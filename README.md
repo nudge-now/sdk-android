@@ -145,12 +145,7 @@ protected void onCreate(Bundle savedInstanceState) {
   adfresca.load();
   adfresca.show();
 ```
-
-위와 같은 방식으로 호출이 가능합니다.
-
-정확한 기록을 위해 반드시 앱이 실행되었다고 판단되는 시점에서 호출하는 것을 권장합니다.
-
-추후 보다 편하게 해당 기능을 이용하실 수 있도록 지원해드릴 예정입니다.
+**주의:** setIsInAppPurchasedUser() 메소드는 startSession(), load() 메소드 이전에 호출이 되어야 합니다. 
 
 ### Custom Parameter
 
@@ -171,6 +166,7 @@ SDK에서는 **setCustomParameter** 메소드를 사용하여 각 커스텀 파�
   adfresca.load();
   adfresca.show();
 ```
+**주의:** setCustomParameter() 메소드는 startSession(), load() 메소드 이전에 호출이 되어야 합니다. 특히 startSession() 이전에는 반드시 모든 커스텀 파리미터 값들이 초기 설정될 수 있도록 합니다.
 
 ### Event
 
