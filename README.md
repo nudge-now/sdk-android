@@ -158,9 +158,9 @@ SDK에서는 **setCustomParameter** 메소드를 사용하여 각 커스텀 파�
 ```java
   AdFresca adfresca = AdFresca.getInstance(this);
   
-  adfresca.setCustomParameter(CUSTOM_PARAM_INDEX_LEVEL, User.level);
-  adfresca.setCustomParameter(CUSTOM_PARAM_INDEX_AGE, User.age);
-  adfresca.setCustomParameter(CUSTOM_PARAM_INDEX_HAS_FB_ACCOUNT, User.hasFacebookAccount);
+  AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_LEVEL, User.level);
+  AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_AGE, User.age);
+  AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_HAS_FB_ACCOUNT, User.hasFacebookAccount);
   
   adfresca.startSession();
   adfresca.load();
@@ -198,7 +198,7 @@ _(기존의 ['AD Slot 지정하기](https://adfresca.zendesk.com/entries/2335913
 ```java
   public void onUserLevelChanged(int level) {
     AdFresca adfresca = AdFresca.getInstance(this);
-    adfresca.setCustomParameter(CUSTOM_PARAM_INDEX_LEVEL, level); // 사용자 level 정보를 가장 최신으로 업데이트
+    AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_LEVEL, level); // 사용자 level 정보를 가장 최신으로 업데이트
     adfresca.load(EVENT_INDEX_LEVEL_UP);  // 레벨업 이벤트에 설정한 컨텐츠를 노출
     adfresca.show();
   }

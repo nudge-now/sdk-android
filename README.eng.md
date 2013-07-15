@@ -159,9 +159,9 @@ In SDK, you can just set custom parameters using setCustomParameter method with 
 ```java
   AdFresca adfresca = AdFresca.getInstance(this);
   
-  adfresca.setCustomParameter(CUSTOM_PARAM_INDEX_LEVEL, User.level);
-  adfresca.setCustomParameter(CUSTOM_PARAM_INDEX_AGE, User.age);
-  adfresca.setCustomParameter(CUSTOM_PARAM_INDEX_HAS_FB_ACCOUNT, User.hasFacebookAccount);
+  AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_LEVEL, User.level);
+  AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_AGE, User.age);
+  AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_HAS_FB_ACCOUNT, User.hasFacebookAccount);
   
   adfresca.startSession();
   adfresca.load();
@@ -197,7 +197,7 @@ To simply apply codes,  just pass event index into `AdFresca.load(int eventIndex
 ```java
   public void onUserLevelChanged(int level) {
     AdFresca adfresca = AdFresca.getInstance(this);
-    adfresca.setCustomParameter(CUSTOM_PARAM_INDEX_LEVEL, level); // 사용자 level 정보를 가장 최신으로 업데이트
+    AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_LEVEL, level); // 사용자 level 정보를 가장 최신으로 업데이트
     adfresca.load(EVENT_INDEX_LEVEL_UP);  // Request contents for level up event
     adfresca.show();
   }
