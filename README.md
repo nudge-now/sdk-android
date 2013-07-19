@@ -140,10 +140,23 @@ protected void onCreate(Bundle savedInstanceState) {
 
 ```java
   AdFresca adfresca = AdFresca.getInstance(this);
-  AdFresca.setIsInAppPurchasedUser(User.getInAppPurchaseCount());
-  adfresca.startSession();
-  adfresca.load();
-  adfresca.show();
+  
+  public void onCreate() {
+    AdFresca adfresca = AdFresca.getInstance(this);     
+    AdFresca.setIsInAppPurchasedUser(User.inAppPurchaseCount);
+    adfresca.startSession();
+  }
+  
+  .....
+  
+  public void onUserPurchasedItem() {
+    User.inAppPurchaseCount++;
+    
+    AdFresca adfresca = AdFresca.getInstance(this);     
+    AdFresca.setIsInAppPurchasedUser(User.inAppPurchaseCount);
+    adfresca.load(EVENT_INDEX_PURCHASE);
+    adfresca.show();
+  }
 ```
 **주의:** setIsInAppPurchasedUser() 메소드는 startSession(), load() 메소드 이전에 호출이 되어야 합니다. 
 
@@ -156,15 +169,24 @@ SDK에서는 **setCustomParameter** 메소드를 사용하여 각 커스텀 파�
 (각 파라미터의 정보는 Admin 사이트를 접속하여 앱의 Overview 메뉴 -> 각 앱스토어의 Details 버튼을 눌러 설정 및 확인이 가능합니다.)
 
 ```java
-  AdFresca adfresca = AdFresca.getInstance(this);
+  public void onCreate() {
+    AdFresca adfresca = AdFresca.getInstance(this);     
+    AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_LEVEL, User.level);
+    AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_AGE, User.age);
+    AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_HAS_FB_ACCOUNT, User.hasFacebookAccount);
+    adfresca.startSession();
+  }
   
-  AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_LEVEL, User.level);
-  AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_AGE, User.age);
-  AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_HAS_FB_ACCOUNT, User.hasFacebookAccount);
+  .....
   
-  adfresca.startSession();
-  adfresca.load();
-  adfresca.show();
+  public void onUserLevelChanged(int level) {
+    User.level = level
+    
+    AdFresca adfresca = AdFresca.getInstance(this);     
+    AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_LEVEL, User.level);
+    adfresca.load(EVENT_INDEX_LEVEL_UP);
+    adfresca.show();
+  }
 ```
 **주의:** setCustomParameter() 메소드는 startSession(), load() 메소드 이전에 호출이 되어야 합니다. 특히 startSession() 이전에는 반드시 모든 커스텀 파리미터 값들이 초기 설정될 수 있도록 합니다.
 
@@ -396,7 +418,9 @@ SDK를 적용하기 이전에 구글의 ["GCM: Getting Started" ](http://develop
 
 ### Custom Notification
 
-아래 코드는 Push Notification 을 만들고 직접 notify 하는 방법입니다.
+Custom Notification을 만들고 직접 notify 하는 방법입니다.
+
+**Example**: Notification 도착 시 사용자 기기에 진동을 추가하기 
 
 ```java
 public class GCMIntentService extends GCMBaseIntentService {
@@ -406,10 +430,44 @@ public class GCMIntentService extends GCMBaseIntentService {
 			String title = context.getString(R.string.app_name);
 			int icon = R.drawable.icon;
 			long when = System.currentTimeMillis();
+			
 			Notification notification = AdFresca.generateNotification(context, intent, DemoIntroActivity.class, title, icon, when);
 			notification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 			notificationManager.notify(0, notification);
+		}
+	}
+}
+```
+
+**Example**: Notification 도착 시 Custom Big View를 통해 메시지 표시하기
+
+```java
+public class GCMIntentService extends GCMBaseIntentService {
+	@Override
+	protected void onMessage(Context context, Intent intent) {
+		if (AdFresca.isFrescaNotification(intent)) {
+			String title = context.getString(R.string.app_name);
+			int icon = R.drawable.icon;
+			long when = System.currentTimeMillis();
+			
+			Notification notification = AdFresca.generateNotification(context, intent, DemoIntroActivity.class, title, icon, when);
+			
+			NotificationCompat.Builder builder =
+       				 new NotificationCompat.Builder(this)
+       				 .setSmallIcon(icon)
+       				 .setContentTitle(title)
+       				 .setContentText(notification.tickerText)
+       				 .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
+       				 .setContentIntent(notification.contentIntent);
+       				 /*
+         			  * Big view style is only supportd on 4.1+ devices.
+         			  */
+        			.setStyle(new NotificationCompat.BigTextStyle()
+                			.bigText(notification.tickerText));
+			
+			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+			notificationManager.notify(0, builder.build());
 		}
 	}
 }
