@@ -503,8 +503,8 @@ Media App에 SDK 적용하기:
 
 ```java
 @Override
-public void onStart() {
-  super.onStart();
+public void onResume() {
+  super.onResume();
 
   AdFresca adfresca = AdFresca.getInstance(DemoIntroActivity.this);
   List<AFRewardItem> items = adfresca.getAvailableRewardItems();
@@ -527,8 +527,8 @@ public void onStart() {
 
 ```java
 @Override
-public void onStart() {
-  super.onStart();
+public void onResume() {
+  super.onResume();
 
   AdFresca adfresca = AdFresca.getInstance(DemoIntroActivity.this);
   adfresca.checkRewardItems();
