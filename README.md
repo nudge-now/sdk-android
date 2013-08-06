@@ -19,6 +19,7 @@
     - [Custom URL](#custom-url)
     - [Test Device ID](#test-device-id)
     - [Timeout Interval](#timeout-interval)
+    - [Google Referer Tracking](#google-referer-tracking)
 - [Trouble Shooting](#trouble-shooting)
     - [Error Code](#error-code)
 - [Release Notes](#release-notes)
@@ -27,7 +28,9 @@
 
 ## Introduction
 
-_AD fresca_ 는 기본적으로 전면 이미지를 사용해서 캠페인을 합니다. Android SDK 는 단 몇줄의 코드만으로 이를 가능하게 합니다. 뿐만 아니라 다양한 형태의 캠페인 템플릿과 뷰를 통해 캠페인을 할 수 있습니다.
+_AD fresca_  콘텐츠는 앱 실행 시에 표시되는 전면 형태로서 타이틀바를 제외한 스마트폰 화면을 모두 채우는 형태로 작동합니다. Android SDK는 간단한 절차 - 1) SDK를 설치하고 2) View를 적용하는 2단계 - 만으로 쉽게 설치 및 적용이 가능합니다. 
+
+AD fresca SDK는 다른 SDK과 달리, 데이터를 완전히 로딩할 때까지는 절대 화면에 콘텐츠를 노출하지 않습니다. 또한 로딩 시간이 일정 시간 이상 소요되는 경우 작업을 자동적으로 종료합니다. 따라서 콘텐츠 로딩으로 인해 앱 사용에 미치는 불편함을 최소화하고 있습니다.
 
 * * *
 
@@ -37,7 +40,7 @@ _AD fresca_ 는 기본적으로 전면 이미지를 사용해서 캠페인을 �
 
 아래 링크를 통해 SDK 파일을 다운로드 합니다.
 
-[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.1.3)
+[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.2.0)
 
 **AdFresca.jar** 파일은 **lib** 폴더에, **adfresca_attr.xml** 파일은 **res/values** 폴더에 각각 복사합니다.
 
@@ -70,6 +73,13 @@ _AD fresca_ 는 사용자의 네트워크 접속 상태, 기기ID를 수집하�
 
       <!-- Incentivized Campaign 을 위한 액티비티-->
       <activity android:name="com.adfresca.sdk.reward.AFRewardActivity" />
+      
+       <!-- Google Refererer Tracking 을 위한 Boradcast Receiver-->
+      <receiver android:name="com.adfresca.sdk.referer.AFRefererReciever" android:exported="true">
+      	<intent-filter>
+            <action android:name="com.android.vending.INSTALL_REFERRER" />
+     	</intent-filter>	
+      </receiver>
             
       <!-- Push Notification 기능을 사용할 경우, 아래 내용을 추가합니다. -->
       <activity android:name="com.adfresca.ads.AdFrescaPushActivity" />
@@ -136,14 +146,14 @@ protected void onCreate(Bundle savedInstanceState) {
 
 사용자가 In-App Purchase를 구매한 경우, _AD fresca_에 해당 정보를 기록하여 관리하실 수 있습니다.
 
-사용자가 In-App Purchase 를 구매한 횟수를  AdFresca 객체의 setInAppPurchaseCount(int) 메소드를 사용하여  설정해 주시면 간단히 적용이 가능합니다.
+사용자가 In-App Purchase 를 구매한 횟수를  AdFresca 객체의 setNumberOfInAppPurchases(int) 메소드를 사용하여  설정해 주시면 간단히 적용이 가능합니다.
 
 ```java
   AdFresca adfresca = AdFresca.getInstance(this);
   
   public void onCreate() {
     AdFresca adfresca = AdFresca.getInstance(this);     
-    AdFresca.setIsInAppPurchasedUser(User.inAppPurchaseCount);
+    adfresca.setNumberOfInAppPurchases(User.inAppPurchaseCount);
     adfresca.startSession();
   }
   
@@ -153,27 +163,29 @@ protected void onCreate(Bundle savedInstanceState) {
     User.inAppPurchaseCount++;
     
     AdFresca adfresca = AdFresca.getInstance(this);     
-    AdFresca.setIsInAppPurchasedUser(User.inAppPurchaseCount);
+    adfresca.setNumberOfInAppPurchases(User.inAppPurchaseCount);
     adfresca.load(EVENT_INDEX_PURCHASE);
     adfresca.show();
   }
 ```
+(Advanced) SDK는 현재 설정한 inAppPurchaseCount 값을 로컬에 저장하여 두고 있습니다. 특정 이슈가 발생하여 해당 값을 확인 및 초기화 시키고 싶은 경우 getNumberOfInAppPurchases(), resetNumberOfInAppPurchases() 메소드를 사용할 수 있습니다.
+
 **주의:** setIsInAppPurchasedUser() 메소드는 startSession(), load() 메소드 이전에 호출이 되어야 합니다. 
 
 ### Custom Parameter
 
 _AD fresca_는 앱 사용자의 특수한 정보들 (레벨, 스테이지, 성별, 나이 등)을 입력 받아 타겟팅 및 분석 기능을 제공 합니다.
 
-SDK에서는 **setCustomParameter** 메소드를 사용하여 각 커스텀 파라미터의 인덱스 번호에 맞게 값을 설정하면 됩니다.
+SDK에서는 **setCustomParameterValue** 메소드를 사용하여 각 커스텀 파라미터의 인덱스 번호에 맞게 값을 설정하면 됩니다.
 
 (각 파라미터의 정보는 Admin 사이트를 접속하여 앱의 Overview 메뉴 -> 각 앱스토어의 Details 버튼을 눌러 설정 및 확인이 가능합니다.)
 
 ```java
   public void onCreate() {
     AdFresca adfresca = AdFresca.getInstance(this);     
-    AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_LEVEL, User.level);
-    AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_AGE, User.age);
-    AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_HAS_FB_ACCOUNT, User.hasFacebookAccount);
+    adfresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_LEVEL, User.level);
+    adfresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_AGE, User.age);
+    adfresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_HAS_FB_ACCOUNT, User.hasFacebookAccount);
     adfresca.startSession();
   }
   
@@ -183,12 +195,15 @@ SDK에서는 **setCustomParameter** 메소드를 사용하여 각 커스텀 파�
     User.level = level
     
     AdFresca adfresca = AdFresca.getInstance(this);     
-    AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_LEVEL, User.level);
+    adfresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_LEVEL, User.level);
     adfresca.load(EVENT_INDEX_LEVEL_UP);
     adfresca.show();
   }
 ```
-**주의:** setCustomParameter() 메소드는 startSession(), load() 메소드 이전에 호출이 되어야 합니다. 특히 startSession() 이전에는 반드시 모든 커스텀 파리미터 값들이 초기 설정될 수 있도록 합니다.
+
+(Advanced) SDK는 현재 설정한 Custom Parameter 값을 로컬에 저장하여 두고 있습니다. 특정 이슈가 발생하여 해당 값을 확인 및 초기화 시키고 싶은 경우 getCustomParameterValue(index), resetCustomParameterValues() 메소드를 사용할 수 있습니다.
+
+**주의:** setCustomParameter() 메소드는 startSession(), load() 메소드 이전에 호출이 되어야 합니다. 
 
 ### Event
 
@@ -220,7 +235,7 @@ _(기존의 ['AD Slot 지정하기](https://adfresca.zendesk.com/entries/2335913
 ```java
   public void onUserLevelChanged(int level) {
     AdFresca adfresca = AdFresca.getInstance(this);
-    AdFresca.setCustomParameter(CUSTOM_PARAM_INDEX_LEVEL, level); // 사용자 level 정보를 가장 최신으로 업데이트
+    adfresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_LEVEL, level); // 사용자 level 정보를 가장 최신으로 업데이트
     adfresca.load(EVENT_INDEX_LEVEL_UP);  // 레벨업 이벤트에 설정한 컨텐츠를 노출
     adfresca.show();
   }
@@ -727,6 +742,44 @@ textView.setText(deviceId);
   adfresca.show();
 ```
 
+### Google Referer Tracking
+
+Google Play 캠페인을 통해 앱을 설치하는 경우, Referer 정보를 분석하여 통계 데이터를 제공합니다.
+
+Referer 정보를 추출하여 SDK에 설정하기 위하여 아래와 같이 적용 및 테스트 합니다.
+
+1) AndroidManefest.xml에 Reciever 등록
+
+Reciever를 등록하여 Google Play 앱을 통해 전달되는 Referer 값을 자동으로 SDK에 적용합니다.
+
+```xml
+<receiver android:name="com.adfresca.sdk.referer.AFRefererReciever" android:exported="true">
+	<intent-filter>
+      		<action android:name="com.android.vending.INSTALL_REFERRER" />
+     	</intent-filter>
+</receiver>
+```
+
+2) ADB를 이용하여 테스트 진행하기
+
+디바이스를 연결한 후, 터미널 애플리케이션을 열어 adb shell을 실행합니다. (adb는 Android SDK 설치 디렉토리 아래 platform-tools 디렉토리에 위치)
+
+그리고 아래와 같이 INSTALL_REFERRER 메시지를 디바이스에 전송할 수 있습니다. 패키지 명을 설정하고, referrer 값을 지정합니다.
+(referrer 값의 각 파라미터 내용은 [Google Play - Campaign Parameters](https://developers.google.com/analytics/devguides/collection/android/v2/campaigns#campaign-params) 가이드에서 자세한 내용을 확인할 수 있습니다.)
+
+```sh
+am broadcast -a com.android.vending.INSTALL_REFERRER -n YOUR_PACKAGE/com.adfresca.sdk.referer.AFRefererReciever --es "referrer" "utm_source=test_source&utm_medium=test_medium&utm_term=test_term&utm_content=test_content&utm_campaign=test_name"
+```
+3) referrer 값이 SDK에 설정 되었는지 확인하기
+
+```java
+  AdFresca adfresca = AdFresca.getInstance(this);
+  Log.v(TAG, "Google Referrer = " + adfresca.getReferrer());
+``` 
+(Advanced) 이미 INSTALL_REFERRER를 추출하는 다른 boradcast recicever를 적용 중인 경우, setReferrer(string) 메소드를 이용하여 직접 SDK에 값을 전달할 수 있습니다.
+
+주의: 특정 디바이스에서 한 번 AD fresca 서비스에 INSTALL_REFERRER가 등록되었다면, 더이상 수동으로 값을 변경할 수 없습니다. 클라이언트에서 값을 변경하더라도 Dashboard의 통계 데이터에는 그 값이 변경되지 않습니다.
+
 * * *
 
 ## Trouble Shooting
@@ -771,9 +824,15 @@ INVALIED_LOCALE = 102 | No locale match : l | 디바이스에서 아직 제공�
 * * *
 
 ## Release Notes
-- v2.1.3 _(07/22/2013 Updated)_ 
+- v2.2.0 _(08/06/2013 Updated)_ 
+    - [Google Referer Tracking](#google-referer-tracking) 기능이 추가 되었습니다. 
+    - `AdFresca.setCustomParameter` 메소드가 depreciated 되었습니다. AdFresca 객체의 `setCustomParameterValue()` 메소드를 사용해 주세요.
+    - `AdFresca.setInAppPurchaseCount` 메소드가 depreciated 되었습니다. AdFresca 객체의 `setNumberOfInAppPurchases()` 메소드를 사용해 주세요.
+    - `setCustomParameterValue()` 메소드에서 64 bit integer를 지원합니다. (long type)
+    -  Custom Parameter 및 In-App Purchase 정보를 로컬에 저장하여 사용합니다.
+- v2.1.3 
     - 테스트 모드를 이용하여 여러 개의 Incentivized Campaign을 동시에 테스트하지 못하는 버그가 수정되었습니다.
-- v2.1.2 _(07/09/2013 Updated)_ 
+- v2.1.2
     - `AFBannerView.setKeepAspectRatio(AFBannerView.KeepAspectRatio)` 메소드가 추가되었습니다. 자바코드에서 `keep_aspect_ratio`를 세팅할 수 있습니다.
 - v2.1.1
     - _Banner View_ 컨텐츠의 가로세로 비율을 유지하기 위한 `keep_aspect_ratio` attribute 가 `AFBannerView`에 추가되었습니다.
@@ -829,7 +888,7 @@ INVALIED_LOCALE = 102 | No locale match : l | 디바이스에서 아직 제공�
 - v0.9.2
     - 라이브러리 dependency 에러를 해결하였습니다.
     - Google Gson 및 OpenUDID를 별도로 사용하시는 경우, Duplicate 에러가 발생 할 수 있습니다. 추후 해당 이슈 해결이 포함된 버전을 릴리즈 할 예정입니다.
-    - 0.9.1
+- 0.9.1
     - 광고 호출 시 Timeout 처리 부분이 제대로 작동하지 않던 문제를 해결 하였습니다.
 - v0.9.0
     - _AD fresca_ Android SDK가 출시 되었습니다. 기본적인 광고 호출 및 세션 로깅 기능을 지원 합니다.
