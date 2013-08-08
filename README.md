@@ -40,7 +40,9 @@ AD fresca SDK는 다른 SDK과 달리, 데이터를 완전히 로딩할 때까�
 
 아래 링크를 통해 SDK 파일을 다운로드 합니다.
 
-[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.2.0)
+[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.2.1)
+
+[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.2.1)
 
 **AdFresca.jar** 파일은 **lib** 폴더에, **adfresca_attr.xml** 파일은 **res/values** 폴더에 각각 복사합니다.
 
@@ -824,10 +826,12 @@ INVALIED_LOCALE = 102 | No locale match : l | 디바이스에서 아직 제공�
 * * *
 
 ## Release Notes
-- v2.2.0 _(08/06/2013 Updated)_ 
+- v2.2.1 _(08/08/2013 Updated)_ 
+    -  'Close Mode' 기능을 지원합니다. Dashboard에서 Interstitial View의 닫힘 설정을 제어할 수 있습니다.
+- v2.2.0 
     - [Google Referer Tracking](#google-referer-tracking) 기능이 추가 되었습니다. 
-    - `AdFresca.setCustomParameter` 메소드가 depreciated 되었습니다. AdFresca 객체의 `setCustomParameterValue()` 메소드를 사용해 주세요.
-    - `AdFresca.setInAppPurchaseCount` 메소드가 depreciated 되었습니다. AdFresca 객체의 `setNumberOfInAppPurchases()` 메소드를 사용해 주세요.
+    - `AdFresca.setCustomParameter` 메소드가 deprecated 되었습니다. AdFresca 객체의 `setCustomParameterValue()` 메소드를 사용해 주세요.
+    - `AdFresca.setInAppPurchaseCount` 메소드가 deprecated 되었습니다. AdFresca 객체의 `setNumberOfInAppPurchases()` 메소드를 사용해 주세요.
     - `setCustomParameterValue()` 메소드에서 64 bit integer를 지원합니다. (long type)
     -  Custom Parameter 및 In-App Purchase 정보를 로컬에 저장하여 사용합니다.
 - v2.1.3 
