@@ -170,9 +170,10 @@ protected void onCreate(Bundle savedInstanceState) {
     adfresca.show();
   }
 ```
-(Advanced) SDK는 현재 설정한 inAppPurchaseCount 값을 로컬에 저장하여 두고 있습니다. 특정 이슈가 발생하여 해당 값을 확인 및 초기화 시키고 싶은 경우 getNumberOfInAppPurchases(), resetNumberOfInAppPurchases() 메소드를 사용할 수 있습니다.
 
-**주의:** setIsInAppPurchasedUser() 메소드는 startSession(), load() 메소드 이전에 호출이 되어야 합니다. 
+**주의:** setNumberOfInAppPurchases() 메소드는 startSession(), load() 메소드 이전에 호출이 되어야 합니다. 만약 startSession() 이전에 값이 설정되지 않은 경우, 사용자의 최초 앱 실행 시에는 값이 업데이트 되지 않으며 2회째 실행부터 SDK가 로컬 캐싱해둔 값으로 서버에 전달됩니다. (SDK 로컬 캐시 기능은 Android SDK 2.2.0 버전부터 지원됩니다.)
+
+(Advanced) SDK는 현재 설정한 inAppPurchaseCount 값을 로컬에 저장하여 두고 있습니다. 특정 이슈가 발생하여 해당 값을 확인 및 초기화 시키고 싶은 경우 getNumberOfInAppPurchases(), resetNumberOfInAppPurchases() 메소드를 사용할 수 있습니다.
 
 ### Custom Parameter
 
@@ -203,9 +204,33 @@ SDK에서는 **setCustomParameterValue** 메소드를 사용하여 각 커스텀
   }
 ```
 
+**주의**_ setCustomParameterValue() 메소드는 startSession(), load() 메소드 이전에 호출이 되어야 합니다. 특히 startSession() 이전에는 반드시 모든 커스텀 파리미터 값들을 설정하고, 이후 변경되는 값들에 한하여 각 위치에 커스텀 파라미터를 설정합니다.
+
+만약 불가피하게 startSession() 호출 시에 커스텀 파라미터 값을 설정할 수 없는 경우, 앱을 최초로 실행한 사용자의 프로파일은 업데이트되지 않으며 해당 사용자의 2회째 앱 실행부터 SDK가 로컬에 캐싱해둔 값이 전달됩니다. 최초로 실행된 사용자의 프로파일까지 통계 및 타겟팅하기 위해서는 아래와 같이 초기 값 설정을 진행해야 합니다. (SDK의 로컬 캐싱 기능은 Android SDK 2.2.0 버전부터 지원합니다.)
+
+```cs
+  public void onCreate() {
+    AdFresca adfresca = AdFresca.getInstance(this);     
+    if (isFirstRun) {
+      adfresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_LEVEL, defaultLevel);
+      adfresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_STAGE, defaultStage);
+      adfresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_HAS_FB_ACCOUNT, defaultFacebookFlag);
+    }    
+    adfresca.startSession();
+  }
+  
+  .....
+  
+  public void onUserSignedIn() {
+    AdFresca adfresca = AdFresca.getInstance(this);     
+    adfresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_LEVEL, User.level);
+    adfresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_AGE, User.age);
+    adfresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_HAS_FB_ACCOUNT, User.hasFacebookAccount);
+  }
+```
+
 (Advanced) SDK는 현재 설정한 Custom Parameter 값을 로컬에 저장하여 두고 있습니다. 특정 이슈가 발생하여 해당 값을 확인 및 초기화 시키고 싶은 경우 getCustomParameterValue(index), resetCustomParameterValues() 메소드를 사용할 수 있습니다.
 
-**주의:** setCustomParameter() 메소드는 startSession(), load() 메소드 이전에 호출이 되어야 합니다. 
 
 ### Event
 
