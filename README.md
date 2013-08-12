@@ -42,7 +42,7 @@ AD fresca SDK는 다른 SDK과 달리, 데이터를 완전히 로딩할 때까�
 
 [Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.2.2)
 
-[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.2.1)
+[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.2.2)
 
 **AdFresca.jar** 파일은 **lib** 폴더에, **adfresca_attr.xml** 파일은 **res/values** 폴더에 각각 복사합니다.
 
