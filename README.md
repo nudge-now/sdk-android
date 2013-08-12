@@ -40,7 +40,7 @@ AD fresca SDK는 다른 SDK과 달리, 데이터를 완전히 로딩할 때까�
 
 아래 링크를 통해 SDK 파일을 다운로드 합니다.
 
-[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.2.1)
+[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.2.2)
 
 [Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.2.1)
 
@@ -851,7 +851,9 @@ INVALIED_LOCALE = 102 | No locale match : l | 디바이스에서 아직 제공�
 * * *
 
 ## Release Notes
-- v2.2.1 _(08/08/2013 Updated)_ 
+- v2.2.2 _(08/12/2013 Updated)_ 
+    - 로컬 캐시 기능이 개선되었습니다.
+- v2.2.1 
     -  'Close Mode' 기능을 지원합니다. Dashboard에서 Interstitial View의 닫힘 설정을 제어할 수 있습니다.
 - v2.2.0 
     - [Google Referer Tracking](#google-referer-tracking) 기능이 추가 되었습니다. 
