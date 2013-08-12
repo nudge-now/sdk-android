@@ -7,12 +7,13 @@
     - [In-App-Purchase Count](#in-app-purchase-count)
     - [Custom Parameter](#custom-parameter)
     - [Event](#event)
+- [Push Notification](#push-notification)
+    - [Custom Notification](#custom-notification)
+- [Custom URL](#custom-url)
+- [Reward Item](#reward-item)
 - [Custom Banner](#custom-banner)
     - [Floating View](#floating-view)
     - [Banner View](#banner-view)
-- [Push Notification](#push-notification)
-    - [Custom Notification](#custom-notification)
-- [Reward Item](#reward-item)
 - [Advanced Features](#advanced-features)
     - [AFLoadListener](#afloadlistener)
     - [AFShowListener](#afshowlistener)
@@ -270,85 +271,6 @@ _(기존의 ['AD Slot 지정하기](https://adfresca.zendesk.com/entries/2335913
 
 * * *
 
-## Custom Banner
-
-Android SDK 에서는 _Floating View_와 _Banner View_ 두가지 종류의 커스텀 배너를 제공합니다. 커스텀 배너는 dashboard 에서 이미지 사이즈를 등록한 후 해당 이미지 사이즈를 사용하는 캠페인이 매칭되었을 때 이미지를 커스텀 배너에 보여줍니다.
-
-`AdFresca.load()` 와 `AdFresca.show()` 를 통해 이미지를 보여주는 점은 기존 캠페인과 같습니다. _Floating View_는 다른 UI Component 위에 위치하며 닫을 수 있으며, _Banner View_는 _Floating View_와는 반대로 화면의 일정 영역을 차지하며 닫을 수 없습니다. 
-
-커스텀 배너를 사용하기 위해서는 아래와 같이 namespace 를 layout xml 파일에 추가해야합니다.
-
-```xml
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:adfresca="http://schemas.android.com/apk/res/Your.Package.Name"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-</LinearLayout>
-```
-
-### Floating View
-
-Floating View 를 사용하기 위해 태그를 추가합니다.
-
-```xml
-<com.adfresca.sdk.view.AFFloatingView
-    android:layout_width="match_parent"
-    android:layout_height="80dp"
-    adfresca:image_size_index="1" />
-```
-
-*   `adfresca:image_size_index=1` _이미지 사이즈 인덱스_를 설정합니다.
-
-닫기 버튼 이미지를 설정하여 사용자가 _Floating View_를 닫을 수 있도록 할 수 있습니다.
-
-```xml
-<com.adfresca.sdk.view.AFFloatingView
-    android:layout_width="match_parent"
-    android:layout_height="80dp"
-    adfresca:image_size_index="1"
-    adfresca:close_button_image="@drawable/close_button" />
-```
-
-*   `adfresca:close_button_image="@drawable/close_button"` 닫기 버튼 이미지를 설정합니다.
-
-### Banner View
-
-_Banner View_ 를 사용하기 위해 태그를 추가합니다.
-
-```xml
-<com.adfresca.sdk.view.AFBannerView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    adfresca:image_size_index="1"
-    adfresca:keep_aspect_ratio="width"
-    adfresca:default_image="@drawable/default_banner" />
-```
-
-- `adfresca:image_size_index="1"` 이미지 사이즈 인덱스를 설정합니다.
-- `adfresca:keep_aspect_ratio="width"` 로드된 컨텐츠에 따라 _Banner View_의 가로세로 비율을 유지합니다. _width_가 세팅된 경우 _Banner View_의 세로값을 변경하여 비율을 유지합니다. 이 경우 `android:layout_height`는 반드시 `wrap_content` 가 되어야합니다. (`adfresca:keep_aspect_ratio`는  [ _none_ | _width_ | _height_ ] 중에 하나의 값을 가지며 디폴트는 _none_ 입니다.)
-- `adfresca:default_image="@drawable/default_image"` 이미지가 로드되기 전 표시할 디폴트 이미지를 지정합니다.
-
-**Example:** 한 액티비티에서 기본 _Interstitial View_와 _Banner View_ 두 개의 View를 동시에 사용하기
-
-이벤트 기능을 활용하여 여러 개의 뷰를 한 화면에 동시에 노출할 수 있습니다. 
-
-```java
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-  super.onCreate(savedInstanceState);
-  setContentView(R.layout.activity_intro);
-  
-  AdFresca.setApiKey(API_KEY);
-  AdFresca adfresca = AdFresca.getInstance(this);
-  adfresca.startSession();
-  adfresca.load(EVENT_INDEX_MAIN_PAGE_FOR_BANNER); // 메인 페이지진입 시 Banner View 를 위한 컨텐츠를 load 합니다.
-  adfresca.load(EVENT_INDEX_MAIN_PAGE_FOR_INTERSTITIAL); // 메인 페이지 진입 시 Interstitial View 를 위한 컨텐츠를 load 합니다.
-  adfresca.show(); // load 된 모든 컨텐츠를 show 합니다.
-}
-```
-
-* * *
-
 ## Push Notification
 
 _AD fresca_를 통해 Push Notification을 보내고 받을 수 있습니다.
@@ -517,6 +439,163 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 * * *
 
+## Custom URL
+
+Announcement 캠페인의 Click URL, Push Notification 캠페인의 URL Schema 설정 시에 자신의 앱 URL Schema를 사용할 수 있습니다.
+
+이를 통해 사용자가 콘텐츠를 클릭할 경우, 자신이 원하는 특정 앱 페이지로 이동하는 등의 액션을 지정할 수 있습니다.
+
+해당 기능을 지원하기 위해서는 AndroidManifest.xml 파일을 수정하여 scheme 정보를 추가해야 합니다.
+
+```xml
+  <activity android:name=".DemoZoneActivity">
+      <intent-filter> 
+             <action android:name="android.intent.action.VIEW" /> 
+             <category android:name="android.intent.category.DEFAULT" /> 
+             <category android:name="android.intent.category.BROWSABLE" /> 
+             <data android:scheme="myapp" android:host="com.adfresca.zone" />
+        </intent-filter> 
+  </activity>
+```
+위와 같이 설정한 경우, Campaign의 _Click URL_ 값을 myapp://com.adfresca.zone?item=abc 으로 설정하여 DemoZoneActivity가 바로 실행되도록 할 수 있습니다.
+
+함께 넘어온 파라미터 (item=abc) 값을 얻기 위해서는 DemoZoneActivity를 아래와 같이 구현합니다.
+
+```java
+public void onCreate(Bundle savedInstanceState) {
+  super.onCreate(savedInstanceState);
+
+  Uri uri = getIntent().getData();
+  if (uri != null && uri.getScheme().equals("myapp")) { 
+    String item = uri.getQueryParameter("item");
+  }
+}
+```
+
+### Cocos2d-x 환경에서 Custom URL 사용하기
+
+액티비티를 페이지 개념으로 사용하는 네이티브 환경과 달리, Cocos2d-x나 Unity와 같은 엔진을 사용하여 안드로이드 애플리케이션을 개발하는 경우 단 하나의 액티비티만을 사용하며 엔진 내부적으로 페이지를 처리합니다.
+
+때문에 위와 같이 schema를 지정할 수 있는 액티비티의 제약이 생깁니다. MAIN 으로 지정된 액티비티는 url schema를 적용할 수 없습니다. 
+
+그래서 아래와 같은 방법들을 사용하여 Custom URL을 처리합니다.
+
+1) Main 액티비티의 startActivity(intent) 메소드를 오버라이딩하여 Custom URL 처리하기 (Annoucnement 캠페인)
+
+Annoucnement 캠페인을 통해 전달되는 Click URL은 항상 인게임 상황에서 전달되며, SDK가 내부적으로 startActivity() 메소드를 이용하여 호출하고 있습니다. 이러한 조건에서는 게임이 실행되고 있는 Main 액티비티의 startActivity() 메소드를 직접 구현함으로써 Custom URL 처리가 가능합니다.
+
+```java
+\@Override 
+public void startActivity(Intent intent) { 
+  boolean isStartActivity = true;
+
+  // Check intent 
+  Uri uri = intent.getData(); 
+  if (uri != null && uri.getScheme().equals("adfresca")) { 
+    isStartActivity = false; 
+  }
+
+  if (isStartActivity) { 
+    super.startActivity(intent); 
+  } else { 
+    // Log.d("TEST", "MainActivity.startActivity() : uri = " + uri.toString());   
+    // Do something with uri
+  } 
+}
+```
+(위 방법을 적용할 때에는 AndroidMenefest.xml 파일을 별도로 설정하지 않고 모든 값을 코드로 처리합니다.)
+
+2) Push Notification을 통해 넘어오는 Custom URL 처리하기 (Push Notificiaton 캠페인)
+
+Custom URL이 설정된 Push Notification을 수신한 경우, Notification을 터치 시 원하는 액션을 지정할 수 있습니다. 단, 이 경우는 인게임 상황이 아니기 때문에 조금 다른 방법을 사용합니다.
+
+먼저 PushProxyActivity 라는 이름의 액티비티 클래스를 하나 생성합니다. 그리고 AndroidMenefest.xml 내용을 아래와 같이 추가합니다. 
+
+```xml
+<activity android:name=".PushProxyActivity">
+	<intent-filter> 
+ 		<action android:name="android.intent.action.VIEW" /> 
+		<category android:name="android.intent.category.DEFAULT" /> 
+		<category android:name="android.intent.category.BROWSABLE" /> 
+		<data android:scheme="myapp" android:host="com.adfresca.push" />
+	</intent-filter> 
+</activity>
+
+.......
+
+<uses-permission  android:name="android.permission.GET_TASKS"/>
+```
+위와 같이 설정한 경우 Push Notificaiton 캠페인에서는 myapp://com.adfresca.push?item=abc 와 같은 형식의 url을 입력해야 합니다.
+
+다음은 PushProxyActivity 클래스의 내용을 구현해야 합니다. PushProxyActivity 클래스는 Android OS로 부터 수신하는 Custom URL 정보를 받아 처리하고 바로 자신을 종료하는 단순한 프록시 형태의 액티비티입니다. 만약 현재 게임이 실행 중이 아니라면 Custom URL을 처리할 수 없으므로 새로 게임을 시작하며 uri 값을 넘겨야 합니다.
+
+```java
+public class PushProxyActivity extends Activity {
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    
+    // hide ui
+    requestWindowFeature(Window.FEATURE_NO_TITLE);
+    getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+    Uri uri = getIntent().getData();
+    if (uri != null) {
+      if (isActivityRunning()) {
+        // Log.d("AdFresca", "PushProxyActivity.onCreate() with isActivityRunning : url = " + uri.toString());
+        // Do something with uri
+   	
+     } else {
+       // Log.d("AdFresca", "PushProxyActivity.onCreate() wihtout isActivityRunning :  uri = " + uri.toString());
+       
+       // Run a new cocos2dx activity with uri
+       Intent intent = new Intent(this, SimpleGame.class);
+       intent.putExtra(Constant.FRESCA_URL_KEY, uri.toString());
+       intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+       startActivity(intent);
+     }   			
+   }
+               
+    finish();
+  }
+  
+  private boolean isActivityRunning() { 
+    ActivityManager activityManager = (ActivityManager)this.getSystemService (Context.ACTIVITY_SERVICE); 
+    List<RunningTaskInfo> activitys = activityManager.getRunningTasks(Integer.MAX_VALUE); 
+    boolean isActivityFound = false; 
+    String activityInfo = "ComponentInfo{YOUR_PACKAGE/YOUR_PACKAGE.GAME_ACTIVITY_NAME}" // "ComponentInfo{org.cocos2dx.simplegame/org.cocos2dx.simplegame.SimpleGame}"
+    for (int i = 0; i < activitys.size(); i++) { 
+      if (activitys.get(i).topActivity.toString().equalsIgnoreCase(activityInfo)) {
+        isActivityFound = true;
+        break;
+      }
+    } 
+    return isActivityFound; 
+  } 
+}
+```
+마지막으로 PushProxyActivity를 통해 게임이 실행된 경우 넘어오는 uri 값을 처리합니다. Main 액티비티에 아래와 같은 내용을 추가합니다.
+
+```java
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    ......
+    // Handle custom uri from PushProxcyActivity
+    String frescaURL = this.getIntent().getStringExtra(Constant.FRESCA_URL_KEY);
+    if (frescaURL != null) {
+      // Log.d("AdFresca", "MainActivity.onCreate() with uri = " + frescaURL);  
+      // Do something with uri
+    } 	
+    ......
+  }
+```
+
+Cocos2d-x 환경에서 Custom URL을 처리할 수 있는 모든 방법을 구현하였습니다.
+
+
+* * *
+
 ## Reward Item
 
 _Incentivized Campaign_을 사용하여 , 사용자가 _Media App_에서 _Advertising App_의 광고를 보고 앱을 설치하였을 때 보상으로 _Media App_의 아이템을 지급할 수 있습니다.
@@ -621,6 +700,85 @@ new AsyncTask<Void, Void, Void>() {
 
 * * *
 
+## Custom Banner
+
+Android SDK 에서는 _Floating View_와 _Banner View_ 두가지 종류의 커스텀 배너를 제공합니다. 커스텀 배너는 dashboard 에서 이미지 사이즈를 등록한 후 해당 이미지 사이즈를 사용하는 캠페인이 매칭되었을 때 이미지를 커스텀 배너에 보여줍니다.
+
+`AdFresca.load()` 와 `AdFresca.show()` 를 통해 이미지를 보여주는 점은 기존 캠페인과 같습니다. _Floating View_는 다른 UI Component 위에 위치하며 닫을 수 있으며, _Banner View_는 _Floating View_와는 반대로 화면의 일정 영역을 차지하며 닫을 수 없습니다. 
+
+커스텀 배너를 사용하기 위해서는 아래와 같이 namespace 를 layout xml 파일에 추가해야합니다.
+
+```xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:adfresca="http://schemas.android.com/apk/res/Your.Package.Name"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+</LinearLayout>
+```
+
+### Floating View
+
+Floating View 를 사용하기 위해 태그를 추가합니다.
+
+```xml
+<com.adfresca.sdk.view.AFFloatingView
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    adfresca:image_size_index="1" />
+```
+
+*   `adfresca:image_size_index=1` _이미지 사이즈 인덱스_를 설정합니다.
+
+닫기 버튼 이미지를 설정하여 사용자가 _Floating View_를 닫을 수 있도록 할 수 있습니다.
+
+```xml
+<com.adfresca.sdk.view.AFFloatingView
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    adfresca:image_size_index="1"
+    adfresca:close_button_image="@drawable/close_button" />
+```
+
+*   `adfresca:close_button_image="@drawable/close_button"` 닫기 버튼 이미지를 설정합니다.
+
+### Banner View
+
+_Banner View_ 를 사용하기 위해 태그를 추가합니다.
+
+```xml
+<com.adfresca.sdk.view.AFBannerView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    adfresca:image_size_index="1"
+    adfresca:keep_aspect_ratio="width"
+    adfresca:default_image="@drawable/default_banner" />
+```
+
+- `adfresca:image_size_index="1"` 이미지 사이즈 인덱스를 설정합니다.
+- `adfresca:keep_aspect_ratio="width"` 로드된 컨텐츠에 따라 _Banner View_의 가로세로 비율을 유지합니다. _width_가 세팅된 경우 _Banner View_의 세로값을 변경하여 비율을 유지합니다. 이 경우 `android:layout_height`는 반드시 `wrap_content` 가 되어야합니다. (`adfresca:keep_aspect_ratio`는  [ _none_ | _width_ | _height_ ] 중에 하나의 값을 가지며 디폴트는 _none_ 입니다.)
+- `adfresca:default_image="@drawable/default_image"` 이미지가 로드되기 전 표시할 디폴트 이미지를 지정합니다.
+
+**Example:** 한 액티비티에서 기본 _Interstitial View_와 _Banner View_ 두 개의 View를 동시에 사용하기
+
+이벤트 기능을 활용하여 여러 개의 뷰를 한 화면에 동시에 노출할 수 있습니다. 
+
+```java
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+  super.onCreate(savedInstanceState);
+  setContentView(R.layout.activity_intro);
+  
+  AdFresca.setApiKey(API_KEY);
+  AdFresca adfresca = AdFresca.getInstance(this);
+  adfresca.startSession();
+  adfresca.load(EVENT_INDEX_MAIN_PAGE_FOR_BANNER); // 메인 페이지진입 시 Banner View 를 위한 컨텐츠를 load 합니다.
+  adfresca.load(EVENT_INDEX_MAIN_PAGE_FOR_INTERSTITIAL); // 메인 페이지 진입 시 Interstitial View 를 위한 컨텐츠를 load 합니다.
+  adfresca.show(); // load 된 모든 컨텐츠를 show 합니다.
+}
+```
+
+* * *
+
 ## Advanced Features
 
 ### AFLoadListener
@@ -709,27 +867,6 @@ public void onResume() {
   }
 }
 ```
-
-### Custom URL
-
-Announcement 캠페인의 Click URL, Push Notification 캠페인의 URL Schema 설정 시에 자신의 앱 URL Schema를 사용할 수 있습니다.
-
-이를 통해 사용자가 콘텐츠를 클릭할 경우, 자신이 원하는 특정 앱 페이지로 이동하는 등의 액션을 지정할 수 있습니다.
-
-해당 기능을 지원하기 위해서는 AndroidManifest.xml 파일을 수정하여 scheme 정보를 추가해야 합니다.
-
-```xml
-  <activity android:name=".DemoZoneActivity">
-      <intent-filter> 
-             <action android:name="android.intent.action.VIEW" /> 
-             <category android:name="android.intent.category.DEFAULT" /> 
-             <category android:name="android.intent.category.BROWSABLE" /> 
-             <data android:scheme="myapp" android:host="com.adfresca.zone" />
-        </intent-filter> 
-  </activity>
-```
-
-위와 같이 설정한 경우, Campaign의 _Click URL_ 값을 myapp://com.adfresca.zone 으로 설정하여 DemoZoneActivity가 바로 실행되도록 할 수 있습니다.
 
 ### Test Device ID
 
