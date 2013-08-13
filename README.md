@@ -482,7 +482,7 @@ public void onCreate(Bundle savedInstanceState) {
 
 1) Main 액티비티의 startActivity(intent) 메소드를 오버라이딩하여 Custom URL 처리하기 (Annoucnement 캠페인)
 
-Annoucnement 캠페인을 통해 전달되는 Click URL은 항상 인게임 상황에서 전달되며, SDK가 내부적으로 startActivity() 메소드를 이용하여 호출하고 있습니다. 이러한 조건에서는 게임이 실행되고 있는 Main 액티비티의 startActivity() 메소드를 직접 구현함으로써 Custom URL 처리가 가능합니다.
+Annoucnement 캠페인을 통해 전달되는 Click URL은 항상 인게임 상황에서 전달되며, SDK가 내부적으로 startActivity() 메소드를 이용하여 호출하고 있습니다. 이러한 조건에서는 게임이 실행되고 있는 Main 액티비티의 startActivity() 메소드를 직접 구현함으로써 Custom URL 처리가 가능합니다. 아래와 같이 코드를 구현하면 'myapp://' 형식의 Custom URL이 전달 될 시에 새로운 액티비티를 호출하지 않고 직접 처리할 수 있습니다.
 
 ```java
 \@Override 
@@ -491,7 +491,7 @@ public void startActivity(Intent intent) {
 
   // Check intent 
   Uri uri = intent.getData(); 
-  if (uri != null && uri.getScheme().equals("adfresca")) { 
+  if (uri != null && uri.getScheme().equals("myapp")) { 
     isStartActivity = false; 
   }
 
