@@ -384,7 +384,7 @@ SDK를 적용하기 이전에 구글의 ["GCM: Getting Started" ](http://develop
 
 Custom Notification을 만들고 직접 notify 하는 방법입니다.
 
-**Example**: Notification 도착 시 사용자 기기에 진동을 추가하기 
+**Example**: Notification 도착 시 사용자 기기에 기본 사운드 추가하기 
 
 ```java
 public class GCMIntentService extends GCMBaseIntentService {
@@ -402,6 +402,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 		}
 	}
 }
+```
+Vibrate(진동) 모드를 사용할 경우 별도의 AndroidManifest.xml 파일에 퍼미션 등록이 필요합니다.
+```xml
+<uses-permission android:name="android.permission.VIBRATE"></uses-permission>
 ```
 
 **Example**: Notification 도착 시 Custom Big View를 통해 메시지 표시하기
