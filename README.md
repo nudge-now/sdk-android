@@ -277,11 +277,11 @@ _AD fresca_를 통해 Push Notification을 보내고 받을 수 있습니다.
 
 SDK를 적용하기 이전에 구글의 ["GCM: Getting Started" ](http://developer.android.com/google/gcm/gs.html)가이드 문서를 읽어보시길 권장합니다.
 
-1) GCM Helper Library 설치하기.
+1) GCM Helper Library 설치하기
     - 구글에서 제공하는 [GCM Helper Library](http://code.google.com/p/gcm/source/browse/) 를 다운로드 받습니다. (Download zip 혹은 git clone을 이용)
     - /gcm-client/dist/**gcm.jar** 파일을 프로젝트에 복사하여 설치합니다.
     
-2) AndroidManifest.xml 확인하기.
+2) AndroidManifest.xml 확인하기
 
 ```xml
 <manifest>   
@@ -308,7 +308,7 @@ SDK를 적용하기 이전에 구글의 ["GCM: Getting Started" ](http://develop
 </manifest>
 ```
 
-3) Registration ID를 등록하고 SDK에 셋팅하기.
+3) Registration ID를 등록하고 SDK에 셋팅하기
 
 ```java
     /*
