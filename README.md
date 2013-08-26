@@ -86,12 +86,12 @@ _AD fresca_ 는 사용자의 네트워크 접속 상태, 기기ID를 수집하�
             
       <!-- Push Notification 기능을 사용할 경우, 아래 내용을 추가합니다. -->
       <activity android:name="com.adfresca.ads.AdFrescaPushActivity" />
-        <receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">  
-          <intent-filter>
-            <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-            <category android:name="your_app_package" />
-          </intent-filter>
+      <receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">  
+        <intent-filter>
+          <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+          <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+          <category android:name="your_app_package" />
+        </intent-filter>
       </receiver>
       <service android:name=".GCMIntentService" />  <!-- GCM 메시지를 처리하기 위하여 GCMIntentService 클래스를 구현해야 합니다. (9번 항목에서 상세 설명)  -->
 
@@ -378,6 +378,34 @@ SDK를 적용하기 이전에 구글의 ["GCM: Getting Started" ](http://develop
 
     }
   }
+```
+
+5) GCMReceiver 클래스 구현하기 (Optional)
+
+만약 GCMIntentService 클래스의 패키지 위치가 프로젝트의 최상위 패키지와 같지 않다면 GCMReceiver 클래스를 직접 구현해야 합니다. GCMReceiver 클래스를 생성하여 아래와 같이 getGCMIntentServiceClassName() 메소드를 구현합니다.
+
+```java
+public class GCMReceiver extends GCMBroadcastReceiver { 
+   	@Override
+	protected String getGCMIntentServiceClassName(Context context) { 
+		return "your_app_package.GCMIntentService"; 
+	} 
+}
+```
+
+그리고 AndroidMenefest.xml 파일의 내용을 아래와 같이 수정합니다.
+
+``` xml
+....
+<receiver android:name="your_gcm_package.GCMReceiver" android:permission="com.google.android.c2dm.permission.SEND">  
+  <intent-filter>
+    <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+    <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+    <category android:name="your_app_package" />
+  </intent-filter>
+</receiver>
+<service android:name="your_gcm_package.GCMIntentService" /> 
+....
 ```
 
 ### Custom Notification
