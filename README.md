@@ -468,6 +468,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	}
 }
 ```
+*주의:* notification 객체에 설정된 contentIntent 값은 반드시 SDK에서 설정한 값을 그대로 사용해야 합니다.
 
 * * *
 
