@@ -20,7 +20,7 @@
     - [Custom URL](#custom-url)
     - [Test Device ID](#test-device-id)
     - [Timeout Interval](#timeout-interval)
-    - [Google Referer Tracking](#google-referer-tracking)
+    - [Google Referrer Tracking](#google-referrer-tracking)
 - [Trouble Shooting](#trouble-shooting)
     - [Error Code](#error-code)
 - [Release Notes](#release-notes)
@@ -77,7 +77,7 @@ _AD fresca_ 는 사용자의 네트워크 접속 상태, 기기ID를 수집하�
       <!-- Incentivized Campaign 을 위한 액티비티-->
       <activity android:name="com.adfresca.sdk.reward.AFRewardActivity" />
       
-       <!-- Google Refererer Tracking 을 위한 Boradcast Receiver-->
+       <!-- Google Referrer Tracking 을 위한 Boradcast Receiver-->
       <receiver android:name="com.adfresca.sdk.referer.AFRefererReciever" android:exported="true">
       	<intent-filter>
             <action android:name="com.android.vending.INSTALL_REFERRER" />
@@ -939,15 +939,15 @@ textView.setText(deviceId);
   adfresca.show();
 ```
 
-### Google Referer Tracking
+### Google Referrer Tracking
 
-Google Play 캠페인을 통해 앱을 설치하는 경우, Referer 정보를 분석하여 통계 데이터를 제공합니다.
+Google Play 캠페인을 통해 앱을 설치하는 경우, Referrer 정보를 분석하여 통계 데이터를 제공합니다.
 
-Referer 정보를 추출하여 SDK에 설정하기 위하여 아래와 같이 적용 및 테스트 합니다.
+Referrer 정보를 추출하여 SDK에 설정하기 위하여 아래와 같이 적용 및 테스트 합니다.
 
 1) AndroidManefest.xml에 Reciever 등록
 
-Reciever를 등록하여 Google Play 앱을 통해 전달되는 Referer 값을 자동으로 SDK에 적용합니다.
+Reciever를 등록하여 Google Play 앱을 통해 전달되는 Referrer 값을 자동으로 SDK에 적용합니다.
 
 ```xml
 <receiver android:name="com.adfresca.sdk.referer.AFRefererReciever" android:exported="true">
@@ -1026,7 +1026,7 @@ INVALIED_LOCALE = 102 | No locale match : l | 디바이스에서 아직 제공�
 - v2.2.1 
     -  'Close Mode' 기능을 지원합니다. Dashboard에서 Interstitial View의 닫힘 설정을 제어할 수 있습니다.
 - v2.2.0 
-    - [Google Referer Tracking](#google-referer-tracking) 기능이 추가 되었습니다. 
+    - [Google Referrer Tracking](#google-referrer-tracking) 기능이 추가 되었습니다. 
     - `AdFresca.setCustomParameter` 메소드가 deprecated 되었습니다. AdFresca 객체의 `setCustomParameterValue()` 메소드를 사용해 주세요.
     - `AdFresca.setInAppPurchaseCount` 메소드가 deprecated 되었습니다. AdFresca 객체의 `setNumberOfInAppPurchases()` 메소드를 사용해 주세요.
     - `setCustomParameterValue()` 메소드에서 64 bit integer를 지원합니다. (long type)
