@@ -596,7 +596,7 @@ Now, you're done with custom url in coscos2d-x engine!
 
 ## Reward Item
 
-_Incentivzed Campaign_ makes it possible to give a reward to users who sees an ad of _Advertising App_ in _Media App_ and install _AdVertising App_.
+_Incentivzed Campaign_ makes it possible to give a reward to users who see an ad of _Advertising App_ in _Media App_ and install _AdVertising App_.
 
 (It is highly recommended to install SDK in _Advertising App_ for _CPA Campaign_ that is coming soon although it is not required at this time.)
 
@@ -614,11 +614,11 @@ Code in _Media App_:
 </manifest>
 ```
 
-- At the place you want to reward, call `getAvailableRewardItems()` to get reward item array.
+- Call getAvailableRewardItems() method when you want to get item list.
 
-- This array contains _AFRewardItem_ objects that has properties such as name, quantity and uniqueValue.
+- Array returned from getAvailableRewardItems() contains objects of 'AFRewardItem' which has name, quantity and uniqueValue properties. You should use uniqueValue property of AFRewardItem object to give an item to your users. (ex: you may send an item request to your game server with user id and uniqueValue)
 
-- `getAvailableRewardItems()` returns available reward items when it is called, and start check available reward items asynchronously. That means the second call of `getAvailableRewardItems()` may return available reward items though the first call returns no available reward item.
+- 'getAvailableRewardItems()' method only return when all the validation work are done for current user. it may return items at later if reward is still in validation process.
 
 ```java
 @Override
@@ -640,7 +640,7 @@ public void onStart() {
 }
 ```
 
-###(Advanced) Giving a reward immediately:
+###(Advanced) Giving a reward with faster way:
 
 - Call `checkRewardItems()` to check at the time of starting app or whenever you want.
 - Call `getAvailableRewardItems()` to retrieve available reward items to give it to users.
@@ -670,7 +670,7 @@ public void onClick(View view) {
 }
 ```
 
-### (Advanced) Checking and giving in sync:
+###(Advanced) Giving a reward immediately:
 
 `checkRewardItems(true)` blocks your code flow. That `checkRewardItems(true)` returns means it is finished to check available reward item. After it returns, you may call `getAvailableRewardItems()` to give users reward items.
 
