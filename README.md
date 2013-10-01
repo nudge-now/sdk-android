@@ -1024,7 +1024,7 @@ INVALIED_LOCALE = 102 | No locale match : l | 디바이스에서 아직 제공�
 ## Release Notes
 - v2.2.3 _(10/01/2013 Updated)_ 
     - Push Notification 캠페인에서 설정한 title, ticker 메시지가 표시될 수 있도록 지원합니다.
-    -`AdFresca.generateNotification` 메소드가 Deprecated 되었습니다. `AdFresca.generateAFPushNotification()` 메소드를 사용합니다.
+    - `AdFresca.generateNotification` 메소드가 Deprecated 되었습니다. `AdFresca.generateAFPushNotification()` 메소드를 사용합니다.
 - v2.2.2 _(08/12/2013 Updated)_ 
     - 로컬 캐시 기능이 개선되었습니다.
 - v2.2.1 
