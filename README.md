@@ -421,10 +421,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 			String appName = context.getString(R.string.app_name);
 			int icon = R.drawable.icon;
 			long when = System.currentTimeMillis();
-			
-	    		AFPushNotification notification = AdFresca.generateAFPushNotification(context, intent, DemoIntroActivity.class, appName, icon, when);
-	    		notification.setDefaults(Notification.DEFAULT_ALL); // requires VIBRATE permission
-	    		AdFresca.showNotification(notification);
+						
+			AFPushNotification notification = AdFresca.generateAFPushNotification(context, intent, DemoIntroActivity.class, appName, icon, when);
+			notification.setDefaults(Notification.DEFAULT_ALL); // requires VIBRATE permission
+			AdFresca.showNotification(notification);
 		}
 	}
 }
@@ -434,7 +434,7 @@ Vibrate(진동) 모드를 사용하기 위하여 별도의 AndroidManifest.xml �
 <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
 ```
 
-**Example**: Notification 도착 시 Custom Big View를 통해 메시지 표시하기
+**Example**: Notification 도착 시 BigTextStyle 적용 및 Custom Notification 객체 생성하여 표시하기
 
 ```java
 public class GCMIntentService extends GCMBaseIntentService {
@@ -446,9 +446,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	            long when = System.currentTimeMillis();
 				
 	            AFPushNotification notification = AdFresca.generateAFPushNotification(context, intent, DemoIntroActivity.class, appName, icon, when);
-	            notification.setDefaults(Notification.DEFAULT_ALL); // requires VIBRATE permission
-	            AdFresca.showNotification(notification);
-	            
+
 	            Notification.Builder builder =
 	                    new Notification.Builder(this)
 	                            .setSmallIcon(icon)
