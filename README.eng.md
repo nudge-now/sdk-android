@@ -41,9 +41,9 @@ Unlike other SDKs by other AD networks, AD fresca SDK does not show content to u
 
 Download SDK at the following link.
 
-[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.2.2)
+[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.2.3)
 
-[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.2.2)
+[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.2.3)
 
 Copy **AdFresca.jar** and **adfresca_attr.xml** to **lib** and **res/values** repectively.
 
@@ -330,13 +330,13 @@ Before you start, we recommend reading ["GCM: Getting Started" ](http://develope
     protected void onMessage(Context context, Intent intent) {
     // Check a push notification is form AD fresca.
       if (AdFresca.isFrescaNotification(intent)) { 
-        String title = context.getString(R.string.app_name);
+        String appName = context.getString(R.string.app_name);
         int icon = R.drawable.icon;
         long when = System.currentTimeMillis();
 
         // Show this notification in the status bar
         // If this notification has URI Schema, SDK will open URI. otherwise, the activity from targetClass will be opened 
-        AdFresca.showNotification(context, intent, MainActivity.class, title, icon, when);
+        AdFresca.showNotification(context, intent, MainActivity.class, appName, icon, when);
       }
     }
 
@@ -385,14 +385,13 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onMessage(Context context, Intent intent) {
 		if (AdFresca.isFrescaNotification(intent)) {
-			String title = context.getString(R.string.app_name);
+			String appName = context.getString(R.string.app_name);
 			int icon = R.drawable.icon;
 			long when = System.currentTimeMillis();
 			
-			Notification notification = AdFresca.generateNotification(context, intent, DemoIntroActivity.class, title, icon, when);
-			notification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-			notificationManager.notify(0, notification);
+	    		AFPushNotification notification = AdFresca.generateAFPushNotification(context, intent, DemoIntroActivity.class, appName, icon, when);
+	    		notification.setDefaults(Notification.DEFAULT_ALL); // requires VIBRATE permission
+	    		AdFresca.showNotification(notification);
 		}
 	}
 }
@@ -410,27 +409,32 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onMessage(Context context, Intent intent) {
 		if (AdFresca.isFrescaNotification(intent)) {
-			String title = context.getString(R.string.app_name);
-			int icon = R.drawable.icon;
-			long when = System.currentTimeMillis();
-			
-			Notification notification = AdFresca.generateNotification(context, intent, DemoIntroActivity.class, title, icon, when);
-			
-			NotificationCompat.Builder builder =
-       				 new NotificationCompat.Builder(this)
-       				 .setSmallIcon(icon)
-       				 .setContentTitle(title)
-       				 .setContentText(notification.tickerText)
-       				 .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
-       				 .setContentIntent(notification.contentIntent);
-       				 /*
-         			  * Big view style is only supportd on 4.1+ devices.
-         			  */
-        			.setStyle(new NotificationCompat.BigTextStyle()
-                			.bigText(notification.tickerText));
-			
-			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-			notificationManager.notify(0, builder.build());
+	            String appName = context.getString(R.string.app_name);
+	            int icon = R.drawable.icon;
+	            long when = System.currentTimeMillis();
+				
+	            AFPushNotification notification = AdFresca.generateAFPushNotification(context, intent, DemoIntroActivity.class, appName, icon, when);
+	            notification.setDefaults(Notification.DEFAULT_ALL); // requires VIBRATE permission
+	            AdFresca.showNotification(notification);
+	            
+	            Notification.Builder builder =
+	                    new Notification.Builder(this)
+	                            .setSmallIcon(icon)
+	                            .setContentTitle(notification.getTitle())
+	                            .setContentText(notification.getMessage())
+	                            .setTicker(notification.getTickerText())
+	                            .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
+	                            .setContentIntent(notification.getContentIntent())
+	                            .setAutoCancel(notification.isAutoCancelled())
+	                            /*
+	                             * Big view style is only supported on 4.1+ devices.
+	                             */
+	                            .setStyle(new Notification.BigTextStyle()
+	                                .bigText(notification.getMessage())
+	                            );
+	
+	            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+	            notificationManager.notify(0, builder.build());
 		}
 	}
 }
@@ -989,7 +993,10 @@ INVALIED_LOCALE = 102 | No locale match : l | Unknown locale is used for our ser
 * * *
 
 ## Release Notes
-- v2.2.2 _(08/12/2013 Updated)_ 
+- v2.2.3 _(10/01/2013 Updated)_ 
+    - Added a support for title and ticker messages for Pus hNotification Campaign
+    - Deprecated `AdFresca.generateNotification` method. Use `AdFresca.generateAFPushNotification()` instead
+- v2.2.2 
     - Improved local cache features
 - v2.2.1 
     -  Added 'Close mode' feature. You can control the closing action of an interstitial view on our dashboard.
