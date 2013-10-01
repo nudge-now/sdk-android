@@ -378,7 +378,7 @@ Then update AndroidMenefest.xml as below.
 
 You can change the settings of _Notification_. These examples below show how to do that.
 
-**Example**: Add a default sound when notification is shown on device.
+**Example**: Add default sound, vibration, and light when notification is shown on device.
 
 ```java
 public class GCMIntentService extends GCMBaseIntentService {
@@ -388,10 +388,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 			String appName = context.getString(R.string.app_name);
 			int icon = R.drawable.icon;
 			long when = System.currentTimeMillis();
-			
-	    		AFPushNotification notification = AdFresca.generateAFPushNotification(context, intent, DemoIntroActivity.class, appName, icon, when);
-	    		notification.setDefaults(Notification.DEFAULT_ALL); // requires VIBRATE permission
-	    		AdFresca.showNotification(notification);
+						
+			AFPushNotification notification = AdFresca.generateAFPushNotification(context, intent, DemoIntroActivity.class, appName, icon, when);
+			notification.setDefaults(Notification.DEFAULT_ALL); // requires VIBRATE permission
+			AdFresca.showNotification(notification);
 		}
 	}
 }
@@ -402,7 +402,7 @@ To support 'vibrate' mode, you should also add a permission to AndroidManifest.x
 <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
 ```
 
-**Example**: Use 'Big View' style to show notification.
+**Example**: Use BigTextStyle with a custom notificiation to show messages.
 
 ```java
 public class GCMIntentService extends GCMBaseIntentService {
@@ -414,9 +414,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	            long when = System.currentTimeMillis();
 				
 	            AFPushNotification notification = AdFresca.generateAFPushNotification(context, intent, DemoIntroActivity.class, appName, icon, when);
-	            notification.setDefaults(Notification.DEFAULT_ALL); // requires VIBRATE permission
-	            AdFresca.showNotification(notification);
-	            
+
 	            Notification.Builder builder =
 	                    new Notification.Builder(this)
 	                            .setSmallIcon(icon)
