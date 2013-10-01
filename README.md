@@ -41,9 +41,9 @@ AD fresca SDK는 다른 SDK과 달리, 데이터를 완전히 로딩할 때까�
 
 아래 링크를 통해 SDK 파일을 다운로드 합니다.
 
-[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.2.2)
+[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.2.3)
 
-[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.2.2)
+[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.2.3)
 
 **AdFresca.jar** 파일은 **lib** 폴더에, **adfresca_attr.xml** 파일은 **res/values** 폴더에 각각 복사합니다.
 
@@ -361,14 +361,13 @@ SDK를 적용하기 이전에 구글의 ["GCM: Getting Started" ](http://develop
 
       // AD fresca를 통해서 수신한 notification인지 확입합니다.
       if (AdFresca.isFrescaNotification(intent)) { 
-        String title = context.getString(R.string.app_name);
+        String appName = context.getString(R.string.app_name);
         int icon = R.drawable.icon;
         long when = System.currentTimeMillis();
 
         // 수신 받은 notification을 status bar에 표시합니다.
         // notification에 URI Schema가 설정된 경우, 해당 URI를 실행하며 기본적으로는 targetClass에 설정한 액티비티를 실행하여 줍니다. 
-        AdFresca.showNotification(context, intent, MainActivity.class, title, icon, when);
-
+        AdFresca.showNotification(context, intent, MainActivity.class, appName, icon, when);
       } 
 
     }
@@ -412,26 +411,25 @@ public class GCMReceiver extends GCMBroadcastReceiver {
 
 Custom Notification을 만들고 직접 notify 하는 방법입니다.
 
-**Example**: Notification 도착 시 사용자 기기에 기본 사운드 추가하기 
+**Example**: Notification 도착 시 사용자 기기에 기본 사운드, 진동, LED 적용하기
 
 ```java
 public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onMessage(Context context, Intent intent) {
 		if (AdFresca.isFrescaNotification(intent)) {
-			String title = context.getString(R.string.app_name);
+			String appName = context.getString(R.string.app_name);
 			int icon = R.drawable.icon;
 			long when = System.currentTimeMillis();
 			
-			Notification notification = AdFresca.generateNotification(context, intent, DemoIntroActivity.class, title, icon, when);
-			notification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-			notificationManager.notify(0, notification);
+	    		AFPushNotification notification = AdFresca.generateAFPushNotification(context, intent, DemoIntroActivity.class, appName, icon, when);
+	    		notification.setDefaults(Notification.DEFAULT_ALL); // requires VIBRATE permission
+	    		AdFresca.showNotification(notification);
 		}
 	}
 }
 ```
-Vibrate(진동) 모드를 사용할 경우 별도의 AndroidManifest.xml 파일에 퍼미션 등록이 필요합니다.
+Vibrate(진동) 모드를 사용하기 위하여 별도의 AndroidManifest.xml 파일에 퍼미션 등록이 필요합니다.
 ```xml
 <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
 ```
@@ -443,32 +441,37 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onMessage(Context context, Intent intent) {
 		if (AdFresca.isFrescaNotification(intent)) {
-			String title = context.getString(R.string.app_name);
-			int icon = R.drawable.icon;
-			long when = System.currentTimeMillis();
-			
-			Notification notification = AdFresca.generateNotification(context, intent, DemoIntroActivity.class, title, icon, when);
-			
-			NotificationCompat.Builder builder =
-       				 new NotificationCompat.Builder(this)
-       				 .setSmallIcon(icon)
-       				 .setContentTitle(title)
-       				 .setContentText(notification.tickerText)
-       				 .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
-       				 .setContentIntent(notification.contentIntent);
-       				 /*
-         			  * Big view style is only supportd on 4.1+ devices.
-         			  */
-        			.setStyle(new NotificationCompat.BigTextStyle()
-                			.bigText(notification.tickerText));
-			
-			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-			notificationManager.notify(0, builder.build());
+	            String appName = context.getString(R.string.app_name);
+	            int icon = R.drawable.icon;
+	            long when = System.currentTimeMillis();
+				
+	            AFPushNotification notification = AdFresca.generateAFPushNotification(context, intent, DemoIntroActivity.class, appName, icon, when);
+	            notification.setDefaults(Notification.DEFAULT_ALL); // requires VIBRATE permission
+	            AdFresca.showNotification(notification);
+	            
+	            Notification.Builder builder =
+	                    new Notification.Builder(this)
+	                            .setSmallIcon(icon)
+	                            .setContentTitle(notification.getTitle())
+	                            .setContentText(notification.getMessage())
+	                            .setTicker(notification.getTickerText())
+	                            .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
+	                            .setContentIntent(notification.getContentIntent())
+	                            .setAutoCancel(notification.isAutoCancelled())
+	                            /*
+	                             * Big view style is only supported on 4.1+ devices.
+	                             */
+	                            .setStyle(new Notification.BigTextStyle()
+	                                .bigText(notification.getMessage())
+	                            );
+	
+	            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+	            notificationManager.notify(0, builder.build());
 		}
 	}
 }
 ```
-*주의:* notification 객체에 설정된 contentIntent 값은 반드시 SDK에서 설정한 값을 그대로 사용해야 합니다.
+*주의:* 새로운 notification 객체에 설정할 contentIntent 값은 반드시 SDK에서 설정한 값을 그대로 사용해야 합니다.
 
 * * *
 
@@ -1021,6 +1024,9 @@ INVALIED_LOCALE = 102 | No locale match : l | 디바이스에서 아직 제공�
 * * *
 
 ## Release Notes
+- v2.2.3 _(10/01/2013 Updated)_ 
+    - Push Notification 캠페인에서 설정한 title, ticker 메시지가 표시될 수 있도록 지원합니다.
+    -`AdFresca.generateNotification` 메소드가 Deprecated 되었습니다. `AdFresca.generateAFPushNotification()` 메소드를 사용합니다.
 - v2.2.2 _(08/12/2013 Updated)_ 
     - 로컬 캐시 기능이 개선되었습니다.
 - v2.2.1 
