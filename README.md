@@ -9,6 +9,7 @@
     - [Event](#event)
 - [Push Notification](#push-notification)
     - [Custom Notification](#custom-notification)
+    - [Baidu Push Service](#baidu-push-service)
 - [Custom URL](#custom-url)
 - [Reward Item](#reward-item)
 - [Custom Banner](#custom-banner)
@@ -41,9 +42,9 @@ AD fresca SDK는 다른 SDK과 달리, 데이터를 완전히 로딩할 때까�
 
 아래 링크를 통해 SDK 파일을 다운로드 합니다.
 
-[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.2.3)
+[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.3.0)
 
-[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.2.3)
+[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.3.0)
 
 **AdFresca.jar** 파일은 **lib** 폴더에, **adfresca_attr.xml** 파일은 **res/values** 폴더에 각각 복사합니다.
 
@@ -470,6 +471,111 @@ public class GCMIntentService extends GCMBaseIntentService {
 }
 ```
 *주의:* 새로운 notification 객체에 설정할 contentIntent 값은 반드시 SDK에서 설정한 값을 그대로 사용해야 합니다.
+
+### Baidu Push Service
+
+_AD fresca_ Android SDK는 Google의 GCM 서비스 외에도 Baidu Push 서비스를 이용하여 푸쉬 메시지를 사용자에게 전송할 수 있습니다. 
+
+SDK를 적용하기 이전에 ["Baidu Cloud Push" ](http://developer.baidu.com/wiki/index.php?title=docs/cplat/push)가이드 문서를 읽어보시길 권장합니다.
+
+1) Baidu Push SDK 설치하기
+- Baidu에서 제공하는 [Baidu Push Android SDK](http://developer.baidu.com/wiki/index.php?title=docs/cplat/push/sdk/clientsdk) 를 다운로드 받습니다.
+- /libs/pushservice.jar 파일을 프로젝트에 복사하여 설치합니다.
+    
+2) AndroidManifest.xml 내용 추가하기
+
+```xml
+<manifest>   
+  <application>
+      .........
+       <!-- Baidu push service -->
+        <receiver android:name="YOUR_PACKAGE.BaiduPushMessageReceiver">    <!-- Baidu Push Notification을 처리하기 위해 직접 구현하는 내용입니다 -->
+            <intent-filter>
+                <action android:name="com.baidu.android.pushservice.action.MESSAGE" />
+                <action android:name="com.baidu.android.pushservice.action.RECEIVE" />
+                <action android:name="com.baidu.android.pushservice.action.notification.CLICK" />
+            </intent-filter>
+        </receiver>
+        
+        <receiver android:name="com.baidu.android.pushservice.PushServiceReceiver"
+            android:process=":bdservice_v1">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="com.baidu.android.pushservice.action.notification.SHOW" />
+                <action android:name="com.baidu.android.pushservice.action.media.CLICK" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="com.baidu.android.pushservice.RegistrationReceiver"
+            android:process=":bdservice_v1">
+            <intent-filter>
+                <action android:name="com.baidu.android.pushservice.action.METHOD" />
+                <action android:name="com.baidu.android.pushservice.action.BIND_SYNC" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+                <data android:scheme="package" />
+            </intent-filter>                   
+        </receiver>
+        
+        <service
+            android:name="com.baidu.android.pushservice.PushService"
+            android:exported="true"
+            android:process=":bdservice_v1" />        
+        <!-- push service end -->
+   </application>
+    ..........
+	<!-- Baidu Push permissions -->
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" /> 
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> 
+	<uses-permission android:name="android.permission.BROADCAST_STICKY" /> 
+	<uses-permission android:name="android.permission.WRITE_SETTINGS" /> 
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/> 
+	<uses-permission android:name="android.permission.DISABLE_KEYGUARD" /> 
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> 
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />    
+    ..........
+</manifest>
+```
+
+3) 최초 Activity에서 Baidu Push service 시작하기
+
+```java
+  // Start Baidu push service with Baidu push API Key 
+  PushManager.startWork(getApplicationContext(),
+				PushConstants.LOGIN_TYPE_API_KEY, 
+				"YOUR_BAIDU_PUSH_API_KEY");
+
+  AdFresca adfresca = AdFresca.getInstance(this);
+  adfresca.startSession();
+```
+
+4) BaiduPushMessageReceiver 클래스 구현하기
+
+```java
+public class BaiduPushMessageReceiver extends BroadcastReceiver {
+
+	@Override
+	public void onReceive(final Context context, Intent intent) {
+		if (intent.getAction().equals(PushConstants.ACTION_MESSAGE)) {
+			if (AdFresca.isFrescaNotification(intent)) {
+	            String appName = context.getString(R.string.app_name);
+	            int icon = R.drawable.icon;
+	            long when = System.currentTimeMillis();
+
+	            AdFresca.showNotification(context, intent, DemoIntroActivity.class, appName, icon, when);
+
+		} else if (intent.getAction().equals(PushConstants.ACTION_RECEIVE)) {
+			AdFresca.handleBaiduPushRegistration(intent);
+		}
+	}
+}
+```
+
+Baidu Push 적용이 완료되었습니다. 푸쉬 메시지의 알람 사운드 추가, BigViewStyle 적용 등은 GCM 적용과 마찬가지로 [Custom Notification](#custom-notification) 내용에 따라 적용이 가능합니다.
 
 * * *
 
@@ -1022,10 +1128,12 @@ INVALIED_LOCALE = 102 | No locale match : l | 디바이스에서 아직 제공�
 * * *
 
 ## Release Notes
-- v2.2.3 _(10/01/2013 Updated)_ 
+- v2.3.0 _(10/12/2013 Updated)_ 
+    - AD fresca SDK에서 Baidu Push를 이용할 수 있도록 지원합니다. 자세한 내용은 [Baidu Push Service](#baidu-push-service) 항목을 참고하여 주세요.
+- v2.2.3
     - Push Notification 캠페인에서 설정한 title, ticker 메시지가 표시될 수 있도록 지원합니다.
     - `AdFresca.generateNotification` 메소드가 Deprecated 되었습니다. `AdFresca.generateAFPushNotification()` 메소드를 사용합니다.
-- v2.2.2 _(08/12/2013 Updated)_ 
+- v2.2.2
     - 로컬 캐시 기능이 개선되었습니다.
 - v2.2.1 
     -  'Close Mode' 기능을 지원합니다. Dashboard에서 Interstitial View의 닫힘 설정을 제어할 수 있습니다.
