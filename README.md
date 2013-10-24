@@ -489,6 +489,8 @@ SDK를 적용하기 이전에 ["Baidu Cloud Push" ](http://developer.baidu.com/w
   <application>
       .........
        <!-- Baidu push service -->
+        <activity android:name="com.adfresca.ads.AdFrescaPushActivity" /> 
+        
         <receiver android:name="YOUR_PACKAGE.BaiduPushMessageReceiver">    <!-- Baidu Push Notification을 처리하기 위해 직접 구현하는 내용입니다 -->
             <intent-filter>
                 <action android:name="com.baidu.android.pushservice.action.MESSAGE" />
