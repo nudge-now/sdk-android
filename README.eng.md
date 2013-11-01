@@ -298,8 +298,9 @@ Before you start, we recommend reading ["GCM: Getting Started" ](http://develope
     GCMRegistrar.register(this, GCM_SENDER_ID);          
   }
 
+  AdFresca.setPushRegistrationId(gcmDeviceId);
+  
   AdFresca adfresca = AdFresca.getInstance(this);
-  adfresca.setPushRegistrationId(gcmDeviceId);
   adfresca.startSession();
 ```
 
