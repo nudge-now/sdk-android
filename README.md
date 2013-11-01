@@ -327,8 +327,9 @@ SDK를 적용하기 이전에 구글의 ["GCM: Getting Started" ](http://develop
      GCMRegistrar.register(this, GCM_SENDER_ID);          
    }
    
+  AdFresca.setPushRegistrationId(gcmDeviceId);
+     
   AdFresca adfresca = AdFresca.getInstance(this);
-  adfresca.setPushRegistrationId(gcmDeviceId);
   adfresca.startSession();
 ```
 
