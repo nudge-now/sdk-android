@@ -943,12 +943,12 @@ AdFresca.setLoadListener(new AFLoadListener(){
 
 ### AFShowListener
 
-`AFShowListener`는 캠패인이 끝났을 때 처리를 위한 _이벤트 리스너_입니다.
+`AFShowListener`는 SDK에서 컨텐츠 프로세싱이 종료되었을 때 이벤트 처리를 위한 _이벤트 리스너_입니다.
 
-캠패인이 끝났다는 것은 다음 두가지를 의미합니다.
+컨텐츠 프로세싱이 종료되었다는 것은 다음 두 가지를 의미합니다.
 
 1. 컨텐츠가 정상적으로 화면에 보여지고 닫혀진 경우
-2. load 된 컨텐츠가 만료되었거나 컨텐츠에 맞는 view를 찾을 수 없어서 보여지지 않고 끝난 경우
+2. 컨텐츠가 매칭되지 않았거나 컨텐츠에 맞는 view를 찾을 수 없어서 화면에 보여지지 않고 끝난 경우
 
 이 두가지 경우를 `AFShowListener.show(int eventIndex, AFView view)`의 두번째 인자 `view`로 판별할 수 있습니다.
 
