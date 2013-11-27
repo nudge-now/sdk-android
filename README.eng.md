@@ -41,9 +41,9 @@ Unlike other SDKs by other AD networks, AD fresca SDK does not show content to u
 
 Download SDK at the following link.
 
-[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.2.3)
+[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.3.1)
 
-[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.2.3)
+[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.3.1)
 
 Copy **AdFresca.jar** and **adfresca_attr.xml** to **lib** and **res/values** repectively.
 
@@ -992,7 +992,11 @@ INVALIED_LOCALE = 102 | No locale match : l | Unknown locale is used for our ser
 * * *
 
 ## Release Notes
-- v2.2.3 _(10/01/2013 Updated)_ 
+- v2.3.1 _(11/27/2013 Updated)_ 
+    - When GCM Registration ID is registred or changed, SDK now updates ID value to our service in real-time. (Previous SDKs only updated when app session started)
+- v2.3.0 
+    - Added a support for Baidu Push Notification. English version of Baidu push guide will be updated soon.
+- v2.2.3
     - Added a support for title and ticker messages for Pus hNotification Campaign
     - Deprecated `AdFresca.generateNotification` method. Use `AdFresca.generateAFPushNotification()` instead
 - v2.2.2 
