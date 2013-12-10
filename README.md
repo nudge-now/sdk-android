@@ -11,6 +11,7 @@
     - [Custom Notification](#custom-notification)
     - [Baidu Push Service](#baidu-push-service)
 - [Custom URL](#custom-url)
+- [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking)
 - [Reward Item](#reward-item)
 - [Custom Banner](#custom-banner)
     - [Floating View](#floating-view)
@@ -45,6 +46,8 @@ AD fresca SDK는 다른 SDK과 달리, 데이터를 완전히 로딩할 때까�
 [Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.3.1)
 
 [Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.3.1)
+
+[Android SDK with IAP Tracking Beta Download](http://file.adfresca.com/distribution/sdk-for-Android-iap-beta.zip) (v.2.4.0-beta1)
 
 **AdFresca.jar** 파일은 **lib** 폴더에, **adfresca_attr.xml** 파일은 **res/values** 폴더에 각각 복사합니다.
 
@@ -739,6 +742,124 @@ Cocos2d-x 환경에서 Custom URL을 처리할 수 있는 모든 방법을 구�
 
 * * *
 
+## In-App Purchase Tracking 
+
+_**(현재 In-App-Purchase Tracking 기능은 SDK 2.4.0-beta1 버전에서만 지원됩니다.)**_
+
+_In-App-Purchase Tracking_ 기능을 통하여 현재 앱에서 발생하고 있는 모든 인-앱 결제를 분석하고 캠페인 타겟팅에 이용할 수 있습니다. 
+
+AD fresca의 In-App-Purchase Tracking은 2가지 타입으로 나뉩니다. 
+
+1. 실제 화폐를 통해 결제되는 Actual Item Tracking (예: USD $1.99를 결제하여 Gold 100개 아이템을 결제)
+2. 가상 화폐를 통해 결제되는 Virtual Item Tracking (예: Gold 10개를 이용하여 포션 아이템을 결제)
+
+위 2가지 타입의 데이터를 모두 Tracking 함으로써 앱의 매출뿐만 아니라 인-앱 사용자들의 아이템 구매 추이 분석까지 가능합니다.
+
+아래의 적용 예제를 참고하여 간단히 In-App-Purchase Tracking 기능을 적용할 수 있습니다.
+
+### Actual Item Tracking
+
+Actual Item의 결제는 각 앱스토어별 인-앱 결제 라이브러리를 통해 이루어집니다. 각 결제 라이브러리에서 _'결제 성공'_ 이벤트가 발생 할 시에 AFPurchase 객체를 생성하고 logPurchase(purchase) 메소드를 호출합니다.
+
+적용 예제: Google Play 결제 
+```java
+// Callback for when a purchase is finished
+IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+	public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+		Log.d(TAG, "Purchase finished: " + result + ", purchase: " + purchase);
+
+		if (mHelper == null || result.isFailure() || !verifyDeveloperPayload(purchase)) {
+			......
+			return;
+		}
+
+		Log.d(TAG, "Purchase successful.");
+		if (purchase.getPurchaseState() == 0) {
+			SkuDetails detail = currentInventory.getSkuDetails(purchase.getSku());
+	        	
+			String itemId = purchase.getSku(); // Sku value or any unique value of purchased item
+			String currencyCode = "KRW"; // The currencyCode must be specified in the ISO 4217 standard. (ex: USD, KRW, JPY)
+			Double price =  parsePrice(detail.getPrice()); // For Google Play, you can get the price value from SkuDetails
+			Date purhcaseDate = new Date(purchase.getPurchaseTime());
+			String orderId = purchase.getOrderId();
+			String receiptData = purchase.getOriginalJson();
+			String signature = purchase.getSignature();
+
+			AFPurchase actualPurchase = new AFPurchase.Builder(AFPurchase.Type.ACTUAL_ITEM)
+													  .setItemId(itemId)
+													  .setCurrencyCode(currencyCode)
+													  .setPrice(price)
+													  .setPurchaseDate(purhcaseDate)
+													  .setReceipt(orderId, receiptData, signature)
+													  .build();
+
+			AdFresca.getInstance(MainActivity.this).logPurchase(actualPurchase);
+		}
+		
+		......
+    }
+};
+```
+
+위 예제는 Google Play 결제 라이브러리를 기준으로 작성되었지만 아마존이나 티스토어 등 모든 결제 라이브러리에서도 AFPurchase 객체에 필요한 값을 얻어올 수 있습니다.
+
+Actual Item을 위한 AFPurchase.Builder의 보다 자세한 설명은 아래와 같습니다.
+
+Method | Description
+------------ | ------------- | ------------
+setItemId(string) | 결제한 아이템의 고유 식별 아이디를 설정합니다. AD fresca 대쉬보드에서 해당 값을 기준으로 아이템 목록이 생성됩니다. 
+setCurrencyCode(string) | ISO 4217 표준 코드를 설정합니다. Google Play의 경우 'Default price' 에 설정되는 Currency Code 값을 이용하며 타 결제 라이브러리의 경우는 보통 이용 가능한 Currency Code가 고정되어 있습니다 (예: 아마존은 USD, 티스토어는 KRW). 또는 자체 백엔드 서버에서 결제하는 아이템의 Currency Code를 내려받아 설정할 수 있습니다.
+setPrice(double) | 아이템의 가격을 설정합니다. 결제 라이브러리에서 주는 값을 이용하거나, 자체 백엔드 서버에서 가격을 내려받아 설정할 수 있습니다. 
+setPurchaseDate(date) | 결제된 시간을 Date 객체 형태로 설정합니다. 값이 설정되지 않은 경우 AD fresca 서비스에 기록되는 시간이 결제 시간으로 자동 설정됩니다.
+setReceipt(string, string, string) | 추후 Receipt Verficiation 기능을 위해 필요한 데이터를 설정합니다. 현재 버전의 SDK는 Google Play만 지원하며 타 결제 라이브러리의 경우는 값을 설정하지 않습니다.
+
+### Virtual Item Tracking
+
+Virtual Item의 결제는 앱 내의 가상 화폐로 아이템을 결제한 경우를 의미합니다. 앱 내에서 가상 화폐를 이용한 결제 이벤트가 성공한 경우 아래 예제와 같이 AFPurchase 객체를 생성하고 logPurchase(purchase) 메소드를 호출합니다.
+
+적용 예제: 
+```java
+public void onVirtualItemPurchased(Item item, Date purchasedDate) {
+	AFPurchase virtualPurchase = new AFPurchase.Builder(AFPurchase.Type.VIRTUAL_ITEM)
+									.setItemId(item.getId()) // "long_sword"
+									.setCurrencyCode(item.getCurrencyCode()) // "gold"
+									.setPurchaseDate(purchaseDate) // Date object or null
+									.setPrice(item.getPrice()) // 10
+									.build();
+	
+	AdFresca.getInstance(this).logPurchase(virtualPurchase);
+}
+```
+
+Virtual Item을 위한 AFPurchase.Builder의 보다 자세한 설명은 아래와 같습니다.
+
+Method | Description
+------------ | ------------- | ------------
+setItemId(string) | 결제한 아이템의 고유 식별 아이디를 설정합니다. AD fresca 대쉬보드에서 해당 값을 기준으로 아이템 목록이 생성됩니다. 
+setCurrencyCode(string) | 결제에 사용한 가상화폐 고유 코드를 설정합니다. (예: gold)
+setPrice(double) | 가상 화폐로 결제한 가격 정보를 설정합니다. (예: gold 10개의 경우 10 값을 설정)
+setPurchaseDate(date) | 결제된 시간을 Date 객체 형태로 설정합니다. 값이 설정되지 않은 경우 AD fresca 서비스에 기록되는 시간이 결제 시간으로 자동 설정됩니다.
+
+### Trouble Shooting
+
+logPurchase() 메소드를 통해 기록된 AFPurchase 객체는 AD fresca 서비스에 업데이트되어 실시간으로 대쉬보드에 반영됩니다. 현재까지 등록된 아이템 리스트는 'Overview' 메뉴의 Settings - In App Items 페이지를 통해 확인할 수 있습니다.
+
+만약 아이템 리스트가 새로 갱신되지 않는 경우, AFPurchaseExceptionListener 구현하여 혹시 에러가 발생하고 있지 않은지 확인해야 합니다. 
+
+만약 AFPurchase 객체의 값이 제대로 설정되지 않은 경우, AFPurchaseExceptionListener 통하여 에러 메시지를 표시하고 있으니 아래와 같이 코드를 적용하여 로그를 확인합니다.
+
+```java
+......
+AdFresca.getInstance(this).logPurchase(purchase, new AFPurchaseExceptionListener(){
+	public void onException(AFPurchase purchase, AFException e) {
+		Log.e(TAG, (purchase == null ? "purchase=null" : purchase.toString()));
+		Log.e(TAG, e.getMessage());
+	}
+});
+```
+
+* * *
+
 ## Reward Item
 
 _Incentivized Campaign_을 사용하여 , 사용자가 _Media App_에서 _Advertising App_의 광고를 보고 앱을 설치하였을 때 보상으로 _Media App_의 아이템을 지급할 수 있습니다.
@@ -1131,6 +1252,8 @@ INVALIED_LOCALE = 102 | No locale match : l | 디바이스에서 아직 제공�
 * * *
 
 ## Release Notes
+- v2.4.0-beta1 _(12/10/2013 Updated)_ 
+    - 앱 내에서 발생하는 In-App Purchase 데이터를 트랙킹할 수 있는 기능이 추가되었습니다. 자세한 내용은 [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking) 항목을 참고하여 주세요.
 - v2.3.1 _(11/27/2013 Updated)_ 
     - GCM Registration ID가 새로 등록되거나 변경 시, SDK가 ID값을 실시간으로 AD fresca 서비스에 업데이트하도록 개선되었습니다. (기존에는 앱 실행 시에만 업데이트하였습니다.)
 - v2.3.0 
