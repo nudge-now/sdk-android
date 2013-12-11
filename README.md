@@ -1258,7 +1258,7 @@ INVALIED_LOCALE = 102 | No locale match : l | 디바이스에서 아직 제공�
 
 ## Release Notes
 - v2.4.0-beta1 _(12/10/2013 Updated)_ 
-    - 앱 내에서 발생하는 In-App Purchase 데이터를 트랙킹할 수 있는 기능이 추가되었습니다. 자세한 내용은 [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking) 항목을 참고하여 주세요.
+    - 앱 내에서 발생하는 In-App Purchase 데이터를 트랙킹할 수 있는 기능이 추가되었습니다. 자세한 내용은 [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta) 항목을 참고하여 주세요.
 - v2.3.1 _(11/27/2013 Updated)_ 
     - GCM Registration ID가 새로 등록되거나 변경 시, SDK가 ID값을 실시간으로 AD fresca 서비스에 업데이트하도록 개선되었습니다. (기존에는 앱 실행 시에만 업데이트하였습니다.)
 - v2.3.0 
