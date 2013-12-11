@@ -11,9 +11,9 @@
     - [Custom Notification](#custom-notification)
     - [Baidu Push Service](#baidu-push-service)
 - [Custom URL](#custom-url)
-- [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking)
+- [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta)
 - [Reward Item](#reward-item)
-- [Custom Banner](#custom-banner)
+- [Custom Banner (Android Only)](#custom-banner)
     - [Floating View](#floating-view)
     - [Banner View](#banner-view)
 - [Advanced Features](#advanced-features)
@@ -742,7 +742,8 @@ Cocos2d-x 환경에서 Custom URL을 처리할 수 있는 모든 방법을 구�
 
 * * *
 
-## In-App Purchase Tracking 
+
+## In-App Purchase Tracking (Beta)
 
 _**(현재 In-App-Purchase Tracking 기능은 SDK 2.4.0-beta1 버전에서만 지원됩니다.)**_
 
@@ -755,7 +756,9 @@ AD fresca의 In-App-Purchase Tracking은 2가지 타입으로 나뉩니다.
 
 위 2가지 타입의 데이터를 모두 Tracking 함으로써 앱의 매출뿐만 아니라 인-앱 사용자들의 아이템 구매 추이 분석까지 가능합니다.
 
-아래의 적용 예제를 참고하여 간단히 In-App-Purchase Tracking 기능을 적용할 수 있습니다.
+아이템 정보 등록을 위한 별도의 작업은 필요하지 않으며, 클라이언트에서 결제된 아이템 정보가 자동으로 대쉬보드에 등록되어 관리할 수 있습니다. (아이템 리스트 확인은 'Overview' 메뉴의 Settings - In App Items 페이지를 통해 확인합니다.)
+
+아래의 적용 예제를 참고하여 간단히 In-App-Purchase Tracking 기능을 적용합니다.
 
 ### Actual Item Tracking
 
@@ -807,7 +810,7 @@ Actual Item을 위한 AFPurchase.Builder의 보다 자세한 설명은 아래와
 
 Method | Description
 ------------ | ------------- | ------------
-setItemId(string) | 결제한 아이템의 고유 식별 아이디를 설정합니다. AD fresca 대쉬보드에서 해당 값을 기준으로 아이템 목록이 생성됩니다. 
+setItemId(string) | 결제한 아이템의 고유 식별 아이디를 설정합니다. 등록된 앱스토어에 상관 없이 앱내에서 고유한 식별 값을 이용하는 것을 권장합니다. AD fresca 대쉬보드에서 해당 값을 기준으로 아이템 목록이 생성됩니다. 
 setCurrencyCode(string) | ISO 4217 표준 코드를 설정합니다. Google Play의 경우 'Default price' 에 설정되는 Currency Code 값을 이용하며 타 결제 라이브러리의 경우는 보통 이용 가능한 Currency Code가 고정되어 있습니다 (예: 아마존은 USD, 티스토어는 KRW). 또는 자체 백엔드 서버에서 결제하는 아이템의 Currency Code를 내려받아 설정할 수 있습니다.
 setPrice(double) | 아이템의 가격을 설정합니다. 결제 라이브러리에서 주는 값을 이용하거나, 자체 백엔드 서버에서 가격을 내려받아 설정할 수 있습니다. 
 setPurchaseDate(date) | 결제된 시간을 Date 객체 형태로 설정합니다. 값이 설정되지 않은 경우 AD fresca 서비스에 기록되는 시간이 결제 시간으로 자동 설정됩니다.
@@ -835,7 +838,7 @@ Virtual Item을 위한 AFPurchase.Builder의 보다 자세한 설명은 아래�
 
 Method | Description
 ------------ | ------------- | ------------
-setItemId(string) | 결제한 아이템의 고유 식별 아이디를 설정합니다. AD fresca 대쉬보드에서 해당 값을 기준으로 아이템 목록이 생성됩니다. 
+setItemId(string) | 결제한 아이템의 고유 식별 아이디를 설정합니다. 등록된 앱스토어에 상관 없이 앱내에서 고유한 식별 값을 이용하는 것을 권장합니다. AD fresca 대쉬보드에서 해당 값을 기준으로 아이템 목록이 생성됩니다. 
 setCurrencyCode(string) | 결제에 사용한 가상화폐 고유 코드를 설정합니다. (예: gold)
 setPrice(double) | 가상 화폐로 결제한 가격 정보를 설정합니다. (예: gold 10개의 경우 10 값을 설정)
 setPurchaseDate(date) | 결제된 시간을 Date 객체 형태로 설정합니다. 값이 설정되지 않은 경우 AD fresca 서비스에 기록되는 시간이 결제 시간으로 자동 설정됩니다.
@@ -965,6 +968,8 @@ new AsyncTask<Void, Void, Void>() {
 * * *
 
 ## Custom Banner
+
+_(Custom Banner 기능은 Android Platform에 한하여 적용 가능합니다.)_
 
 Android SDK 에서는 _Floating View_와 _Banner View_ 두가지 종류의 커스텀 배너를 제공합니다. 커스텀 배너는 dashboard 에서 이미지 사이즈를 등록한 후 해당 이미지 사이즈를 사용하는 캠페인이 매칭되었을 때 이미지를 커스텀 배너에 보여줍니다.
 
