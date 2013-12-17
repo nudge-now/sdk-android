@@ -23,6 +23,7 @@
     - [Test Device ID](#test-device-id)
     - [Timeout Interval](#timeout-interval)
     - [Google Referrer Tracking](#google-referrer-tracking)
+- [Proguard Configuration](#proguard-configuration)
 - [Trouble Shooting](#trouble-shooting)
     - [Error Code](#error-code)
 - [Release Notes](#release-notes)
@@ -1214,6 +1215,18 @@ am broadcast -a com.android.vending.INSTALL_REFERRER -n YOUR_PACKAGE/com.adfresc
 주의: 특정 디바이스에서 한 번 AD fresca 서비스에 INSTALL_REFERRER가 등록되었다면, 더이상 수동으로 값을 변경할 수 없습니다. 클라이언트에서 값을 변경하더라도 Dashboard의 통계 데이터에는 그 값이 변경되지 않습니다.
 
 * * *
+
+## Proguard Configuration
+
+Proguard 툴을 이용하여 APK 파일을 보호하는 경우 몇 가지 예외 처리 작업을 진행해야 합니다. AD fresca SDK와 SDK에 포함된 OpenUDID 및 Google Gson에 대한 예외 처리를 아래와 같이 적용합니다.
+
+```java
+-keep class com.adfresca.** {*;} 
+-keep class com.google.gson.** {*;} 
+-keep class org.openudid.** {*;} 
+-keep class sun.misc.Unsafe { *; }
+-keepattributes Signature 
+```
 
 ## Trouble Shooting
 
