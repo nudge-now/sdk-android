@@ -21,6 +21,7 @@
     - [Test Device ID](#test-device-id)
     - [Timeout Interval](#timeout-interval)
     - [Google Referrer Tracking](#google-referrer-tracking)
+- [Proguard Configuration](#proguard-configuration)
 - [Trouble Shooting](#trouble-shooting)
     - [Error Code](#error-code)
 - [Release Notes](#release-notes)
@@ -948,6 +949,19 @@ am broadcast -a com.android.vending.INSTALL_REFERRER -n YOUR_PACKAGE/com.adfresc
 
 Caution: After your device updates referrer once to our service, it won't be able to change the referrer values for this device.
 * * *
+
+## Proguard Configuration
+
+If you use Proguard to protect your APK, you should add exception configurations for our Android SDK. Add following lines of codes to ignore our SDK, OpenUDID, and Google Gson. 
+
+```java
+-keep class com.adfresca.** {*;} 
+-keep class com.google.gson.** {*;} 
+-keep class org.openudid.** {*;} 
+-keep class sun.misc.Unsafe { *; }
+-keepattributes Signature 
+```
+
 
 ## Trouble Shooting
 
