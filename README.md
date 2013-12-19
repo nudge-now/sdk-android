@@ -258,7 +258,7 @@ _(기존의 ['AD Slot 지정하기](https://adfresca.zendesk.com/entries/2335913
     public void onCreate(Bundle savedInstanceState) {
       AdFresca adfresca = AdFresca.getInstance(this);     
       adfresca.load(EVENT_INDEX_MAIN_PAGE);  // 메인 페이지에 설정한  컨텐츠를 노출
-      adfresca.show();
+      adfresca.show(EVENT_INDEX_MAIN_PAGE);
     }
   }
 ```
@@ -270,7 +270,7 @@ _(기존의 ['AD Slot 지정하기](https://adfresca.zendesk.com/entries/2335913
     AdFresca adfresca = AdFresca.getInstance(this);
     adfresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_LEVEL, level); // 사용자 level 정보를 가장 최신으로 업데이트
     adfresca.load(EVENT_INDEX_LEVEL_UP);  // 레벨업 이벤트에 설정한 컨텐츠를 노출
-    adfresca.show();
+    adfresca.show(EVENT_INDEX_LEVEL_UP);
   }
 ```
 
