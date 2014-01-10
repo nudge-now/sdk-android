@@ -44,9 +44,9 @@ AD fresca SDK는 다른 SDK과 달리, 데이터를 완전히 로딩할 때까�
 
 아래 링크를 통해 SDK 파일을 다운로드 합니다.
 
-[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.3.1)
+[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.3.2)
 
-[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.3.1)
+[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.3.2)
 
 [Android SDK with IAP Tracking Beta Download](http://file.adfresca.com/distribution/sdk-for-Android-iap-beta.zip) (v.2.4.0-beta1)
 
@@ -1076,6 +1076,7 @@ AdFresca.setLoadListener(new AFLoadListener(){
 
 1. 컨텐츠가 정상적으로 화면에 보여지고 닫혀진 경우
 2. 컨텐츠가 매칭되지 않았거나 컨텐츠에 맞는 view를 찾을 수 없어서 화면에 보여지지 않고 끝난 경우
+3. 네트워크 이슈로 컨텐츠 매칭 요청 시간 초과 (Timeout) 이벤트가 발생한 경우
 
 이 두가지 경우를 `AFShowListener.show(int eventIndex, AFView view)`의 두번째 인자 `view`로 판별할 수 있습니다.
 
@@ -1270,9 +1271,11 @@ INVALIED_LOCALE = 102 | No locale match : l | 디바이스에서 아직 제공�
 * * *
 
 ## Release Notes
+- v2.3.2 _(01/10/2014 Updated)_ 
+    - load() 메소드를 호출한 후 지정된 요청 시간이 초과된 경우 (Timeout), AFShowListener 리스너의 onFinish() 이벤트가 발생하도록 수정되었습니다. onFinish() 이벤트 발생에 대한 설명은 [AFShowListener](#afshowlistener) 항목을 참고하여 주세요.
 - v2.4.0-beta1 _(12/10/2013 Updated)_ 
     - 앱 내에서 발생하는 In-App Purchase 데이터를 트랙킹할 수 있는 기능이 추가되었습니다. 자세한 내용은 [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta) 항목을 참고하여 주세요.
-- v2.3.1 _(11/27/2013 Updated)_ 
+- v2.3.1
     - GCM Registration ID가 새로 등록되거나 변경 시, SDK가 ID값을 실시간으로 AD fresca 서비스에 업데이트하도록 개선되었습니다. (기존에는 앱 실행 시에만 업데이트하였습니다.)
 - v2.3.0 
     - AD fresca SDK에서 Baidu Push를 이용할 수 있도록 지원합니다. 자세한 내용은 [Baidu Push Service](#baidu-push-service) 항목을 참고하여 주세요.
