@@ -42,9 +42,9 @@ Unlike other SDKs by other AD networks, AD fresca SDK does not show content to u
 
 Download SDK at the following link.
 
-[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.3.1)
+[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.3.2)
 
-[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.3.1)
+[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.3.2)
 
 Copy **AdFresca.jar** and **adfresca_attr.xml** to **lib** and **res/values** repectively.
 
@@ -1006,7 +1006,9 @@ INVALIED_LOCALE = 102 | No locale match : l | Unknown locale is used for our ser
 * * *
 
 ## Release Notes
-- v2.3.1 _(11/27/2013 Updated)_ 
+- v2.3.2 _(1/10/2014 Updated)_ 
+    - When load() method method is called but timed out, AFShowListener's onFinish() event will be called by SDK. Please refer to [AFShowListener](#afshowlistener) section for detailed information of onFinish() event
+- v2.3.1 
     - When GCM Registration ID is registred or changed, SDK now updates ID value to our service in real-time. (Previous SDKs only updated when app session started)
 - v2.3.0 
     - Added a support for Baidu Push Notification. English version of Baidu push guide will be updated soon.
