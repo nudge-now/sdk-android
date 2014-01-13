@@ -48,7 +48,7 @@ AD fresca SDK는 다른 SDK과 달리, 데이터를 완전히 로딩할 때까�
 
 [Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.3.2)
 
-[Android SDK with IAP Tracking Beta Download](http://file.adfresca.com/distribution/sdk-for-Android-iap-beta.zip) (v.2.4.0-beta1)
+[Android SDK with IAP Tracking Beta Download](http://file.adfresca.com/distribution/sdk-for-Android-iap-beta.zip) (v.2.4.0-beta2)
 
 **AdFresca.jar** 파일은 **lib** 폴더에, **adfresca_attr.xml** 파일은 **res/values** 폴더에 각각 복사합니다.
 
@@ -1271,10 +1271,13 @@ INVALIED_LOCALE = 102 | No locale match : l | 디바이스에서 아직 제공�
 * * *
 
 ## Release Notes
+- v2.4.0-beta2 _(1/14/2014 Updated)_ 
+    - v2.3.2에서 패치된 Timeout 이벤트 처리가 적용되었습니다.
+    - [Unity Plugin 2.2.0-beta1](https://github.com/adfresca/sdk-unity-sample/blob/master/README.md#release-notes) 버전을 지원합니다.
+- v2.4.0-beta1
+    - 앱 내에서 발생하는 In-App Purchase 데이터를 트랙킹할 수 있는 기능이 추가되었습니다. 자세한 내용은 [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta) 항목을 참고하여 주세요.
 - v2.3.2 _(01/10/2014 Updated)_ 
     - load() 메소드를 호출한 후 지정된 요청 시간이 초과된 경우 (Timeout), AFShowListener 리스너의 onFinish() 이벤트가 발생하도록 수정되었습니다. onFinish() 이벤트 발생에 대한 설명은 [AFShowListener](#afshowlistener) 항목을 참고하여 주세요.
-- v2.4.0-beta1 _(12/10/2013 Updated)_ 
-    - 앱 내에서 발생하는 In-App Purchase 데이터를 트랙킹할 수 있는 기능이 추가되었습니다. 자세한 내용은 [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta) 항목을 참고하여 주세요.
 - v2.3.1
     - GCM Registration ID가 새로 등록되거나 변경 시, SDK가 ID값을 실시간으로 AD fresca 서비스에 업데이트하도록 개선되었습니다. (기존에는 앱 실행 시에만 업데이트하였습니다.)
 - v2.3.0 
