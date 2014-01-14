@@ -812,7 +812,7 @@ That, a campaign is finished, means the following two cases.
 1. The content was shown and it has been closed.
 2. A campaign was failed because it was expired or there was no [Custom Banner](#custom-banner) for its _Image Size Index_.
 
-You can differentiate these two cases by `view` that is given by `AFShowListener.show(int eventIndex, AFView view)`
+You can differentiate these 3 cases by `view` that is given by `AFShowListener.show(int eventIndex, AFView view)`
 
 - if `view != null`, it was the first case. At this time, `view` is one of [ _Default View_ | _Floating View_ | _Banner View_ ]. (`view` is _Default View_ if `view.isDefaultView()` returns true.)
 - if `view == null`, it was the second case.
