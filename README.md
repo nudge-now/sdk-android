@@ -9,6 +9,7 @@
     - [Event](#event)
 - [Push Notification](#push-notification)
     - [Custom Notification](#custom-notification)
+    - [Image Notification](#image-notification)
     - [Baidu Push Service](#baidu-push-service)
 - [Custom URL](#custom-url)
 - [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta)
@@ -44,11 +45,11 @@ AD fresca SDK는 다른 SDK과 달리, 데이터를 완전히 로딩할 때까�
 
 아래 링크를 통해 SDK 파일을 다운로드 합니다.
 
-[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.3.2)
+[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.3.3)
 
-[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.3.2)
+[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.3.3)
 
-[Android SDK with IAP Tracking Beta Download](http://file.adfresca.com/distribution/sdk-for-Android-iap-beta.zip) (v.2.4.0-beta2)
+[Android SDK with IAP Tracking Beta Download](http://file.adfresca.com/distribution/sdk-for-Android-iap-beta.zip) (v.2.4.0-beta3)
 
 **AdFresca.jar** 파일은 **lib** 폴더에, **adfresca_attr.xml** 파일은 **res/values** 폴더에 각각 복사합니다.
 
@@ -111,6 +112,9 @@ _AD fresca_ 는 사용자의 네트워크 접속 상태, 기기ID를 수집하�
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> 
+    <uses-permission android:name="android.permission.VIBRATE" />
 
 </manifest>
 ```
@@ -415,9 +419,9 @@ public class GCMReceiver extends GCMBroadcastReceiver {
 
 ### Custom Notification
 
-Custom Notification을 만들고 직접 notify 하는 방법입니다.
+Notification 객체의 내용을 일부 수정하고 싶을 경우 사용합니다.
 
-**Example**: Notification 도착 시 사용자 기기에 기본 사운드, 진동, LED 적용하기
+**Example**: Notification 도착 시 사용자 기기에 기본 알람 사운드, 진동, LED 적용하기
 
 ```java
 public class GCMIntentService extends GCMBaseIntentService {
@@ -428,7 +432,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 			int icon = R.drawable.icon;
 			long when = System.currentTimeMillis();
 						
-			AFPushNotification notification = AdFresca.generateAFPushNotification(context, intent, DemoIntroActivity.class, appName, icon, when);
+			AFPushNotification notification = AdFresca.generateAFPushNotification(context, intent, MainActivity.class, appName, icon, when);
 			notification.setDefaults(Notification.DEFAULT_ALL); // requires VIBRATE permission
 			AdFresca.showNotification(notification);
 		}
@@ -440,42 +444,103 @@ Vibrate(진동) 모드를 사용하기 위하여 별도의 AndroidManifest.xml �
 <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
 ```
 
-**Example**: Notification 도착 시 BigTextStyle 적용 및 Custom Notification 객체 생성하여 표시하기
+**Example**: Notification 도착 시 특정 사운드 파일 재생하기
 
 ```java
 public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onMessage(Context context, Intent intent) {
 		if (AdFresca.isFrescaNotification(intent)) {
-	            String appName = context.getString(R.string.app_name);
-	            int icon = R.drawable.icon;
-	            long when = System.currentTimeMillis();
-				
-	            AFPushNotification notification = AdFresca.generateAFPushNotification(context, intent, DemoIntroActivity.class, appName, icon, when);
-
-	            Notification.Builder builder =
-	                    new Notification.Builder(this)
-	                            .setSmallIcon(icon)
-	                            .setContentTitle(notification.getTitle())
-	                            .setContentText(notification.getMessage())
-	                            .setTicker(notification.getTickerText())
-	                            .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
-	                            .setContentIntent(notification.getContentIntent())
-	                            .setAutoCancel(notification.isAutoCancelled())
-	                            /*
-	                             * Big view style is only supported on 4.1+ devices.
-	                             */
-	                            .setStyle(new Notification.BigTextStyle()
-	                                .bigText(notification.getMessage())
-	                            );
-	
-	            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-	            notificationManager.notify(0, builder.build());
+			String appName = context.getString(R.string.app_name);
+			int icon = R.drawable.icon;
+			long when = System.currentTimeMillis();
+			Uri soundUri = Uri.parse("android.resource://com.adfresca.demo/raw/mysound");
+						
+			AFPushNotification notification = AdFresca.generateAFPushNotification(context, intent, MainActivity.class, appName, icon, when);
+			notification.setSound(soundUri);
+			AdFresca.showNotification(notification);
 		}
 	}
 }
 ```
-*주의:* 새로운 notification 객체에 설정할 contentIntent 값은 반드시 SDK에서 설정한 값을 그대로 사용해야 합니다.
+
+### Image Notification
+
+_AD fresca_ Android SDK는 일반적인 텍스트 형태의 Notification 뿐만 아니라 이미지를 포함한 새로운 형태의 _Image Push Notification_ 기능을 제공하고 있습니다.
+
+<center>
+<img src="https://adfresca.zendesk.com/attachments/token/eazl5xhrucn1wdh/?name=image_push_v1+copy.png" height=500/>&nbsp;
+<img src="https://adfresca.zendesk.com/attachments/token/j0sweqbrznecla6/?name=image_push_v4+copy.png" height=500/>
+</center>
+
+AD fresca의 Image Push Notification은 사용자 디바이스 상태에 따라 2가지 유형의 템플릿으로 표시됩니다.
+
+1. 디바이스가 잠금 상태일 때 표시되는 Overlay 형태의 메시지 뷰 (왼쪽 이미지)
+2. 디바이스가 활성화 상태일 때 표시되는 Notification 형태의 메시지 뷰 (오른쪽 이미지)
+
+Overlay 형태의 경우 전체 화면을 사용하는 특성상 사용자의 불편함을 최소화하기 위하여 디바이스가 잠금 상태인 경우에만 표시하도록 되어 있으며, 그 외의 폰이 활성화된 상태에서는 일반적인 푸시 메시지와 같이 Notification 영역에만 표시됩니다. 
+
+Overlay 형태의 메시지뷰가 표시되지 않는 보다 자세한 경우는 아래와 같습니다.
+- 사용자의 디바이스가 잠금 상태가 아닌 경우
+- 전화가 걸려오고 있는 경우 (이미 메시지 뷰가 표시된 상황에서 전화가 오는 경우는 뷰가 자동으로 닫합니다.)
+- 캠페인에 설정된 로컬 이미지 리소스가 애플리케이션 빌드에 포함되지 않은 경우
+- 구 버전 SDK가 적용되어 있는 경우
+
+위 4가지 경우에는 Notification 형태의 메시지 뷰가 디바이스에 표시됩니다.
+
+_Image Push Notification_ 기능을 적용하기 위해서는 아래의 과정이 필요합니다.
+
+1) AndroidMenefest.xml 퍼미션 정보 확인하기
+``` xml
+....
+    <!-- If you need a push notification feature, add following permissions -->
+    <permission android:name="com.adfresca.demo.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+	<uses-permission android:name="com.adfresca.demo.permission.C2D_MESSAGE" />
+	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" /> 
+	<uses-permission android:name="android.permission.VIBRATE" />
+....
+```
+
+2) 이미지 파일 준비하기
+
+현재 메시지 뷰에 표시되는 이미지 리소스는 애플리케이션 빌드에 포함된 파일이름을 대쉬보드에서 지정하여 적용됩니다. (이후 서비스 업데이트를 통해 대쉬보드에서 별도로 등록한 이미지를 내려받아 표시하는 기능이 추가됩니다.)
+
+AD fresca Android SDK는 애플리케이션 빌드의 'assets', 'res/drawable', 'res/raw' 폴더에 위치한 이미지 파일을 검색하여 표시하고 있습니다. 원하는 이미지 파일들을 해당 위치에 저장하여 빌드합니다.
+
+FHD (1080 * 1920) 해상도의 단말기 기준으로 권장하는 이미지 사이즈는 아래와 같습니다.
+- 464px * 464px (1:1 비율)
+- 800px * 464px (가로 형태의 이미지)
+- 464px * 800px (세로 형태의 이미지)
+
+지정된 파일을 원본 비율에 맞추어 아래와 같이 Overlay 형태의 메시지뷰에 표시하고 있습니다.
+<center>
+<img src="https://adfresca.zendesk.com/attachments/token/eazl5xhrucn1wdh/?name=image_push_v1+copy.png" width=200/>&nbsp;
+<img src="https://adfresca.zendesk.com/attachments/token/ml9j3tfyzywwnq1/?name=image_push_v2+copy.png" width=200/>&nbsp;
+<img src="https://adfresca.zendesk.com/attachments/token/h6zkgvemxex3hwc/?name=image_push_v3+copy.png" width=200/>
+</center>
+
+Notification 형태의 뷰는 현재 Android UI에서 제공하는 [BigPictureStyle](http://developer.android.com/reference/android/app/Notification.BigPictureStyle.html) 설정을 적용하여 Notification 영역에 표시되고 있습니다. OS 4.1 버전부터 지원되며 OS에서 화면 해상도에 맞게 이미지 사이즈를 지정하여 표시하게 됩니다.
+
+3) AdFresca.showNotification() 메소드 확인하기
+
+Image Push Notification 기능은 showNotification() 메소드를 통해 메시지를 표시하는 경우에만 동작합니다. 위의 가이드 내용처럼 showNotification() 메소드가 호출되고 있는지 확인합니다.
+
+```java
+...
+    protected void onMessage(Context context, Intent intent) {
+      if (AdFresca.isFrescaNotification(intent)) { 
+        String appName = context.getString(R.string.app_name);
+        int icon = R.drawable.icon;
+        long when = System.currentTimeMillis();
+
+        AdFresca.showNotification(context, intent, MainActivity.class, appName, icon, when);
+      } 
+...
+```
 
 ### Baidu Push Service
 
@@ -1271,12 +1336,18 @@ INVALIED_LOCALE = 102 | No locale match : l | 디바이스에서 아직 제공�
 * * *
 
 ## Release Notes
-- v2.4.0-beta2 _(1/14/2014 Updated)_ 
+
+- v2.4.0-beta3 _(01/30/2014 Updated)_ 
+    - v2.3.3에서 적용된 [Image Push Notification](#image-notification) 기능이 추가되었습니다. 
+- v2.4.0-beta2 
     - v2.3.2에서 패치된 Timeout 이벤트 처리가 적용되었습니다.
     - [Unity Plugin 2.2.0-beta1](https://github.com/adfresca/sdk-unity-sample/blob/master/README.md#release-notes) 버전을 지원합니다.
 - v2.4.0-beta1
-    - 앱 내에서 발생하는 In-App Purchase 데이터를 트랙킹할 수 있는 기능이 추가되었습니다. 자세한 내용은 [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta) 항목을 참고하여 주세요.
-- v2.3.2 _(01/10/2014 Updated)_ 
+    - 앱 내에서 발생하는 In-App Purchase 데이터를 트랙킹할 수 있는 기능이 추가되었습니다. 자세한 내용은 [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta) 항목을 참고하여 주세요. [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta) 항목을 참고하여 주세요.
+- v2.3.3 _(01/30/2014 Updated)_ 
+    - Image Push Notifcaiton 기능이 추가되었습니다. 적용에 대한 자세한 내용은 [Image Notification](#image-notification) 항목을 참고하여 주세요.
+    - showNotification() 메소드를 통해 표시되는 푸시 메시지에 [BigTextStyle](http://developer.android.com/reference/android/app/Notification.BigTextStyle.html)이 기본적으로 적용됩니다.
+- v2.3.2 
     - load() 메소드를 호출한 후 지정된 요청 시간이 초과된 경우 (Timeout), AFShowListener 리스너의 onFinish() 이벤트가 발생하도록 수정되었습니다. onFinish() 이벤트 발생에 대한 설명은 [AFShowListener](#afshowlistener) 항목을 참고하여 주세요.
 - v2.3.1
     - GCM Registration ID가 새로 등록되거나 변경 시, SDK가 ID값을 실시간으로 AD fresca 서비스에 업데이트하도록 개선되었습니다. (기존에는 앱 실행 시에만 업데이트하였습니다.)
