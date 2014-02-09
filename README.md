@@ -466,27 +466,27 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 ### Image Notification
 
-_AD fresca_ Android SDK는 일반적인 텍스트 형태의 Notification 뿐만 아니라 이미지를 포함한 새로운 형태의 _Image Push Notification_ 기능을 제공하고 있습니다.
+_AD fresca_ Android SDK는 일반적인 텍스트 형태의 Notification 뿐만 아니라 이미지를 포함한 새로운 형태의 _Image Push Notification_ 기능을 제공하고 있습니다. 이미지 푸시 메시지를 이용하시면 기존의 텍스트 푸시 메시지에 비해 사용자의 주목을 끌 수 있을 뿐만 아니라, 한 눈에 쉽게 내용을 파악할 수 있습니다.
 
 <center>
-<img src="https://adfresca.zendesk.com/attachments/token/eazl5xhrucn1wdh/?name=image_push_v1+copy.png" height=500/>&nbsp;
-<img src="https://adfresca.zendesk.com/attachments/token/j0sweqbrznecla6/?name=image_push_v4+copy.png" height=500/>
+<img src="https://adfresca.zendesk.com/attachments/token/ordowzyitlmzvmn/?name=image_push_v1+copy.png" height=500/>&nbsp;
+<img src="https://adfresca.zendesk.com/attachments/token/5okygnwkprh58k5/?name=image_push_v4+copy.png" height=500/>
 </center>
 
 AD fresca의 Image Push Notification은 사용자 디바이스 상태에 따라 2가지 유형의 템플릿으로 표시됩니다.
 
-1. 디바이스가 잠금 상태일 때 표시되는 Overlay 형태의 메시지 뷰 (왼쪽 이미지)
-2. 디바이스가 활성화 상태일 때 표시되는 Notification 형태의 메시지 뷰 (오른쪽 이미지)
+1. 디바이스가 잠금 상태일 때 표시되는 전면 레이어 형태 (왼쪽 이미지)
+2. 디바이스가 활성화 상태일 때 표시되는 Android Notification 형태 (오른쪽 이미지)
 
-Overlay 형태의 경우 전체 화면을 사용하는 특성상 사용자의 불편함을 최소화하기 위하여 디바이스가 잠금 상태인 경우에만 표시하도록 되어 있으며, 그 외의 폰이 활성화된 상태에서는 일반적인 푸시 메시지와 같이 Notification 영역에만 표시됩니다. 
+스마트폰 사용 중에 전면 레이어로 이미지를 노출하는 경우, 사용자에게 부담감을 줄 수 있습니다. 그래서 화면이 잠겨 있지 않은 상태에서는 Android Notification을 이용해서 이미지와 텍스트를 함께 노출 시킴으로써 보다 자연스러운 커뮤니케이션을 할 수 있도록 구현되어 있습니다.
 
-Overlay 형태의 메시지뷰가 표시되지 않는 보다 자세한 경우는 아래와 같습니다.
+전면 레이어 형태의 메시지뷰가 표시되지 않는 보다 자세한 경우는 아래와 같습니다.
 - 사용자의 디바이스가 잠금 상태가 아닌 경우
 - 전화가 걸려오고 있는 경우 (이미 메시지 뷰가 표시된 상황에서 전화가 오는 경우는 뷰가 자동으로 닫합니다.)
 - 캠페인에 설정된 로컬 이미지 리소스가 애플리케이션 빌드에 포함되지 않은 경우
 - 구 버전 SDK가 적용되어 있는 경우
 
-위 4가지 경우에는 Notification 형태의 메시지 뷰가 디바이스에 표시됩니다.
+위 4가지 경우에는 Android Notification 형태의 메시지 뷰가 디바이스에 표시됩니다.
 
 _Image Push Notification_ 기능을 적용하기 위해서는 아래의 과정이 필요합니다.
 
@@ -518,12 +518,12 @@ FHD (1080 * 1920) 해상도의 단말기 기준으로 권장하는 이미지 사
 
 지정된 파일을 원본 비율에 맞추어 아래와 같이 Overlay 형태의 메시지뷰에 표시하고 있습니다.
 <center>
-<img src="https://adfresca.zendesk.com/attachments/token/eazl5xhrucn1wdh/?name=image_push_v1+copy.png" width=200/>&nbsp;
-<img src="https://adfresca.zendesk.com/attachments/token/ml9j3tfyzywwnq1/?name=image_push_v2+copy.png" width=200/>&nbsp;
-<img src="https://adfresca.zendesk.com/attachments/token/h6zkgvemxex3hwc/?name=image_push_v3+copy.png" width=200/>
+<img src="https://adfresca.zendesk.com/attachments/token/ordowzyitlmzvmn/?name=image_push_v1+copy.png" width=200/>&nbsp;
+<img src="https://adfresca.zendesk.com/attachments/token/jzehtdeatza0nde/?name=image_push_v2+copy.png" width=200/>&nbsp;
+<img src="https://adfresca.zendesk.com/attachments/token/lo9ngjyz663um41/?name=image_push_v3+copy.png" width=200/>
 </center>
 
-Notification 형태의 뷰는 현재 Android UI에서 제공하는 [BigPictureStyle](http://developer.android.com/reference/android/app/Notification.BigPictureStyle.html) 설정을 적용하여 Notification 영역에 표시되고 있습니다. OS 4.1 버전부터 지원되며 OS에서 화면 해상도에 맞게 이미지 사이즈를 지정하여 표시하게 됩니다.
+Android Notification 형태의 뷰는 현재 Android UI에서 제공하는 [BigPictureStyle](http://developer.android.com/reference/android/app/Notification.BigPictureStyle.html) 설정을 적용하여 Notification 영역에 표시되고 있습니다. OS 4.1 버전부터 지원되며 OS에서 화면 해상도에 맞게 이미지 사이즈를 지정하여 표시하게 됩니다.
 
 3) AdFresca.showNotification() 메소드 확인하기
 
