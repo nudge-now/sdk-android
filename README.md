@@ -1210,20 +1210,21 @@ _AD fresca_는 테스트 모드 기능을 지원하며 테스트에 사용할 �
 
 테스트 기기 ID는 SDK를 통해 추출이 가능하며 2가지 방법을 지원 합니다.
 
-
-1. testDeviceId를 얻어와서 원하는 곳에 출력하는 방법
+1) getTestDeviceId() 메소드를 이용하여 로그로 출력하는 방법
 
 ```java
 AdFresca adfresca = AdFresca.getInstance(this);
-String deviceId = adfresca.getTestDeviceId();
-textView.setText(deviceId);
+Log.d(TAG, "AD fresca Test Device ID is = " + adfresca.getTestDeviceId());
 ```
 
-2. printTestDeviceId Property를 설정하여 화면에 Device ID를 표시하는 방법
+2) setPrintTestDeviceId() 메소드를 설정하여 화면에 Device ID를 표시하는 방법
  
+개발자가 기기를 직접 연결할 수 없는 경우, 설정을 활성화 한 상태로 앱 빌드를 전달하여 설치합니다. 화면에 표시된 기기 ID를 직접 기록하여 등록할 수 있습니다.
+
+담당 마케터가 원격에서 근무하는 경우 해당 기능을 유용하게 사용할 수 있으며, 설정이 활성화된 상태로 앱이 배포되지 않도록 주의해야 합니다.
+
 ```java
   AdFresca adfresca = AdFresca.getInstance(this);
-  Log.d(TAG, "AD fresca Test Device ID is = " + adfresca.getTestDeviceId());
   adfresca.setPrintTestDeviceId(true);
   adfresca.load();
   adfresca.show();
