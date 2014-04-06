@@ -996,11 +996,11 @@ SDK 적용을 위해서는 Advertising App에서의 패키지 이름 확인 및 
 
 ## Reward Item
 
-Reward Item 기능을 적용하여 현재 사용자에게 지급 가능한 보상 아이템이 있는지 확인하고, 지정된 보상 아이템을 사용자에게 지급할 수 있습니다.
+Reward Item 기능을 적용하여 현재 사용자에게 지급 가능한 보상 아이템이 있는지 검사하고, 보상 아이템을 사용자에게 지급할 수 있습니다.
 
-Annoucnement 캠페인의 'Reward Item' 항목을 설정했거나, Incentivized CPI 캠페인의 'Incentive Item' 을 설정한 경우 사용자에게 아이템이 지급되어야 합니다.
+Annoucnement 캠페인의 'Reward Item' 항목을 설정했거나, Incentivized CPI 캠페인의 'Incentive Item' 을 설정한 경우 사용자에게 보상 아이템이 지급됩니다.
 
-- AndroidManifest.xml 확인하기
+먼저 AndroidManifest.xml 내용을 확인합니다.
 
 ```xml
 <manifest>   
@@ -1036,7 +1036,7 @@ public void onResume() {
 }
 ```
 
-Incentivized CPI 캠페인의 경우는 사용자의 앱 설치가 확인된 후 onReward 이벤트가 발생하며, Annoucnement 캠페인의 경우는 캠페인이 앱 사용자에게 매칭되어 노출될 때 onReward 이벤트가 발생합니다. 만일 디바이스의 네트워크 단절 상항이 발생한 경우 SDK가 데이터를 로컬에 보관하여 다음 앱 실행에서 아이템 지급이 가능하도록 구현되어 있기 때문에 항상 100% 지급을 보장합니다.
+Incentivized CPI 캠페인의 경우는 사용자의 앱 설치가 확인된 후 onReward 이벤트가 발생하며, Annoucnement 캠페인의 경우는 캠페인이 앱 사용자에게 매칭되어 노출될 때 onReward 이벤트가 발생합니다. 만일 디바이스의 네트워크 단절이 발생한 경우 SDK는 데이터를 로컬에 보관하여 다음 앱 실행에서 아이템 지급이 가능하도록 구현되어 있기 때문에 항상 100% 지급을 보장합니다.
 
 (기존의 getAvailableRewardItems 메소드는 Deprecated 상태로 변경되었지만, 호환성을 보장하여 정상적으로 동작하고 있습니다.)
 
