@@ -3,16 +3,17 @@
 - [Quick Start](#quick-start)
     - [Installation](#installation)
     - [Code](#code)
-- [Basic Features](#basic-features)
-    - [In-App-Purchase Count](#in-app-purchase-count)
-    - [Custom Parameter](#custom-parameter)
-    - [Event](#event)
+- [Test Device ID](#test-device-id)
+- [Custom Parameter](#custom-parameter)
+- [Marketing Event](#marketing-event)
+- [In-App-Purchase Count](#in-app-purchase-count)
 - [Push Notification](#push-notification)
     - [Custom Notification](#custom-notification)
     - [Image Notification](#image-notification)
     - [Baidu Push Service](#baidu-push-service)
 - [Custom URL](#custom-url)
 - [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta)
+- [CPI Identifier](#cpi-identifier)
 - [Reward Item](#reward-item)
 - [Custom Banner (Android Only)](#custom-banner)
     - [Floating View](#floating-view)
@@ -20,22 +21,19 @@
 - [Advanced Features](#advanced-features)
     - [AFLoadListener](#afloadlistener)
     - [AFShowListener](#afshowlistener)
-    - [Custom URL](#custom-url)
-    - [Test Device ID](#test-device-id)
     - [Timeout Interval](#timeout-interval)
     - [Google Referrer Tracking](#google-referrer-tracking)
 - [Proguard Configuration](#proguard-configuration)
 - [Trouble Shooting](#trouble-shooting)
-    - [Error Code](#error-code)
 - [Release Notes](#release-notes)
 
 * * *
 
 ## Introduction
 
-_AD fresca_  콘텐츠는 앱 실행 시에 표시되는 전면 형태로서 타이틀바를 제외한 스마트폰 화면을 모두 채우는 형태로 작동합니다. Android SDK는 간단한 절차 - 1) SDK를 설치하고 2) View를 적용하는 2단계 - 만으로 쉽게 설치 및 적용이 가능합니다. 
+AD fresca는 게임 운영자나 마케터가 앱 내 사용자 특성을 실시간으로 파악하여  더 자주, 더 오래 플레이하고, 더 많이 결제하도록 유도하는 라이브 서비스 운영 툴을 제공합니다
 
-AD fresca SDK는 다른 SDK과 달리, 데이터를 완전히 로딩할 때까지는 절대 화면에 콘텐츠를 노출하지 않습니다. 또한 로딩 시간이 일정 시간 이상 소요되는 경우 작업을 자동적으로 종료합니다. 따라서 콘텐츠 로딩으로 인해 앱 사용에 미치는 불편함을 최소화하고 있습니다.
+게임 운영자나 마케터는 [Dashboard](https://admin.adfresca.com) 사이트를 통해 실시간으로 타겟팅한 사용자에게 메시지를 전달할 수 있으며, 이를 실제 앱에 적용하기 위하여 게임 개발팀에서는 아래 제공되는 SDK를 손쉽게 설치하고 가이드에 따라 코드를 적용합니다.
 
 * * *
 
@@ -45,11 +43,11 @@ AD fresca SDK는 다른 SDK과 달리, 데이터를 완전히 로딩할 때까�
 
 아래 링크를 통해 SDK 파일을 다운로드 합니다.
 
-[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.3.3)
+[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.3.4)
 
-[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.3.3)
+[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.3.4)
 
-[Android SDK with IAP Tracking Beta Download](http://file.adfresca.com/distribution/sdk-for-Android-iap-beta.zip) (v.2.4.0-beta3)
+[Android SDK with IAP Tracking Beta Download](http://file.adfresca.com/distribution/sdk-for-Android-iap-beta.zip) (v.2.4.0-beta4)
 
 **AdFresca.jar** 파일은 **lib** 폴더에, **adfresca_attr.xml** 파일은 **res/values** 폴더에 각각 복사합니다.
 
@@ -90,7 +88,7 @@ _AD fresca_ 는 사용자의 네트워크 접속 상태, 기기ID를 수집하�
      	</intent-filter>	
       </receiver>
             
-      <!-- Push Notification 기능을 사용할 경우, 아래 내용을 추가합니다. -->
+      <!-- Push Notification 기능을 사용하기 위하여 아래 내용을 추가합니다. -->
       <activity android:name="com.adfresca.ads.AdFrescaPushActivity" />
       <receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">  
         <intent-filter>
@@ -99,14 +97,14 @@ _AD fresca_ 는 사용자의 네트워크 접속 상태, 기기ID를 수집하�
           <category android:name="your_app_package" />
         </intent-filter>
       </receiver>
-      <service android:name=".GCMIntentService" />  <!-- GCM 메시지를 처리하기 위하여 GCMIntentService 클래스를 구현해야 합니다. (9번 항목에서 상세 설명)  -->
+      <service android:name=".GCMIntentService" />  <!-- GCM 메시지를 처리하기 위하여 GCMIntentService 클래스를 구현해야 합니다. Push Notification 항목 참고)  -->
 
    </application>
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
-    <!-- Push Notification 기능을 사용할 경우, 아래 내용을 추가합니다. -->
+    <!-- Push Notification 기능을 사용하기 위하여 아래 내용을 추가합니다. -->
     <permission android:name="your_app_pakcage.permission.C2D_MESSAGE" android:protectionLevel="signature" />
     <uses-permission android:name="your_app_package.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
@@ -121,7 +119,7 @@ _AD fresca_ 는 사용자의 네트워크 접속 상태, 기기ID를 수집하�
 
 ### Code
 
-_AD fresca SDK_는 아래 코드 처럼 단 몇줄의 코드만으로도 캠페인을 시작할 수 있습니다.
+AD fresca SDK 통해 사용자에게 메시지를 전달하기 위한 주요 코드를 적용합니다. 아래의 코드만으로도 게임 운영자 / 마케터가 지정한 캠페인의 콘텐츠를 화면에 표시할 수 있습니다.
 
 ```java
 @Override
@@ -137,61 +135,60 @@ protected void onCreate(Bundle savedInstanceState) {
 }
 ```
 
-`AdFresca.setApiKey(API_KEY);` API Key 를 설정합니다.
+`AdFresca.setApiKey(API_KEY);` API Key 를 설정합니다. API Key는 [Dashboard](https://admin.adfresca.com) 사이트에서 앱 추가 후 Overview 메뉴의 Settings - API Keys 버튼을 클릭하여 확인이 가능합니다.
 
-`adfresca.startSession();` 세션이 시작됨을 서버에 알립니다. 어플리케이션이 시작될 때 **한번만** 실행되도록 합니다.
+`adfresca.startSession();` 앱이 실행되었음을 기록합니다. 어플리케이션이 시작될 때 **한번만** 실행되도록 합니다.
 
-`adfresca.load();` 서버로부터 컨텐츠를 내려받습니다.
+`adfresca.load();` 서버로부터 매칭되는 캠페인의 콘텐츠를 내려받습니다. 
 
-`adfresca.show();` 내려받은 컨텐츠를 보여줍니다.
+`adfresca.show();` 내려받은 콘텐츠를 화면에 표시합니다.
 
-정상적으로 실행이 되면 다음과 같은 화면이 보여집니다.
+앱이 실행 되면 다음과 같은 화면이 보여집니다. 정상적으로 콘텐츠 뷰가 화면에 표시되고, 터치 시 앱스토어 페이지로 이동하는지 확인합니다.
 
 <img src="https://adfresca.zendesk.com/attachments/token/zngvftbmcccyajk/?name=device-2013-03-18-133517.png" width="240" />
 &nbsp;
 <img src="https://adfresca.zendesk.com/attachments/token/phn4fcpvbi2damx/?name=device-2013-03-18-133443.png" height="240" />
 * * *
 
-## Basic Features
+### Test Device ID
 
-### In-App Purchase Count
+AD fresca는 테스트 모드 기능을 지원하여 테스트를 원하는 디바이스에만 지정한 캠페인의 콘텐츠를 화면에 표시하고 푸시 메시지를 전송할 수 있습니다. 이로 인해 SDK가 적용된 앱이 이미 앱스토어에 출시된 경우, 게임 운영팀 혹은 개발팀에게만 새로운 메시지를 전달할 수 있도록 지원합니다.
 
-사용자가 In-App Purchase를 구매한 경우, _AD fresca_에 해당 정보를 기록하여 관리하실 수 있습니다.
+테스트 기기 등록을 위한 아이디 값은 SDK를 통해 추출이 가능하며 2가지 방법을 지원 합니다.
+ 
+1. getTestDeviceId() 메소드를 사용하여 로그로 출력하는 방법
+  - 테스트에 사용할 기기를 개발PC에 연결한 후 로그를 통해 해당 아이디 값을 출력하여 확인 합니다. 
 
-사용자가 In-App Purchase 를 구매한 횟수를  AdFresca 객체의 setNumberOfInAppPurchases(int) 메소드를 사용하여  설정해 주시면 간단히 적용이 가능합니다.
-
-```java
+  ```java
   AdFresca adfresca = AdFresca.getInstance(this);
-  
-  public void onCreate() {
-    AdFresca adfresca = AdFresca.getInstance(this);     
-    adfresca.setNumberOfInAppPurchases(User.inAppPurchaseCount);
-    adfresca.startSession();
-  }
-  
-  .....
-  
-  public void onUserPurchasedItem() {
-    User.inAppPurchaseCount++;
-    
-    AdFresca adfresca = AdFresca.getInstance(this);     
-    adfresca.setNumberOfInAppPurchases(User.inAppPurchaseCount);
-    adfresca.load(EVENT_INDEX_PURCHASE);
+  Log.d(TAG, "AD fresca Test Device ID is = " + adfresca.getTestDeviceId());
+  ```
+
+2. setPrintTestDeviceId() 메소드를 사용하여 콘텐츠 뷰에 기기 아이디를 화면에 표시하는 방법
+  - 개발자가 기기를 직접 연결할 수 없는 경우, 설정을 활성화 한 상태로 앱 빌드를 전덜하여 설치합니다. 화면에 표시된 기기 아이디를 직접 기록하여 등록할 수 있습니다.
+  - 담당 마케터가 원격에서 근무하는 경우 해당 기능을 유용하게 사용할 수 있습니다.
+  - 설정이 활성화된 상태로 앱이 배포되지 않도록 주의해야 합니다.
+
+  ```java
+    AdFresca adfresca = AdFresca.getInstance(this);
+    adfresca.setPrintTestDeviceId(true);
+    adfresca.load();
     adfresca.show();
-  }
-```
+  ```
 
-**주의:** setNumberOfInAppPurchases() 메소드는 startSession(), load() 메소드 이전에 호출이 되어야 합니다. 만약 startSession() 이전에 값이 설정되지 않은 경우, 사용자의 최초 앱 실행 시에는 값이 업데이트 되지 않으며 2회째 실행부터 SDK가 로컬 캐싱해둔 값으로 서버에 전달됩니다. (SDK 로컬 캐시 기능은 Android SDK 2.2.0 버전부터 지원됩니다.)
-
-(Advanced) SDK는 현재 설정한 inAppPurchaseCount 값을 로컬에 저장하여 두고 있습니다. 특정 이슈가 발생하여 해당 값을 확인 및 초기화 시키고 싶은 경우 getNumberOfInAppPurchases(), resetNumberOfInAppPurchases() 메소드를 사용할 수 있습니다.
+* * *
 
 ### Custom Parameter
 
-_AD fresca_는 앱 사용자의 특수한 정보들 (레벨, 스테이지, 성별, 나이 등)을 입력 받아 타겟팅 및 분석 기능을 제공 합니다.
+커스텀 파라미터는 캠페인 진행 시, 타겟팅을 위해 사용할 사용자의 상태 값을 의미합니다.
 
-SDK에서는 **setCustomParameterValue** 메소드를 사용하여 각 커스텀 파라미터의 인덱스 번호에 맞게 값을 설정하면 됩니다.
+AD fresca SDK는 기본적으로 '국가, 언어, 앱 버전, 실행 횟수 등'의 디바이스 고유 데이터를 수집하며, 동시에 각 앱 내에서 고유하게 사용되는 특수한 상태 값들(예: 캐릭터 레벨, 보유 포인트, 스테이지 등)을 커스텀 파라미터로 정의하고 수집하여 분석 및 타겟팅 기능을 제공합니다.
 
-(각 파라미터의 정보는 Admin 사이트를 접속하여 앱의 Overview 메뉴 -> 각 앱스토어의 Details 버튼을 눌러 설정 및 확인이 가능합니다.)
+커스텀 파라미터 설정은 [Dashboard](https://admin.adfresca.com) 사이트를 접속하여 앱의 Overview 메뉴 -> Settings - Custom Parameters 버튼을 클릭하여 확인할 수 있습니다.
+
+SDK 적용을 위해서는 Dashboard에서 지정된 각 커스텀 파라미터의 '인덱스' 값이 필요합니다. 인덱스 값은 1,2,3,4 와 같은 Integer 형태의 고유 값이며 소스코드에 Constant 형태로 지정하여 이용하는 것을 권장합니다.
+
+Integer, Boolean 형태의 데이터를 상태 값으로 설정할 수 있으며, *setCustomParameterValue** 메소드를 사용하여 각 인덱스 값에 맞게 상태 값을 설정합니다.
 
 ```java
   public void onCreate() {
@@ -216,7 +213,7 @@ SDK에서는 **setCustomParameterValue** 메소드를 사용하여 각 커스텀
 
 **주의**_ setCustomParameterValue() 메소드는 startSession(), load() 메소드 이전에 호출이 되어야 합니다. 특히 startSession() 이전에는 반드시 모든 커스텀 파리미터 값들을 설정하고, 이후 변경되는 값들에 한하여 각 위치에 커스텀 파라미터를 설정합니다.
 
-만약 불가피하게 startSession() 호출 시에 커스텀 파라미터 값을 설정할 수 없는 경우, 앱을 최초로 실행한 사용자의 프로파일은 업데이트되지 않으며 해당 사용자의 2회째 앱 실행부터 SDK가 로컬에 캐싱해둔 값이 전달됩니다. 최초로 실행된 사용자의 프로파일까지 통계 및 타겟팅하기 위해서는 아래와 같이 초기 값 설정을 진행해야 합니다. (SDK의 로컬 캐싱 기능은 Android SDK 2.2.0 버전부터 지원합니다.)
+만약 불가피하게 startSession() 호출 전에 커스텀 파라미터 값을 설정할 수 없는 경우, 앱을 최초로 실행한 사용자의 프로파일은 업데이트되지 않으며 해당 사용자의 2회째 앱 실행부터 SDK가 로컬에 캐싱해둔 값이 전달됩니다. 최초로 실행된 사용자의 프로파일까지 통계 및 타겟팅하기 위해서는 아래와 같이 초기 값 설정을 진행합니다. 또한, 사용자의 로그인 이벤트 이후 모든 커스텀 파라미터의 값을 설정할 수 있도록 구현합니다.
 
 ```cs
   public void onCreate() {
@@ -241,19 +238,21 @@ SDK에서는 **setCustomParameterValue** 메소드를 사용하여 각 커스텀
 
 (Advanced) SDK는 현재 설정한 Custom Parameter 값을 로컬에 저장하여 두고 있습니다. 특정 이슈가 발생하여 해당 값을 확인 및 초기화 시키고 싶은 경우 getCustomParameterValue(index), resetCustomParameterValues() 메소드를 사용할 수 있습니다.
 
+* * *
 
-### Event
+## Marketing Event
 
-Event 기능을 사용하면 앱에서 일어나는 다양한 사용자들의 활동, 페이지 이동 등에 Event를 설정한 후 그러한 Event 발생 시에 그에 적합한 공지사항, 컨텐츠 등을 노출할 수 있습니다.
+마케팅 이벤트는 유저에게 메세지를 전달하고자 하는 상황을 의미합니다. (예: 캐릭터 레벨 업, 퀘스트 달성, 스토어 페이지 진입)
 
-Event 설정은 Admin 을 통해 가능하며 '[Event 설정하기](https://adfresca.zendesk.com/entries/23359141)' 가이드를 참고해주시기 바랍니다.
+마케팅 이벤트 기능을 사용하여 지정된 상황에 알맞는 캠페인이 노출되도록 할 수 있습니다.
 
-Event 설정하신 후, SDK 적용을 위해서는 각 Event 'Index' 값이 필요합니다. Index 값은 1,2,3,4 와 같은 Integer 형태의 고유 값이며 소스코드에 Constant 형태로 미리 입력하여 이용하시는 것을 권장합니다.
+마케팅 이벤트 설정은 [Dashboard](https://admin.adfresca.com) 사이트를 접속하여 앱의 Overview 메뉴 -> Settings - Marketing Events 버튼을 클릭하여 확인할 수 있습니다.
 
-각 Event 발생 시, load() 메소드에 원하는 Event의  Index 값을 인자로 넘겨주시면 간단히 적용이 완료됩니다.
+SDK 적용을 위해서는 Dashboard에서 지정된 각 마케팅 이벤트의 '인덱스' 값이 필요합니다. 인덱스 값은 1,2,3,4 와 같은 Integer 형태의 고유 값이며 소스코드에 Constant 형태로 지정하여 이용하는 것을 권장합니다.
 
-_(기존의 ['AD Slot 지정하기](https://adfresca.zendesk.com/entries/23359131)' 기능은 Deprecated 되어 현재 Event로 대체 되었습니다. 자세한 내용은 SDK Changed Log를 확인하여 주세요. )_
+각 이벤트 발생 시, load() 메소드에 원하는 이벤트 인덱스 값을 인자로 넘겨주시면 간단히 적용이 완료됩니다.
 
+(load() 메소드에 인덱스를 설정하지 않은 경우, 인덱스 값은 '1' 값이 자동으로 지정됩니다.)
 
 **Example**:  사용자가 메인 페이지로 이동할 시에 설정한 컨텐츠를 노출
 
@@ -280,11 +279,44 @@ _(기존의 ['AD Slot 지정하기](https://adfresca.zendesk.com/entries/2335913
 
 * * *
 
+## In-App Purchase Count
+
+앱에서 IAP 기능을 사용하는 경우, 현재까지 사용자가 구매한 누적 횟수를 SDK에 설정하여 분석 및 타겟팅에 이용할 수 있습니다. 
+
+**setNumberOfInAppPurchases(int)** 메소드를 사용하여 현재까지 사용자가 구매한 누적 횟수 값을 SDK에 설정합니다. 커스텀 파라미터와 마찬가지로 앱 실행 혹은 사용자 로그인 이후에 값을 지정하고, IAP 결제가 일어난 직후에 갱신된 누적 구매 횟수 값을 설정합니다.
+
+```java
+  AdFresca adfresca = AdFresca.getInstance(this);
+  
+  public void onCreate() {
+    AdFresca adfresca = AdFresca.getInstance(this);     
+    adfresca.setNumberOfInAppPurchases(User.inAppPurchaseCount);
+    adfresca.startSession();
+  }
+  
+  .....
+  
+  public void onUserPurchasedItem(int totalPurchaseCount) {
+    User.inAppPurchaseCount = totalPurchaseCount;
+    
+    AdFresca adfresca = AdFresca.getInstance(this);     
+    adfresca.setNumberOfInAppPurchases(User.inAppPurchaseCount);
+  }
+```
+
+(Advanced) SDK는 현재 설정한 inAppPurchaseCount 값을 로컬에 저장하여 두고 있습니다. 특정 이슈가 발생하여 해당 값을 확인 및 초기화 시키고 싶은 경우 getNumberOfInAppPurchases(), resetNumberOfInAppPurchases() 메소드를 사용할 수 있습니다.
+
+* * *
+
 ## Push Notification
 
 _AD fresca_를 통해 Push Notification을 보내고 받을 수 있습니다.
 
-SDK를 적용하기 이전에 구글의 ["GCM: Getting Started" ](http://developer.android.com/google/gcm/gs.html)가이드 문서를 읽어보시길 권장합니다.
+SDK를 적용하기 이전에 [Google API Console](https://cloud.google.com/console) 사이트에서 프로젝트를 생성하고, [Dashboard](https://admin.adfresca.com) 사이트에 설정할 GCM API Key 및 SDK 적용에 필요한 GCM_SENDER_ID (Project Number) 값을 얻어야 합니다.
+
+'[Android Push Notification 설정 및 적용하기 (GCM)](https://adfresca.zendesk.com/entries/28526764)' 가이드를 참고하여 필요한 값들을 얻습니다.
+
+이제 SDK 적용을 시작합니다.
 
 1) GCM Helper Library 설치하기
     - 구글에서 제공하는 [GCM Helper Library](http://code.google.com/p/gcm/source/browse/) 를 다운로드 받습니다. (Download zip 혹은 git clone을 이용)
@@ -475,8 +507,8 @@ _AD fresca_ Android SDK는 일반적인 텍스트 형태의 Notification 뿐만 
 
 AD fresca의 Image Push Notification은 사용자 디바이스 상태에 따라 2가지 유형의 템플릿으로 표시됩니다.
 
-1. 디바이스가 잠금 상태일 때 표시되는 전면 레이어 형태 (왼쪽 이미지)
-2. 디바이스가 활성화 상태일 때 표시되는 Android Notification 형태 (오른쪽 이미지)
+1. 디바이스가 잠금 상태일 때 표시되는 전면 레이어 형태 (왼쪽 스크린샷)
+2. 디바이스가 활성화 상태일 때 표시되는 Android Notification 형태 (오른쪽 스크린샷)
 
 스마트폰 사용 중에 전면 레이어로 이미지를 노출하는 경우, 사용자에게 부담감을 줄 수 있습니다. 그래서 화면이 잠겨 있지 않은 상태에서는 Android Notification을 이용해서 이미지와 텍스트를 함께 노출 시킴으로써 보다 자연스러운 커뮤니케이션을 할 수 있도록 구현되어 있습니다.
 
@@ -509,21 +541,21 @@ _Image Push Notification_ 기능을 적용하기 위해서는 아래의 과정�
 
 현재 메시지 뷰에 표시되는 이미지 리소스는 애플리케이션 빌드에 포함된 파일이름을 대쉬보드에서 지정하여 적용됩니다. (이후 서비스 업데이트를 통해 대쉬보드에서 별도로 등록한 이미지를 내려받아 표시하는 기능이 추가됩니다.)
 
-AD fresca Android SDK는 애플리케이션 빌드의 'assets', 'res/drawable', 'res/raw' 폴더에 위치한 이미지 파일을 검색하여 표시하고 있습니다. 원하는 이미지 파일들을 해당 위치에 저장하여 빌드합니다.
+AD fresca Android SDK는 애플리케이션 빌드의 'assets', 'res/drawable', 'res/raw' 폴더에 위치한 이미지 파일을 검색하여 표시하고 있습니다. 원하는 이미지 파일을 해당 위치에 저장하여 빌드합니다.
 
-FHD (1080 * 1920) 해상도의 단말기 기준으로 권장하는 이미지 사이즈는 아래와 같습니다.
-- 464px * 464px (1:1 비율)
-- 800px * 464px (가로 형태의 이미지)
-- 464px * 800px (세로 형태의 이미지)
+FHD (1080 * 1920) 해상도의 단말기 기준으로 권장하는 이미지 사이즈 리스트는 아래와 같습니다.
+- 464px * 464px (1:1 비율의 이미지를 사용할 경우)
+- 800px * 464px (가로 형태의 이미지를 사용할 경우)
+- 464px * 800px (세로 형태의 이미지를 사용할 경우)
 
-지정된 파일을 원본 비율에 맞추어 아래와 같이 Overlay 형태의 메시지뷰에 표시하고 있습니다.
+지정된 파일을 원본 비율에 맞추어 아래와 같이 Overlay 형태의 메시지뷰에 표시할 수 있습니다.
 <center>
 <img src="https://adfresca.zendesk.com/attachments/token/ordowzyitlmzvmn/?name=image_push_v1+copy.png" width=200/>&nbsp;
 <img src="https://adfresca.zendesk.com/attachments/token/jzehtdeatza0nde/?name=image_push_v2+copy.png" width=200/>&nbsp;
 <img src="https://adfresca.zendesk.com/attachments/token/lo9ngjyz663um41/?name=image_push_v3+copy.png" width=200/>
 </center>
 
-Android Notification 형태의 뷰는 현재 Android UI에서 제공하는 [BigPictureStyle](http://developer.android.com/reference/android/app/Notification.BigPictureStyle.html) 설정을 적용하여 Notification 영역에 표시되고 있습니다. OS 4.1 버전부터 지원되며 OS에서 화면 해상도에 맞게 이미지 사이즈를 지정하여 표시하게 됩니다.
+**주의:** Android Notification 형태의 뷰는 현재 Android UI에서 제공하는 [BigPictureStyle](http://developer.android.com/reference/android/app/Notification.BigPictureStyle.html) 설정을 적용하여 Notification 영역에 표시되고 있습니다. OS 4.1 버전부터 지원되며 OS에서 화면 해상도에 맞게 표시할 이미지 사이즈를 지정하여 표시하게 됩니다. 이 과정에서 세로 길이가 긴 형태의 이미지들은 이미지가 가운데로 크롭될 가능성이 높습니다. 
 
 3) AdFresca.showNotification() 메소드 확인하기
 
@@ -805,9 +837,7 @@ public class PushProxyActivity extends Activity {
 
 Cocos2d-x 환경에서 Custom URL을 처리할 수 있는 모든 방법을 구현하였습니다.
 
-
 * * *
-
 
 ## In-App Purchase Tracking (Beta)
 
@@ -929,13 +959,46 @@ AdFresca.getInstance(this).logPurchase(purchase, new AFPurchaseExceptionListener
 
 * * *
 
+## CPI Identifier
+
+Incentivized CPI 캠페인 기능을 사용하여, 사용자가 Media App에서 Advertising App의 광고를 보고 앱을 설치하였을 때 보상으로 Media App의 아이템을 지급할 수 있습니다.
+
+- Medial App: 다른 앱의 광고를 노출하고, 광고 대상의 앱을 설치한 사용자들에게 보상을 지급하는 앱
+- Advertising: Media App에 광고가 노출되는 앱.
+
+Incentivized CPI 캠페인에 대한 보다 자세한 설명 및 [Dashboard](https://admin.adfresca.com) 사이트에서의 설정 방법은 [Incentivized CPI 캠페인 관리하기](https://adfresca.zendesk.com/entries/22033960) 가이드를 참고하여 주시기 바랍니다.
+
+SDK 적용을 위해서는 Advertising App에서의 패키지 이름 확인 및 Media App에서의 Reward Item 지급 기능을 구현해야 합니다.
+
+#### Advertising App 설정하기:
+
+  Android 플랫폼의 경우 앱의 패키지 이름을 이용하여 광고를 노출한 앱이 실제로 디바이스에 설치되었는지 검사하게 됩니다. 따라서 Advertising App 앱의 패키지 이름을 확인하고 CPI Identifier로 사용합니다.
+
+  (현재 Incentivized CPI 캠페인을 진행할 경우, Advertising App의 SDK 설치는 필수가 아니며 패키지 이름만 확인하여 진행되면 됩니다. 하지만 이후 지원할 CPA 캠페인을 위해서 미리 SDK를 설치하는 것을 권장합니다.)
+
+  AndroidManifest.xml 파일을 열어 패키지 이름을 확인합니다.
+
+  ```xml
+  <?xml version="1.0" encoding="utf-8"?>
+
+  <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.adfresca.demo">
+    <application>
+    .....
+    </application>
+  </manifest>
+  ```
+
+  위 경우 [Dashboard](https://admin.adfresca.com) 사이트에서 Advertising App의 CPI Identifier 값을 'com.adfresca.demo' 으로 설정하게 됩니다. 
+
+#### Media App SDK 적용하기:
+
+  Media App에서 보상 지급 여부를 확인하고, 사용자에게 아이템을 지급하기 위해서는 SDK 가이드의 [Reward Item](#reward-item) 항목의 내용을 구현합니다.
+
 ## Reward Item
 
-_Incentivized Campaign_을 사용하여 , 사용자가 _Media App_에서 _Advertising App_의 광고를 보고 앱을 설치하였을 때 보상으로 _Media App_의 아이템을 지급할 수 있습니다.
+Reward Item 기능을 적용하여 현재 사용자에게 지급 가능한 보상 아이템이 있는지 확인하고, 지정된 보상 아이템을 사용자에게 지급할 수 있습니다.
 
-(현재 CPI  캠페인을 진행할 경우, _Advertising App_의 SDK 설치는 필수가 아닙니다. 하지만 이후 지원할 CPA 캠페인을 위해서 미리 SDK를 설치하는 것을 권장합니다.)
-
-Media App에 SDK 적용하기:
+Annoucnement 캠페인의 'Reward Item' 항목을 설정했거나, Incentivized CPI 캠페인의 'Incentive Item' 을 설정한 경우 사용자에게 아이템이 지급되어야 합니다.
 
 - AndroidManifest.xml 확인하기
 
@@ -949,87 +1012,33 @@ Media App에 SDK 적용하기:
 </manifest>
 ```
 
-- 아이템 지급을 원하는 위치에서 `getAvailableRewardItems()` 메소드를 통해 아이템 리스트를 받습니다. 
-
-- Array에는 `AFRewardItem` 객체들이 포함되어 있으며 name, quantity, uniqueValue 프로퍼티 값을 가지고 있습니다.
-
-- `getAvailableRewardItems()` 메소드는 현재 지급이 가능한 아이템 리스트를 리턴하며, 아직 검사가 끝나지 않은 경우 이후 메소드 호출 시에 반영됩니다.
+이제 구현을 위해서 아래 2가지 코드를 이용합니다.
+- checkRewardItems 메소드 호출: 현재 지급 가능한 보상 아이템이 있는지 검사합니다. 사용자가 앱을 실행할 호출하는 것을 권장합니다.
+- AFRewardItemListener 구현: 아이템 지급 조건이 만족되면 onReward 이벤트가 발생됩니다. 인자로 넘어온 아이템 정보를 이용하여 사용자에게 아이템을 지급합니다.
 
 ```java
 @Override
 public void onResume() {
   super.onResume();
 
-  AdFresca adfresca = AdFresca.getInstance(DemoIntroActivity.this);
-  List<AFRewardItem> items = adfresca.getAvailableRewardItems();
-
-  if (items.size() > 0) {
-    for (AFRewardItem item : items) {
-      Log.d(TAG,String.format("Get AFRewardItem: name=%s, quantity=%d, uniqueVlaue=%s", item.getName(), item.getQuantity(), item.getUniqueValue())));
-      // do something with tem.getName(), item.getQuantity(), item.getUniqueValue()
-    }
-    String itemNames = joinNameStringsByComma(items);
-    String alertMessage = String.format("You got the reward item(s)! (%s)", itemNames);
-    showAlert(alertMessage);
-  }
-}
-```
-
-###(Advanced) 더욱 빠르게 아이템 지급하기:
-
-`getAvailableRewardItems()` 메소드는 현재 지급 가능한 아이템 리스트를 리턴한 이후, 새롭게 지급 가능한 아이템들이 있는지 백그라운드로 검사를 진행하게 됩니다. 만약 앱 시작시에 미리 검사를 수동으로 진행하고 원하는 위치에서 `getAvailableRewardItems()` 메소드를 호출한다면, 사용자들에게 더욱 빠른 아이템 지급이 가능해집니다.
-
-```java
-@Override
-public void onResume() {
-  super.onResume();
-
-  AdFresca adfresca = AdFresca.getInstance(DemoIntroActivity.this);
+  AdFresca.setRewardItemListener(new AFRewardItemListener(){
+      @Override
+      public void onReward(AFRewardItem item) {
+        String logMessage = String.format("You got the reward item! (%s)", item.getName());
+        Log.d(TAG, logMessage);
+        
+        // 아이템 고유 값 'uniqueValue'을 이용하여 사용자에게 아이템 지급
+        sendItemToUser(item.getUniqueValue());  
+      }});
+          
+  AdFresca adfresca = AdFresca.getInstance(this);
   adfresca.checkRewardItems();
 }
-
-@Override
-public void onClick(View view) {
-  List<AFRewardItem> items = adfresca.getAvailableRewardItems();
-
-  if (items.size() > 0) {
-    for (AFRewardItem item : items) {
-      Log.d(TAG,String.format("Get AFRewardItem: name=%s, quantity=%d, uniqueVlaue=%s", item.getName(), item.getQuantity(), item.getUniqueValue())));
-      // do something with tem.getName(), item.getQuantity(), item.getUniqueValue()
-    }
-    String itemNames = joinNameStringsByComma(items);
-    String alertMessage = String.format("You got the reward item(s)! (%s)", itemNames);
-    showAlert(alertMessage);
-  }
-}
 ```
 
-`checkRewardItems(synchronized)` 메소드를 Synchronized 모드로 실행하면,, SDK가 모든 검사를 완료할 때 까지 기다린 후 바로 아이템을 지급할 수도 있습니다.
+Incentivized CPI 캠페인의 경우는 사용자의 앱 설치가 확인된 후 onReward 이벤트가 발생하며, Annoucnement 캠페인의 경우는 캠페인이 앱 사용자에게 매칭되어 노출될 때 onReward 이벤트가 발생합니다. 만일 디바이스의 네트워크 단절 상항이 발생한 경우 SDK가 데이터를 로컬에 보관하여 다음 앱 실행에서 아이템 지급이 가능하도록 구현되어 있기 때문에 항상 100% 지급을 보장합니다.
 
-```java
-new AsyncTask<Void, Void, Void>() {
-  protected Void doInBackground(Void... params) {
-    AdFresca adfresca = AdFresca.getInstance(DemoIntroActivity.this);
-    adfresca.checkRewardItems(true);
-    return null;
-  }
-
-  protected void onPostExecute(Void param) {
-    AdFresca adfresca = AdFresca.getInstance(DemoIntroActivity.this);
-    List<AFRewardItem> items = adfresca.getAvailableRewardItems();
-
-    if (items.size() > 0) {
-      for (AFRewardItem item : items) {
-      Log.d(TAG,String.format("Get AFRewardItem: name=%s, quantity=%d, uniqueVlaue=%s", item.getName(), item.getQuantity(), item.getUniqueValue())));
-      // do something with tem.getName(), item.getQuantity(), item.getUniqueValue()
-      }
-      String itemNames = joinNameStringsByComma(items);
-      String alertMessage = String.format("You got the reward item(s)! (%s)", itemNames);
-      showAlert(alertMessage);
-    }
-  }
-}.execute();
-```
+(기존의 getAvailableRewardItems 메소드는 Deprecated 상태로 변경되었지만, 호환성을 보장하여 정상적으로 동작하고 있습니다.)
 
 * * *
 
@@ -1204,32 +1213,6 @@ public void onResume() {
 }
 ```
 
-### Test Device ID
-
-_AD fresca_는 테스트 모드 기능을 지원하며 테스트에 사용할 수 있는 기기를 별도로 등록하여 관리할 수 있습니다.
-
-테스트 기기 ID는 SDK를 통해 추출이 가능하며 2가지 방법을 지원 합니다.
-
-1) getTestDeviceId() 메소드를 이용하여 로그로 출력하는 방법
-
-```java
-AdFresca adfresca = AdFresca.getInstance(this);
-Log.d(TAG, "AD fresca Test Device ID is = " + adfresca.getTestDeviceId());
-```
-
-2) setPrintTestDeviceId() 메소드를 설정하여 화면에 Device ID를 표시하는 방법
- 
-개발자가 기기를 직접 연결할 수 없는 경우, 설정을 활성화 한 상태로 앱 빌드를 전달하여 설치합니다. 화면에 표시된 기기 ID를 직접 기록하여 등록할 수 있습니다.
-
-담당 마케터가 원격에서 근무하는 경우 해당 기능을 유용하게 사용할 수 있으며, 설정이 활성화된 상태로 앱이 배포되지 않도록 주의해야 합니다.
-
-```java
-  AdFresca adfresca = AdFresca.getInstance(this);
-  adfresca.setPrintTestDeviceId(true);
-  adfresca.load();
-  adfresca.show();
-```
-
 ### Timeout Interval
 
 컨텐츠의 최대 로딩 시간을 직접 지정하실 수 있습니다. 지정된 시간 내에 컨텐츠가 로딩되지 못한 경우, 사용자에게 컨텐츠를 노출하지 않습니다.
@@ -1243,21 +1226,23 @@ Log.d(TAG, "AD fresca Test Device ID is = " + adfresca.getTestDeviceId());
   adfresca.show();
 ```
 
+* * *
+
 ### Google Referrer Tracking
 
 Google Play 캠페인을 통해 앱을 설치하는 경우, Referrer 정보를 분석하여 통계 데이터를 제공합니다.
 
 Referrer 정보를 추출하여 SDK에 설정하기 위하여 아래와 같이 적용 및 테스트 합니다.
 
-1) AndroidManefest.xml에 Reciever 등록
+1) AndroidManefest.xml에 Reciever 등록 여부 확인하기
 
 Reciever를 등록하여 Google Play 앱을 통해 전달되는 Referrer 값을 자동으로 SDK에 적용합니다.
 
 ```xml
 <receiver android:name="com.adfresca.sdk.referer.AFRefererReciever" android:exported="true">
-	<intent-filter>
-      		<action android:name="com.android.vending.INSTALL_REFERRER" />
-     	</intent-filter>
+  <intent-filter>
+          <action android:name="com.android.vending.INSTALL_REFERRER" />
+      </intent-filter>
 </receiver>
 ```
 
@@ -1295,6 +1280,8 @@ Proguard 툴을 이용하여 APK 파일을 보호하는 경우 몇 가지 예외
 -keepattributes Signature 
 ```
 
+* * *
+
 ## Trouble Shooting
 
 컨텐츠 제대로 출력되지 않거나, 에러가 발생한다면 AdExceptionListener 인터페이스를 구현하여, 에러 정보를 확인 할 수 있습니다.
@@ -1308,43 +1295,23 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 });
 ```
 
-### Error Code
-
-Code | Message | Description
------------- | ------------- | ------------
-UNKNOWN_ERROR = 1 | Unknown Error | 아직 처리되지 않은 에러를 뜻합니다. 자세한 내용을 AdFresca 개발팀에게 문의해주시면 대응이 가능합니다.
-NO_APIKEY = 1 | No API Key set to AdFresca | AdFresca 에 API Key 를 설정하지 않은 경우 발생합니다.
-NO_ACTIVITY = 2 | No Activity set to AdFresca | AdFresca.getInstance(Activity) 에 Activity 가 넘어오지 않은 경우 발생합니다.
-NO_INTERNET_CONNECTION = 3 | No Internet Connection | 디바이스의 인터넷 접속이 불가능할 시에 발생합니다. android.permission.INTERNET  퍼미션이 설정되지 않을 시에 발생 할 수 있습니다.
-NO_DEVICE_ID = 4 |  | OpenUDID 가 제대로 등록되지 않은 경우 발생할 수 있습니다.
-NO_NETWORK_STATUS = 5 |  | ACCESS_NETWORK_STATE 퍼미션이 설정되지 않은 경우 발생합니다.
-INVALID_ADREQEST_IMPRESSION = 6 | We're sorry, but something went wrong. /impression | 서버에서 응답을 제대로 처리하지 못하는 경우 발생 합니다. AdFresca 개발팀에게 직접 문의해주시면 대응이 가능합니다.
-INVALID_ADREQEST_IMAGE = 7 | We're sorry, but something went wrong. /image | 서버에서 응답을 제대로 처리하지 못하는 경우 발생 합니다. AdFresca 개발팀에게 직접 문의해주시면 대응이 가능합니다.
-INVALID_ADREQEST_DISPLAYED = 8 | We're sorry, but something went wrong. /displayed | 서버에서 응답을 제대로 처리하지 못하는 경우 발생 합니다. AdFresca 개발팀에게 직접 문의해주시면 대응이 가능합니다.
-INVALID_ADREQEST_CLICKED = 9 | We're sorry, but something went wrong. /clicked | 서버에서 응답을 제대로 처리하지 못하는 경우 발생 합니다. AdFresca 개발팀에게 직접 문의해주시면 대응이 가능합니다.
-AD_TIMEOUT = 10 | Request Timed Out | 컨텐츠 로딩이 지정된 시간을 초과하여 켐패인 노출이 취소된 경우 발생합니다. 
-NO_APP_VERSION = 11 | No app version in manifest.xml | manifest.xml 안에 versionName이 명시되지 않은 경우 발생합니다.
-INVALID_SESSION_REQUEST = 12 | We're sorry, but something went wrong. /session | 서버에서 응답을 제대로 처리하지 못하는 경우 발생 합니다. AdFresca 개발팀에게 직접 문의해주시면 대응이 가능합니다.
-INVALID_ADREQEST_ACTIVE = 13 | We're sorry, but something went wrong. /active | 서버에서 응답을 제대로 처리하지 못하는 경우 발생 합니다. AdFresca 개발팀에게 직접 문의해주시면 대응이 가능합니다.
-AD_IMPRESSION_EXPIRED = 14 | This AD is expired | 이전에 받아온 컨텐츠가 더이상 유효하지 않을 경우 발생 합니다.
-INVALID_PUSH_RUN_REQUEST = 15 | We're sorry, but something went wrong. /push_notification | 서버에서 응답을 제대로 처리하지 못하는 경우 발생 합니다. AdFresca 개발팀에게 직접 문의해주시면 대응이 가능합니다.
-UNKNOWN_REQUEST_TYPE = 16 |  | SDK 에 알 수 없는 요청이 들어온 경우 발생합니다. AdFresca 개발팀에게 직접 문의해주시면 대응이 가능합니다.
-UNKNOWN_VIEW_TYPE = 17 |  | SDK 에 알 수 없는 View Type 이 처리되는 경우 발생합니다. AdFresca 개발팀에게 직접 문의해주시면 대응이 가능합니다.
-NO_IMAGE_SIZE_TYPE_INDEX = 18 | No matched view for ImageSizeIndex=%d | 서버로부터 내려받은 컨텐츠의 Image Size Index 와 매칭되는 View 가 없어서 노출하지 못한 경우에 발생합니다.
-INVALID_API_KEY = 102 |  No app with the given api_key : | 유효하지 않은 API Key를 입력한 경우 발생합니다. 발급된 API Key가 맞는지 다시 한번 확인해 주세요.
-INVALIED_LOCALE = 102 | No locale match : l | 디바이스에서 아직 제공하지 않는 언어(로케일)을 사용시 발생합니다.
-
 * * *
 
 ## Release Notes
 
-- v2.4.0-beta3 _(01/30/2014 Updated)_ 
+- **v2.4.0-beta4 _(2014/04/06 Updated)_**
+    - v2.3.4에서 적용된 'Annoucnemnt 캠페인을 통한 Reward Item 지급 기능'을 지원합니다.
+    - v2.3.4에서 개선된 [Reward Item](#reward-item) 기능이 적용되었습니다. 
+- v2.4.0-beta3 
     - v2.3.3에서 적용된 [Image Push Notification](#image-notification) 기능이 추가되었습니다. 
 - v2.4.0-beta2 
     - v2.3.2에서 패치된 Timeout 이벤트 처리가 적용되었습니다.
     - [Unity Plugin 2.2.0-beta1](https://github.com/adfresca/sdk-unity-sample/blob/master/README.md#release-notes) 버전을 지원합니다.
 - v2.4.0-beta1
     - 앱 내에서 발생하는 In-App Purchase 데이터를 트랙킹할 수 있는 기능이 추가되었습니다. 자세한 내용은 [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta) 항목을 참고하여 주세요. [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta) 항목을 참고하여 주세요.
+- **v2.3.4 _(2014/04/06 Updated)_**
+   - Annoucnemnt 캠페인을 통한 Reward Item 지급 기능을 지원합니다.
+   - AFRewardItemListener 구현 기능이 추가되어, 지급 가능한 아이템이 발생할 시에 자동으로 onReward 이벤트가 발생합니다. 보다 자세한 내용은 [Reward Item](#reward-item) 항목을 참고하여 주세요.
 - v2.3.3 _(01/30/2014 Updated)_ 
     - Image Push Notifcaiton 기능이 추가되었습니다. 적용에 대한 자세한 내용은 [Image Notification](#image-notification) 항목을 참고하여 주세요.
     - showNotification() 메소드를 통해 표시되는 푸시 메시지에 [BigTextStyle](http://developer.android.com/reference/android/app/Notification.BigTextStyle.html)이 기본적으로 적용됩니다.
