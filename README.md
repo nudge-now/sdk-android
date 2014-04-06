@@ -1300,7 +1300,7 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 ## Release Notes
 
 - **v2.4.0-beta4 _(2014/04/06 Updated)_**
-    - v2.3.4에서 적용된 'Annoucnemnt 캠페인을 통한 Reward Item 지급 기능'을 지원합니다.
+    - v2.3.4에서 적용된 'Announcement 캠페인을 통한 Reward Item 지급 기능'을 지원합니다.
     - v2.3.4에서 개선된 [Reward Item](#reward-item) 기능이 적용되었습니다. 
 - v2.4.0-beta3 
     - v2.3.3에서 적용된 [Image Push Notification](#image-notification) 기능이 추가되었습니다. 
@@ -1310,7 +1310,7 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 - v2.4.0-beta1
     - 앱 내에서 발생하는 In-App Purchase 데이터를 트랙킹할 수 있는 기능이 추가되었습니다. 자세한 내용은 [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta) 항목을 참고하여 주세요. [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta) 항목을 참고하여 주세요.
 - **v2.3.4 _(2014/04/06 Updated)_**
-   - Annoucnemnt 캠페인을 통한 Reward Item 지급 기능을 지원합니다.
+   - Announcement 캠페인을 통한 Reward Item 지급 기능을 지원합니다.
    - AFRewardItemListener 구현 기능이 추가되어, 지급 가능한 아이템이 발생할 시에 자동으로 onReward 이벤트가 발생합니다. 보다 자세한 내용은 [Reward Item](#reward-item) 항목을 참고하여 주세요.
 - v2.3.3 _(01/30/2014 Updated)_ 
     - Image Push Notifcaiton 기능이 추가되었습니다. 적용에 대한 자세한 내용은 [Image Notification](#image-notification) 항목을 참고하여 주세요.
