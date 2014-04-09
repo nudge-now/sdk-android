@@ -841,7 +841,7 @@ Cocos2d-x 환경에서 Custom URL을 처리할 수 있는 모든 방법을 구�
 
 ## In-App Purchase Tracking (Beta)
 
-_**(현재 In-App-Purchase Tracking 기능은 SDK 2.4.0-beta1 버전에서만 지원됩니다.)**_
+_**(현재 In-App-Purchase Tracking 기능은 SDK 2.4.0-beta 버전에서만 지원됩니다.)**_
 
 _In-App-Purchase Tracking_  기능을 통하여 현재 앱에서 발생하고 있는 모든 인-앱 결제를 분석하고 캠페인 타겟팅에 이용할 수 있습니다.
 
