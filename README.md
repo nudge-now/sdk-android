@@ -990,7 +990,7 @@ SDK 적용을 위해서는 Advertising App에서의 패키지 이름 확인 및 
 
   위 경우 [Dashboard](https://admin.adfresca.com) 사이트에서 Advertising App의 CPI Identifier 값을 'com.adfresca.demo' 으로 설정하게 됩니다. 
 
-  그리고, Incentivized CPA 캠페인을 진행할 경우는 아래와 같이 보상 조건으로 지정한 마케팅 이벤트가 발생되어야 합니다.
+  마지막으로, Incentivized CPA 캠페인을 진행할 경우는 보상 조건으로 지정한 마케팅 이벤트가 발생되어야 합니다. 사용자가 보상 조건을 완료한 이후 아래와 같이 지정한 마케팅 이벤트를 호출합니다.
     
   ```java
   // 튜토리얼 완료 이벤트를 보상 조건으로 지정한 경우
