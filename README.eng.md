@@ -149,7 +149,7 @@ You can see the following if everything is correct.
 
 ### In-App Purchase Count
 
-If user purchases in-app items, you can save this information on our service to use use targeting and analytics features.
+If user purchases in-app items, you can save this information on our service to use targeting and analytics features.
 
 You can simply set a number of in-app purchases for current user, using setNumberOfInAppPurchases(int) method.
 
