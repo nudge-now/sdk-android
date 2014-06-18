@@ -456,14 +456,14 @@ To use this feature, add scheme in AndroidManifest.xml
              <action android:name="android.intent.action.VIEW" /> 
              <category android:name="android.intent.category.DEFAULT" /> 
              <category android:name="android.intent.category.BROWSABLE" /> 
-             <data android:scheme="myapp" android:host="com.adfresca.zone" />
+             <data android:scheme="myapp" android:host="item" />
         </intent-filter> 
   </activity>
 ```
 
-In this example, you can set url as myapp://com.adfresca.zone?item=abc to open DemoZoneActivity when user responds.
+In this example, you can set url as myapp://item?name=abc to launch DemoZoneActivity when user responds.
 
-on DemoZoneActivity, you can get parameter values (item=abc) as example codes below.
+on DemoZoneActivity, you can get parameter values (name=abc) as example codes below.
 
 ```java
 public void onCreate(Bundle savedInstanceState) {
@@ -471,7 +471,7 @@ public void onCreate(Bundle savedInstanceState) {
 
   Uri uri = getIntent().getData();
   if (uri != null && uri.getScheme().equals("myapp")) { 
-    String item = uri.getQueryParameter("item");
+    String name = uri.getQueryParameter("name");
   }
 }
 ```
