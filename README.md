@@ -461,7 +461,7 @@ To use this feature, add scheme in AndroidManifest.xml
   </activity>
 ```
 
-In this example, you can set url as yapp://com.adfresca.zone?item=abc to open DemoZoneActivity when user responds.
+In this example, you can set url as myapp://com.adfresca.zone?item=abc to open DemoZoneActivity when user responds.
 
 on DemoZoneActivity, you can get parameter values (item=abc) as example codes below.
 
