@@ -39,7 +39,7 @@
 
 [Android SDK with IAP Tracking Beta Download](http://file.adfresca.com/distribution/sdk-for-Android-iap-beta.zip) (v.2.4.0-beta4)
 
-To add SDK into your android project, please follow the instructions below:
+SDK를 프로젝트에 설치하기 위하여 아래의 과정을 진행합니다.
 
 1) **AdFresca.jar** 파일은 **lib** 폴더에, **adfresca_attr.xml** 파일은 **res/values** 폴더에 각각 복사합니다.
 
