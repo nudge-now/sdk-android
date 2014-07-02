@@ -33,11 +33,11 @@
 
 아래 링크를 통해 SDK 파일을 다운로드 합니다.
 
-[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) (v2.3.4)
+[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip)
 
-[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip) (v2.3.4)
+[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip)
 
-[Android SDK with IAP Tracking Beta Download](http://file.adfresca.com/distribution/sdk-for-Android-iap-beta.zip) (v.2.4.0-beta4)
+[Android SDK with IAP Tracking Beta Download](http://file.adfresca.com/distribution/sdk-for-Android-iap-beta.zip) 
 
 SDK를 프로젝트에 설치하기 위하여 아래의 과정을 진행합니다.
 
