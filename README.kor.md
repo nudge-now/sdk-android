@@ -8,6 +8,7 @@
 - [IAP & Reward](#iap--reward)
   - [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta)
   - [Give Reward](#give-reward)
+  - [Promotion](#promotion)
 - [Dynamic Targeting](#dynamic-targeting)
   - [Custom Parameter](#custom-parameter)
   - [Marketing Moment](#marketing-moment)
@@ -36,8 +37,6 @@
 [Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip)
 
 [Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip)
-
-[Android SDK with IAP Tracking Beta Download](http://file.adfresca.com/distribution/sdk-for-Android-iap-beta.zip) 
 
 SDK를 프로젝트에 설치하기 위하여 아래의 과정을 진행합니다.
 
@@ -233,7 +232,7 @@ AD fresca는 테스트 모드 기능을 지원하여 테스트를 원하는 디�
 
 * * *
 
-## IAP & Reward
+## IAP, Reward, and Promotion
 
 ### In-App Purchase Tracking (Beta)
 
@@ -254,7 +253,7 @@ AD fresca의 In-App-Purchase Tracking은 2가지 유형이 있습니다.
 
 #### Actual Item Tracking
 
-Actual Item의 결제는 각 앱스토어별 인-앱 결제 라이브러리를 통해 이루어집니다. 각 결제 라이브러리에서 _'결제 성공'_ 이벤트가 발생 할 시에 AFPurchase 객체를 생성하고 logPurchase(purchase) 메소드를 호출합니다.
+Actual Item의 결제는 각 앱스토어별 인-앱 결제 라이브러리를 통해 이루어집니다. 각 결제 라이브러리에서 _'결제 성공'_ 이벤트가 발생 할 시에 AFPurchase 객체를 생성하고 logPurchase(purchase) 메소드를 호출합니다. 그리고 _'결제 실패'_ 이벤트가 발생 할 시에는 cancelPromotionPurchase() 메소드를 호출합니다.
 
 적용 예제: Google Play 결제 
 ```java
@@ -265,6 +264,7 @@ IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelpe
 
     if (mHelper == null || result.isFailure() || !verifyDeveloperPayload(purchase)) {
       ......
+      AdFresca.getInstance(MainActivity.this).cancelPromotionPurchase();
       return;
     }
 
@@ -310,7 +310,7 @@ setReceipt(string, string, string) | 추후 Receipt Verficiation 기능을 위�
 
 #### Virtual Item Tracking
 
-Virtual Item의 결제는 앱 내의 가상 화폐로 아이템을 결제한 경우를 의미합니다. 앱 내에서 가상 화폐를 이용한 결제 이벤트가 성공한 경우 아래 예제와 같이 AFPurchase 객체를 생성하고 logPurchase(purchase) 메소드를 호출합니다.
+Virtual Item의 결제는 앱 내의 가상 화폐로 아이템을 결제한 경우를 의미합니다. 앱 내에서 가상 화폐를 이용한 결제 이벤트가 성공한 경우 아래 예제와 같이 AFPurchase 객체를 생성하고 logPurchase(purchase) 메소드를 호출합니다. 그리고 _'결제 실패'_ 이벤트가 발생 할 시에는 cancelPromotionPurchase() 메소드를 호출합니다.
 
 적용 예제: 
 ```java
@@ -323,6 +323,11 @@ public void onVirtualItemPurchased(Item item, Date purchasedDate) {
                   .build();
   
   AdFresca.getInstance(this).logPurchase(virtualPurchase);
+}
+
+// 사용자가 결제를 취소했거나, 실패한 경우
+public void onPurchaseVirtualItemFailure() {
+		AdFresca.getInstance(this).cancelPromotionPurchase();
 }
 ```
 
@@ -359,7 +364,7 @@ AdFresca.getInstance(this).logPurchase(purchase, new AFPurchaseExceptionListener
 
 Reward 지급 기능을 적용하여 현재 사용자에게 지급 가능한 보상 아이템이 있는지 검사하고, 보상 아이템을 사용자에게 지급할 수 있습니다.
 
-Annoucnement 캠페인의 'Reward Item' 항목을 설정했거나, Incentivized CPI & CPA 캠페인의 'Incentive Item' 을 설정한 경우 사용자에게 보상 아이템이 지급됩니다.
+Reward 캠페인에서 'Reward Item' 항목을 설정하거나, Incentivized CPI & CPA 캠페인의 'Incentive Item' 을 설정한 경우 사용자에게 보상 아이템이 지급됩니다.
 
 먼저 AndroidManifest.xml 내용을 확인합니다.
 
@@ -383,11 +388,11 @@ public void onResume() {
   AdFresca.setRewardItemListener(new AFRewardItemListener(){
       @Override
       public void onReward(AFRewardItem item) {
-        String logMessage = String.format("You got the reward item! (%s)", item.getName());
+        String logMessage = String.format("You got the reward item! (%s)", item.toJson());
         Log.d(TAG, logMessage);
         
-        // 아이템 고유 값 'uniqueValue'을 이용하여 사용자에게 아이템 지급
-        sendItemToUser(item.getUniqueValue());  
+        // 아이템 정보를 이용하여 현재 사용자에게 아이템을 지급합니다.
+        sendItemToUser(currentUserId, item.getUniqueValue(), item.getQuantity(), item.getSecurityToken());		
       }});
           
   AdFresca fresca = AdFresca.getInstance(this);
@@ -397,13 +402,46 @@ public void onResume() {
 
 캠페인 종류에 따라 onReward 이벤트의 발생 조건이 다릅니다.
 
-- Annoucnement 캠페인: 캠페인이 앱 사용자에게 매칭되어 노출될 때 이벤트가 발생합니다
+- Reward 캠페인: 캠페인이 앱 사용자에게 매칭되어 노출될 때 이벤트가 발생합니다
 - Incentivized CPI 캠페인: 사용자의 Advertising App 설치가 확인된 후 이벤트가 발생합니다.
 - Incentivized CPA 캠페인: 사용자의 Advertising App 설치가 확인되고 보상 조건으로 지정된 마케팅 이벤트가 호출된 후에 발생합니다.
 
 만일 디바이스의 네트워크 단절이 발생한 경우 SDK는 데이터를 로컬에 보관하여 다음 앱 실행에서 아이템 지급이 가능하도록 구현되어 있기 때문에 항상 100% 지급을 보장합니다.
 
-(기존의 getAvailableRewardItems 메소드는 Deprecated 상태로 변경되었지만, 호환성을 보장하여 정상적으로 동작하고 있습니다.)
+##### sendItemToUser() 메소드의 구현
+
+SDK에서 요청한 아이템을 사용자에게 지급해야 합니다. 클라이언트에서 직접 지급하거나, 백엔드 서버와 통신하여 사용자의 선물함으로 보상을 지급하는 방식을 이용할 수 있습니다. 아이팀의 고유 값, 수량, 그리고 시큐리티 토큰값을 이용하여 현재 로그인된 사용자에게 아이템을 지급합니다.
+
+##### 백엔드 서버를 통해 아이템을 지급할 경우 보안 이슈 해결하기
+
+저희 SDK에서는 특정 사용자가 동일한 캠페인에서 1회 이상 아이템이 지급되지 않도록 처리하고 있습니다. 하지만 클라이언트에서 백엔드 서버와 통신하는 과정이 노출된다면 외부 공격에 의해 아이템이 중복으로 지급되는 보안 이슈가 발생할 수도 있습니다. 해당 문제를 방지하기 위하여 시큐리티 토큰값을 제공하고 있습니다. 시큐리티 토큰값은 대쉬보드에서 캠페인 생성 시에 자동으로 생성 혹은 직접 지정할 수 있는 고유 값입니다. 해당 값을 이용하여 아래와 같은 처리를 할 수 있습니다.
+
+1. 백엔드 서버에서는 진행하려는 리워드 캠페인의 시큐리티 토큰값을 데이터베이스에 미리 보관하여, 존재하지 않는 토큰값이 포함된 요청을 거절합니다.
+2. 특정 사용자가 동일한 토큰값으로 1회 이상 지급 요청을 하는 경우 요청을 거절합니다. 
+3. 만약 토큰값이 외부에 노출되었다고 판단될 경우, 대쉬보드에서 토큰값을 새로 생성하거나 수정합니다.
+
+* * *
+
+### Promotion
+
+Sales Promotion 캠페인을 이용하여 특정 아이템의 구매를 유도할 수 있습니다. 사용자가 캠페인에 노출된 이미지 메시지를 클릭할 경우 해당 아이템의 구매 UI가 표시됩니다. SDK는 사용자의 실제 구매 여부까지 자동으로 트랙킹하여 대쉬보드에서 실시간으로 통계를 제공합니다. 
+
+Actual Currency 아이템의 프로모션 기능을 적용하기 위해 아래와 같이 코드를 적용합니다. 프로모션 이벤트가 발생한 경우, 사용하는 인-앱 결제 라이브러리를 이용하여 SDK에서 전달되는 아이템의 구매 UI가 표시되도록 합니다.
+
+```java
+AdFresca.setPromotionListener(new AFPromotionListener(){
+			@Override
+			public void onPromotion(AFPurchase promotionPurchase) {
+				if (promotionPurchase.getCurrencyType() == AFPurchase.Type.ACTUAL_ITEM) {
+		      // Using Google Play In-app Billing Library		
+          iabHelper.launchPurchaseFlow(MainActivity.this, promotionPurchase.getItemId(), 0, yourPurchaseFinishedListener, "YOUR_PAYLOAD");
+				}
+			}}
+); 
+```
+
+SDK가 사용자의 실제 구매 여부를 트랙킹하기 위해서는 [In-App Purchase Tracking](#in-app-purchase-tracking-beta) 기능이 미리 구현되어 있어야 합니다. 사용자가 아이템을 구매를 하지 않거나 실패한 경우를 트랙킹 하기 위하여 cancelPromotionPurchase() 메소드가 반드시 적용되어 있어야 합니다.
+
 
 * * *
 
@@ -1116,8 +1154,12 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 * * *
 
 ## Release Notes
-
-- **v2.4.0-beta4 _(2014/04/06 Updated)_**
+- **v2.4.1 _(2014/08/08 Updated)_**
+    - 리워드 지급 시에 시큐리티 토큰값을 이용하여 보안 이슈를 해결할 수 있습니다. 자세한 내용은 [Give Reward](#give-reward) 항목을 참고하여 주세요.
+    - Sales Promotion 캠페인 기능을 이용하여 Actual Currency 아이템의 프로모션 기능을 지원합니다. 자세한 내용은 [Promotion](#promotion) 항목을 참고하여 주세요.
+    - [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta) 기능에서 cancelPromotionPurchase() 메소드가 추가되었습니다. 
+    - 이미지 메시지의 **Clickable Area** 기능을 지원합니다.
+- v2.4.0-beta4
     - v2.3.4에서 적용된 'Announcement 캠페인을 통한 Reward Item 지급 기능'을 지원합니다.
     - v2.3.4에서 적용된 Incentivized CPA 캠페인 기능을 지원합니다. 자세한 내용은 [Cross Promotion Configuration](#cross-promotion-configuration) 항목을 참고하여 주세요.
     - v2.3.4에서 개선된 [Give Reward](#give-reward) 기능이 적용되었습니다. 
