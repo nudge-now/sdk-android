@@ -327,7 +327,7 @@ public void onVirtualItemPurchased(Item item, Date purchasedDate) {
 
 // 사용자가 결제를 취소했거나, 실패한 경우
 public void onPurchaseVirtualItemFailure() {
-		AdFresca.getInstance(this).cancelPromotionPurchase();
+  AdFresca.getInstance(this).cancelPromotionPurchase();
 }
 ```
 
@@ -430,18 +430,17 @@ Actual Currency 아이템의 프로모션 기능을 적용하기 위해 아래�
 
 ```java
 AdFresca.setPromotionListener(new AFPromotionListener(){
-			@Override
-			public void onPromotion(AFPurchase promotionPurchase) {
-				if (promotionPurchase.getCurrencyType() == AFPurchase.Type.ACTUAL_ITEM) {
-		      // Using Google Play In-app Billing Library		
-          iabHelper.launchPurchaseFlow(MainActivity.this, promotionPurchase.getItemId(), 0, yourPurchaseFinishedListener, "YOUR_PAYLOAD");
-				}
-			}}
+  @Override
+  public void onPromotion(AFPurchase promotionPurchase) {
+    if (promotionPurchase.getCurrencyType() == AFPurchase.Type.ACTUAL_ITEM) {
+      // Using Google Play In-app Billing Library		
+      iabHelper.launchPurchaseFlow(MainActivity.this, promotionPurchase.getItemId(), 0, yourPurchaseFinishedListener, "YOUR_PAYLOAD");
+    }
+  }}
 ); 
 ```
 
 SDK가 사용자의 실제 구매 여부를 트랙킹하기 위해서는 [In-App Purchase Tracking](#in-app-purchase-tracking-beta) 기능이 미리 구현되어 있어야 합니다. 사용자가 아이템을 구매를 하지 않거나 실패한 경우를 트랙킹 하기 위하여 cancelPromotionPurchase() 메소드가 반드시 적용되어 있어야 합니다.
-
 
 * * *
 
