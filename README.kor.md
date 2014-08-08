@@ -5,7 +5,7 @@
   - [In-App Messaging](#in-app-messaging)
   - [Push Messaging](#push-messaging)
   - [Test Device Registration](#test-device-registration)
-- [IAP, Reward, and Promotion](#iap-reward-and-promotion)
+- [IAP, Reward and Promotion](#iap-reward-and-promotion)
   - [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta)
   - [Give Reward](#give-reward)
   - [Promotion](#promotion)
@@ -232,7 +232,7 @@ AD fresca는 테스트 모드 기능을 지원하여 테스트를 원하는 디�
 
 * * *
 
-## IAP, Reward, and Promotion
+## IAP, Reward and Promotion
 
 ### In-App Purchase Tracking (Beta)
 
