@@ -5,7 +5,7 @@
   - [In-App Messaging](#in-app-messaging)
   - [Push Messaging](#push-messaging)
   - [Test Device Registration](#test-device-registration)
-- [IAP & Reward](#iap--reward)
+- [IAP, Reward, and Promotion](#iap-reward-and-promotion)
   - [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta)
   - [Give Reward](#give-reward)
   - [Promotion](#promotion)
