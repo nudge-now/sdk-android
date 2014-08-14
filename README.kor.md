@@ -442,36 +442,35 @@ AdFresca.setPromotionListener(new AFPromotionListener(){
   @Override
   public void onPromotion(AFPurchase promotionPurchase) {
     String itemId = promotionPurchase.getItemId();
-	  String logMessage = "no logMessage";
-				
+    String logMessage = "no logMessage";
+        
     if (promotionPurchase.getCurrencyType() == AFPurchase.Type.ACTUAL_ITEM) {
-      // Using Google Play In-app Billing Library		
+      // Using Google Play In-app Billing Library   
       iabHelper.launchPurchaseFlow(MainActivity.this, promotionPurchase.getItemId(), 0, yourPurchaseFinishedListener, "YOUR_PAYLOAD");
       
-      logMessage = String.format("on ACTUAL_ITEM Promotion (%s)", itemId);	
+      logMessage = String.format("on ACTUAL_ITEM Promotion (%s)", itemId);  
       
-    } else if (promotionPurchase.getCurrencyType() == AFPurchase.Type.VIRTUAL_ITEM) {					
-	String currencyCode = promotionPurchase.getCurrencyCode();
-			
-	if (promotionPurchase.getDiscountType() == AFPurchase.DiscountType.DISCOUNTED_TYPE_PRICE) {
-	  // Use a discounted price
-	  double discountedPrice = promotionPurchase.getPrice(); 
-	
-	  showPurchaseUIWithDiscountedPrice(itemId, currencyCode, discountedPrice);
-	  
-	  logMessage = String.format("on VIRTUAL_ITEM Promotion (%s) with %.2f %s", promotionPurchase.getItemName(), discountedPrice, currencyCode);		
-	  
-	} else if (promotionPurchase.getDiscountType() == AFPurchase.DiscountType.DISCOUNT_TYPE_RATE) {
-	  // Use this rate to calculate a discounted price of item. discountedPrice = originalPrice - (originalPrice * discountRate)
-	  double discountRate = promotionPurchase.getDiscountRate(); 
-	  
-	  showPurchaseUIWithDiscountRate(itemId, currencyCode, discountRate);
-	  
-	  logMessage = String.format("on VIRTUAL_ITEM Promotion (%s) with %.2f %% discount", promotionPurchase.getItemName(), discountRate * 100.0);
-	}
-	
-	Log.d(TAG, logMessage);
-     }
+    } else if (promotionPurchase.getCurrencyType() == AFPurchase.Type.VIRTUAL_ITEM) {         
+      String currencyCode = promotionPurchase.getCurrencyCode();
+          
+      if (promotionPurchase.getDiscountType() == AFPurchase.DiscountType.DISCOUNTED_TYPE_PRICE) {
+        // Use a discounted price
+        double discountedPrice = promotionPurchase.getPrice(); 
+      
+        showPurchaseUIWithDiscountedPrice(itemId, currencyCode, discountedPrice);
+        
+        logMessage = String.format("on VIRTUAL_ITEM Promotion (%s) with %.2f %s", promotionPurchase.getItemName(), discountedPrice, currencyCode);    
+        
+      } else if (promotionPurchase.getDiscountType() == AFPurchase.DiscountType.DISCOUNT_TYPE_RATE) {
+        // Use this rate to calculate a discounted price of item. discountedPrice = originalPrice - (originalPrice * discountRate)
+        double discountRate = promotionPurchase.getDiscountRate(); 
+        
+        showPurchaseUIWithDiscountRate(itemId, currencyCode, discountRate);
+        
+        logMessage = String.format("on VIRTUAL_ITEM Promotion (%s) with %.2f %% discount", promotionPurchase.getItemName(), discountRate * 100.0);
+      }
+    }
+    Log.d(TAG, logMessage);
   }}
 ); 
 ```
