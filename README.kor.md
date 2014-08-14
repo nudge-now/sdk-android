@@ -451,27 +451,27 @@ AdFresca.setPromotionListener(new AFPromotionListener(){
       logMessage = String.format("on ACTUAL_ITEM Promotion (%s)", itemId);	
       
     } else if (promotionPurchase.getCurrencyType() == AFPurchase.Type.VIRTUAL_ITEM) {					
-					String currencyCode = promotionPurchase.getCurrencyCode();
-							
-					if (promotionPurchase.getDiscountType() == AFPurchase.DiscountType.DISCOUNTED_TYPE_PRICE) {
-  					// Use a discounted price
-  					double discountedPrice = promotionPurchase.getPrice(); 
-  
-  					showPurchaseUIWithDiscountedPrice(itemId, currencyCode, discountedPrice);
-  					
-  					logMessage = String.format("on VIRTUAL_ITEM Promotion (%s) with %.2f %s", promotionPurchase.getItemName(), discountedPrice, currencyCode);		
-  					
-  				} else if (promotionPurchase.getDiscountType() == AFPurchase.DiscountType.DISCOUNT_TYPE_RATE) {
-  					// Use this rate to calculate a discounted price of item. discountedPrice = originalPrice - (originalPrice * discountRate)
-  					double discountRate = promotionPurchase.getDiscountRate(); 
-  					
-  					showPurchaseUIWithDiscountRate(itemId, currencyCode, discountRate);
-  					
-  					logMessage = String.format("on VIRTUAL_ITEM Promotion (%s) with %.2f %% discount", promotionPurchase.getItemName(), discountRate * 100.0);
-					}
-					
-					Log.d(TAG, logMessage);
-				}
+	String currencyCode = promotionPurchase.getCurrencyCode();
+			
+	if (promotionPurchase.getDiscountType() == AFPurchase.DiscountType.DISCOUNTED_TYPE_PRICE) {
+	  // Use a discounted price
+	  double discountedPrice = promotionPurchase.getPrice(); 
+	
+	  showPurchaseUIWithDiscountedPrice(itemId, currencyCode, discountedPrice);
+	  
+	  logMessage = String.format("on VIRTUAL_ITEM Promotion (%s) with %.2f %s", promotionPurchase.getItemName(), discountedPrice, currencyCode);		
+	  
+	} else if (promotionPurchase.getDiscountType() == AFPurchase.DiscountType.DISCOUNT_TYPE_RATE) {
+	  // Use this rate to calculate a discounted price of item. discountedPrice = originalPrice - (originalPrice * discountRate)
+	  double discountRate = promotionPurchase.getDiscountRate(); 
+	  
+	  showPurchaseUIWithDiscountRate(itemId, currencyCode, discountRate);
+	  
+	  logMessage = String.format("on VIRTUAL_ITEM Promotion (%s) with %.2f %% discount", promotionPurchase.getItemName(), discountRate * 100.0);
+	}
+	
+	Log.d(TAG, logMessage);
+     }
   }}
 ); 
 ```
