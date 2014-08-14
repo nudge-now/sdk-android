@@ -424,23 +424,59 @@ SDK에서 요청한 아이템을 사용자에게 지급해야 합니다. 클라�
 
 ### Promotion
 
-Sales Promotion 캠페인을 이용하여 특정 아이템의 구매를 유도할 수 있습니다. 사용자가 캠페인에 노출된 이미지 메시지를 클릭할 경우 해당 아이템의 구매 UI가 표시됩니다. SDK는 사용자의 실제 구매 여부까지 자동으로 트랙킹하여 대쉬보드에서 실시간으로 통계를 제공합니다. 
+Sales Promotion 캠페인을 이용하여 특정 아이템의 구매를 유도할 수 있습니다. 사용자가 캠페인에 노출된 이미지 메시지를 클릭할 경우 해당 아이템의 결제 UI가 표시됩니다. SDK는 사용자의 실제 결제 여부까지 자동으로 트랙킹하여 대쉬보드에서 실시간으로 통계를 제공합니다. 
 
-Actual Currency 아이템의 프로모션 기능을 적용하기 위해 아래와 같이 코드를 적용합니다. 프로모션 이벤트가 발생한 경우, 사용하는 인-앱 결제 라이브러리를 이용하여 SDK에서 전달되는 아이템의 구매 UI가 표시되도록 합니다.
+프로모션 기능을 적용하기 위해서 AFPromotionListener를 구현합니다. 프로모션 캠페인이 노출된 후 사용자가 이미지 메시지의 액션 영역을 탭하면 onPromotion() 이벤트가 발생합니다. 이벤트에 넘어오는 promotionPurchase 객체 정보를 이용하여 사용자에게 아이템 결제 UI를 표시하도록 코드를 적용합니다.
+
+Actual Currency 아이템의 경우 인-앱 결제 라이브러리를 이용하여 결제 UI를 표시합니다. promotionPurchase 객체의 ItemId 값이 아이템의 SKU 값에 해당됩니다. 아래의 예제는 구글 플레이의 결제 라이브러리 코드를 이용하고 있습니다.
+
+Virtual Currency 아이템의 경우는 앱이 기존에 사용하고 있는 상점 내 아이템 결제 UI를 표시하도록 코드를 작성합니다. Virtual Currency 프로모션의 경우는 2가지 가격 할인 옵션을 제공하고 있습니다. getDiscountType() 메소드를 이용하여 할인 옵션을 확인할 수 있습니다.
+
+1. **Discount Price**: 캠페인에 직접 지정된 가격으로 아이템을 판매합니다. getPrice() 메소드를 이용하여 가격 정보를 얻습니다.
+2. **Discount Rate**: 캠페인에 지정된 할인율을 적용하여 아이템을 판매합니다. getDiscountRate() 메소드를 이용하여 할인율 정보를 받아옵니다.
+
+
 
 ```java
 AdFresca.setPromotionListener(new AFPromotionListener(){
   @Override
   public void onPromotion(AFPurchase promotionPurchase) {
+    String itemId = promotionPurchase.getItemId();
+	  String logMessage = "no logMessage";
+				
     if (promotionPurchase.getCurrencyType() == AFPurchase.Type.ACTUAL_ITEM) {
       // Using Google Play In-app Billing Library		
       iabHelper.launchPurchaseFlow(MainActivity.this, promotionPurchase.getItemId(), 0, yourPurchaseFinishedListener, "YOUR_PAYLOAD");
-    }
+      
+      logMessage = String.format("on ACTUAL_ITEM Promotion (%s)", itemId);	
+      
+    } else if (promotionPurchase.getCurrencyType() == AFPurchase.Type.VIRTUAL_ITEM) {					
+					String currencyCode = promotionPurchase.getCurrencyCode();
+							
+					if (promotionPurchase.getDiscountType() == AFPurchase.DiscountType.DISCOUNTED_TYPE_PRICE) {
+  					// Use a discounted price
+  					double discountedPrice = promotionPurchase.getPrice(); 
+  
+  					showPurchaseUIWithDiscountedPrice(itemId, currencyCode, discountedPrice);
+  					
+  					logMessage = String.format("on VIRTUAL_ITEM Promotion (%s) with %.2f %s", promotionPurchase.getItemName(), discountedPrice, currencyCode);		
+  					
+  				} else if (promotionPurchase.getDiscountType() == AFPurchase.DiscountType.DISCOUNT_TYPE_RATE) {
+  					// Use this rate to calculate a discounted price of item. discountedPrice = originalPrice - (originalPrice * discountRate)
+  					double discountRate = promotionPurchase.getDiscountRate(); 
+  					
+  					showPurchaseUIWithDiscountRate(itemId, currencyCode, discountRate);
+  					
+  					logMessage = String.format("on VIRTUAL_ITEM Promotion (%s) with %.2f %% discount", promotionPurchase.getItemName(), discountRate * 100.0);
+					}
+					
+					Log.d(TAG, logMessage);
+				}
   }}
 ); 
 ```
 
-SDK가 사용자의 실제 구매 여부를 트랙킹하기 위해서는 [In-App Purchase Tracking](#in-app-purchase-tracking-beta) 기능이 미리 구현되어 있어야 합니다. 사용자가 아이템을 구매를 하지 않거나 실패한 경우를 트랙킹 하기 위하여 cancelPromotionPurchase() 메소드가 반드시 적용되어 있어야 합니다.
+SDK가 사용자의 실제 구매 여부를 트랙킹하기 위해서는 [In-App Purchase Tracking](#in-app-purchase-tracking-beta) 기능이 미리 구현되어 있어야 합니다. 특히 사용자가 아이템을 구매를 하지 않거나 실패한 경우를 트랙킹 하기 위하여 cancelPromotionPurchase() 메소드가 반드시 적용되어 있어야 합니다.
 
 * * *
 
@@ -1153,7 +1189,11 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 * * *
 
 ## Release Notes
-- **v2.4.1 _(2014/08/08 Updated)_**
+VIRTUAL_ITEM
+- **v2.4.2 _(2014/08/15 Updated)_**
+    - Sales Promotion 캠페인 기능을 이용하여 Virtual Currency 아이템의 프로모션 기능을 지원합니다. 자세한 내용은 [Promotion](#promotion) 항목을 참고하여 주세요.
+    - 캠페인 매칭 시에 여러 개의 캠페인이 동시에 매칭될 수 있습니다. 새로운 SDK는 순차적으로 매칭된 캠페인들의 메시지를 표시합니다.
+- v2.4.1
     - 리워드 지급 시에 시큐리티 토큰값을 이용하여 보안 이슈를 해결할 수 있습니다. 자세한 내용은 [Give Reward](#give-reward) 항목을 참고하여 주세요.
     - Sales Promotion 캠페인 기능을 이용하여 Actual Currency 아이템의 프로모션 기능을 지원합니다. 자세한 내용은 [Promotion](#promotion) 항목을 참고하여 주세요.
     - [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta) 기능에서 cancelPromotionPurchase() 메소드가 추가되었습니다. 
