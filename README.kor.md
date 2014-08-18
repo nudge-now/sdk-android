@@ -1188,7 +1188,7 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 * * *
 
 ## Release Notes
-VIRTUAL_ITEM
+
 - **v2.4.2 _(2014/08/15 Updated)_**
     - Sales Promotion 캠페인 기능을 이용하여 Virtual Currency 아이템의 프로모션 기능을 지원합니다. 자세한 내용은 [Promotion](#promotion) 항목을 참고하여 주세요.
     - 캠페인 매칭 시에 여러 개의 캠페인이 동시에 매칭될 수 있습니다. 새로운 SDK는 순차적으로 매칭된 캠페인들의 메시지를 표시합니다.
