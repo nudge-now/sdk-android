@@ -1196,7 +1196,7 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
     - 리워드 지급 시에 시큐리티 토큰값을 이용하여 보안 이슈를 해결할 수 있습니다. 자세한 내용은 [Give Reward](#give-reward) 항목을 참고하여 주세요.
     - Sales Promotion 캠페인 기능을 이용하여 Actual Currency 아이템의 프로모션 기능을 지원합니다. 자세한 내용은 [Promotion](#promotion) 항목을 참고하여 주세요.
     - [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta) 기능에서 cancelPromotionPurchase() 메소드가 추가되었습니다. 
-    - 이미지 메시지의 **Clickable Area** 기능을 지원합니다.
+    - 이미지 메시지의 Tap Area 기능을 지원합니다.
     - iap beta 버전이 2.4.1부터 통합되었습니다. 
 - v2.4.0-beta4
     - v2.3.4에서 적용된 'Announcement 캠페인을 통한 Reward Item 지급 기능'을 지원합니다.
