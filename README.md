@@ -30,13 +30,13 @@
 
 ### Installation
 
-Download SDK on the following link:
+Download our SDK with the following link:
 
 [Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) 
 
-To add SDK into your android project, please follow the instructions below:
+To add our SDK into your android project, please follow the instructions below:
 
-1) Copy **AdFresca.jar** and **adfresca_attr.xml** to **lib** and **res/values** repectively.
+1) Copy **AdFresca.jar** and **adfresca_attr.xml** to **lib** and **res/values** respectively.
 
 <img src="https://adfresca.zendesk.com/attachments/token/bja88u9zake4knm/?name=add_adfresca_jar_and_attr_xml.png" width="300"/>
 
@@ -79,7 +79,7 @@ To add SDK into your android project, please follow the instructions below:
 
 ### Start Session
 
-Now, start to put some simple SDK codes in your app. You first need to call startSession() method with setting your API Key. To get your API Key, go to our [Dashboard](https://admin.adfresca.com) and then click 'Settings - API Keys' button in your app's 'Overview' page.
+Now, let’s start to put some simple SDK codes in your app. You first need to call startSession() method with setting your API Key. To get your API Key, go to our [Dashboard](https://admin.adfresca.com) and then click 'Settings - API Keys' button in your app's 'Overview' page.
 
 Put startSession() in your first activity class. Please make sure that this method is called once while your app is running.
 
@@ -93,7 +93,7 @@ protected void onCreate(Bundle savedInstanceState) {
 
 ### In-App Messaging
 
-With the in-app messaging feature, you can deliver a message to your in-app users in real time. Simply put 'load()' and 'show()' methods where you want to deliver a message. The type of message can be an interstitial image, text, and iframe webpage. The message is only shown when your user matches the in-app messaging campaign's target logics. We will discuss more details of the in-app messaging's dynamic targeting features in the [Dynamic Targeting](#dynamic-targeting) section.
+With the in-app messaging feature, you can deliver a message to your in-app users in real time. Simply put 'load()' and 'show()' methods where you want to deliver a message. The type of message can be an interstitial image, text, and iframe webpage. The message is only shown when your user matches the in-app messaging campaign's target logics. We will discuss in more detail about the in-app messaging's dynamic targeting features in the [Dynamic Targeting](#dynamic-targeting) section.
 
 ```java
 protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +104,7 @@ protected void onCreate(Bundle savedInstanceState) {
 }
 ```
 
-When you first call in-app messaging methods, you will see the test message below. If you tap on the image, it will redirect to the product page of the app on the app store. You will hide this test message by chagning the test mode configuration later.
+When you first call in-app messaging methods, you will see the test message below. If you tap on the image, it will redirect to the product page of the app on the app store. You will hide this test message by changing the test mode configuration later.
 
 <img src="https://adfresca.zendesk.com/attachments/token/zngvftbmcccyajk/?name=device-2013-03-18-133517.png" width="240" />
 &nbsp;
@@ -163,7 +163,7 @@ Before you start, you need to have your GCM project number from Google API Conso
 AdFresca fresca = AdFresca.getInstance(this);
 fresca.setPushRegistrationIdentifier("GCM_REGISTRATION_ID_OF_THIS_DEVICE");
 ```
-- If you don't have GCM registration id yet, please refer to '[How to Get GCM Registration ID](https://gist.github.com/sunku/b47eecee77afe40aa515)'
+- If you don't have a GCM registration id yet, please refer to '[How to Get GCM Registration ID](https://gist.github.com/sunku/b47eecee77afe40aa515)'
 
 4) Implement GCMIntentService
 
@@ -193,15 +193,15 @@ protected void onMessage(Context context, Intent intent) {
 }
 ```
 
-- If the push message has Click URL, SDK will execute the url when users touch the message.
-- If the push message does not have Click URL, SDK will execute your targetActivityClass instead.
-- You may also able to use notification.setSound(uri) method to play a sound when message is arrived.
+- If the push message has a Click URL, our SDK will execute the url when users touch the message.
+- If the push message does not have a Click URL, our SDK will execute your targetActivityClass instead.
+- You may also able to use notification.setSound(uri) method to play a sound when the message arrives.
 
 ### Test Device Registration
 
-AD fresca supports a test mode feature. With the test mode feature, you can deliver your test message to only registred test devices. 
+Nudge supports a test mode feature. With the test mode feature, you can deliver test messages to only registered test devices. 
 
-To register your test device to our dashboard, you need to know your test device ID from our SDK. SDK provides two ways to show test device ID.
+To register your test device to our dashboard, you need to know your test device ID from our SDK. Our SDK provides two ways to show test device IDs.
  
 1. Using getTestDeviceId() method
   - After connecting your device with ADB, you can simply print out test device ID with a logger.
@@ -231,20 +231,20 @@ After you have your test device ID, you have to register it to [Dashboard](https
 
 ### In-App Purchase Tracking (Beta)
 
-With In-App-Purchase Tracking , you can analyze all the purchases of your users, and use it for targeting specific user segment to display your campaigns. (targeting feature is coming soon)
+With In-App-Purchase Tracking, you can analyze all the purchases of your users, and use it for targeting specific user segments to display your campaigns. (targeting feature is coming soon)
 
 There are two types of purchases you can track with our SDK.
 
-1. **Actual Item Purchase Tracking:**  the purchases made by real money. For example, user purchased 'USD 1.99' to get 'Gold 100' cash item.
-2. **Virtual Item Purchase Tracking:** the purchases made by virtual money. For example, user purchased 'Gold 10' to get 'Rocket Launcher' item 
+1. **Actual Item Purchase Tracking:**  The purchases made with real money. For example, user purchased ’$1.99' to get 'Gold 100' cash item.
+2. **Virtual Item Purchase Tracking:** The purchases made with virtual money. For example, user purchased 'Gold 10' to get 'Rocket Launcher' item 
 
-You don't need to write down any item list manually. All the Items tracked by SDK are automatically added to our dashboard. To see the list of item, go to 'Overview > Settings > In-App Items' page in our dashboard.
+You don't need to write down any item list manually. All the Items tracked by our SDK are automatically added to our dashboard. To see the list of items, go to 'Overview > Settings > In-App Items' page on our dashboard.
 
-Let's get started to implement SDK codes with examples below. 
+Let's get started and implement SDK codes with the examples below. 
 
 #### Actual Item Tracking
 
-The purchase of 'Actual Item' is made with the store's billing library such as Google Play Billing. When your user purchased the item successfully, simply create AFPurchase object and use logPurchase() method. Also, call cancelPromotionPurchase() method when user cancelled or failed to purchase.
+The purchase of 'Actual Items’ is made with the store's billing library such as Google Play Billing. When your user purchased the item successfully, simply create AFPurchase object and use logPurchase() method. Also, call cancelPromotionPurchase() method when a user cancelled or failed to purchase.
 
 Example: Google Play Billing 
 ```java
@@ -287,21 +287,21 @@ IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelpe
 };
 ```
 
-The above example is written for Google Play. You can also get the required values form other billing library such as Amazon.
+The above example is written for Google Play. You can also get the required values from other billing libraries such as Amazon.
 
 For more details of AFPurchase object with the actual item, check the table below.
 
 Method | Description
 ------------ | ------------- | ------------
-setItemId(string) | Set the unique identifier of your item. This value is may not be different per the os platform or app store. We recommend that you make this value unique for all platforms and stores. Our service distinguish each item by this value.
+setItemId(string) | Set the unique identifier of your item. This value may not be different per the os platform or app store. We recommend that you make this value unique for all platforms and stores. Our service can distinguish each item by this value.
 setCurrencyCode(string) | Set the current code of IOS 4217 standard. For Google Play, use the currency code of 'default price' in your account. For Amazon, set 'USD' value since Amazon only supports USD.
 setPrice(double) | Set the item price. you may use SkuDetails's value or manually set the value from your server.
-setPurchaseDate(date) | Set the date of purchase. You may use purchase.getPurchaseTime() value. If you set null value, it will be automatically recorded by our SDK and server. Please don't use local time of user's device.
+setPurchaseDate(date) | Set the date of purchase. You may use purchase.getPurchaseTime() value. If you set null value, it will be automatically recorded by our SDK and server. Please don't use local time of the user's device.
 setReceipt(string, string, string) | Set the receipt property of purchase object (Google Play only). We will use it to verify the receipt in the future. 
 
 #### Virtual Item Tracking
 
-When users purchased your virtual item in the app, you can also create AFPurchase object and call logPurchase() method. Also, call cancelPromotionPurchase() method when user cancelled or failed to purchase.
+When users purchase virtual items in the app, you can also create AFPurchase object and call logPurchase() method. Also, call cancelPromotionPurchase() method when a user cancelled or failed to purchase.
 
 ```java
 public void onVirtualItemPurchased(Item item, Date purchasedDate) {
@@ -324,10 +324,10 @@ For more details of AFPurchase object with the virtual item, check the table bel
 
 Method | Description
 ------------ | ------------- | ------------
-setItemId(string) | Set the unique identifier of your item. This value is may not be different per the os platform or app store. We recommend that you make this value unique for all platforms and stores. Our service distinguish each item by this value.
+setItemId(string) | Set the unique identifier of your item. This value may not be different per the os platform or app store. We recommend that you make this value unique for all platforms and stores. Our service can distinguish each item by this value.
 setCurrencyCode(string) | Set the item's virtual currency code. (ex: 'gold', 'gas')
 setPrice(double) | Set the item price. You may get this value from your server. (ex: 100 of gold)
-setPurchaseDate(date) | Set the date of purchase. If you set null value, it will be automatically recorded by our SDK and server. Please don't use local time of user's device.
+setPurchaseDate(date) | Set the date of purchase. If you set null value, it will be automatically recorded by our SDK and server. Please don't use local time of the user's device.
 
 #### IAP Troubleshooting
 
@@ -348,14 +348,14 @@ AdFresca.getInstance(this).logPurchase(purchase, new AFPurchaseExceptionListener
 
 ### Give Reward
 
-When you set 'Reward Item' section of the reward campaign or 'Inventive item' section of the incentivized CPI & CPA campaign, you should implement this 'reward item' code to give an reward item to your users.
+When you set the 'Reward Item' section of the reward campaign or 'Inventive item' section of the incentivized CPI & CPA campaign, you should implement this 'reward item' code to give a reward item to your users.
 
-Implementing reward item codes, you can check if your user has any reward to receive, and then will be noticed with an reward item info.
+When implementing reward item codes, you can check if your user has any reward to receive, and then a notice will be sent with reward item info.
 
 To implement codes, we use two codes below:
 
-- checkRewardItems method: this method is to check if any item is available to receive. we recommend to put this code when app becomes active. 
-- AFRewardItemListener implementation: when the reward condition is completed with current user, onReward event is automatically called with AFRewardItem object from our SDK. you can give an item to the user with AFRewardItem object.
+- checkRewardItems method: This method is to check if any item is available to receive. We recommend to put this code when the app becomes active. 
+- AFRewardItemListener implementation: When the reward condition is completed with the current user, onReward event is automatically called with AFRewardItem object from our SDK. You can give an item to the user with AFRewardItem object.
 
 ```java
 public void onResume() {
@@ -378,38 +378,38 @@ public void onResume() {
 
 onReward event is called when each type of campaign's reward condition is completed.
 
-- Reward Campaign: the event is called when your user see the campaign contents
-- Incentivized CPI Campaign: the event is called when SDK checks Advertising App's install
-- Incentivized CPA Campaign: the event is called after SDK checks Advertising App's install and the user called the targeted marketing event in Advertising App
+- Reward Campaign: The event is called when your user sees the campaign contents.
+- Incentivized CPI Campaign: The event is called when our SDK checks Advertising App's install.
+- Incentivized CPA Campaign: The event is called after our SDK checks Advertising App's install and the user called the targeted marketing event in Advertising App.
  
-If your users have any network disconnection or loss in theirs device, our SDK stored the reward data in the app's local storage, and then re-check in the next app session. So, we guarantee users will always get the reward from our SDK.
+If your users have any network connectivity issues, our SDK stores the reward data in the app's local storage, and then re-checks at the next app session. So, we guarantee every user will always get the reward they are entitled to.
 
 
 #### implementing sendItemToUser()
 
-You should give a reward item to your user using your own client code or back-end server api. Your client may send an api request with unique vale of item, quantity and security token values to your server. Then the server application will add a reward item to user's item inventory.
+You should give a reward item to your user using your own client code or back-end server api. Your client may send an api request with an unique value of item, quantity and security token values to your server. Then the server application will add a reward item to the user's item inventory.
 
 #### Hack Proof
 
-Our SDK never call itemRewarded event more than once per a campaign. We always check it with device identifiers to avoid abusing. However, there is still possible for hackers to hijack your api request between your client and back-end server. To prevent this issue, we provide a security token value. A security token is unique value per your campaign. You can generate the token while you're creating a reward campaign. You can do hack proof works using the security token as belows:
+Our SDK never calls itemRewarded event more than once per campaign. We always check with device identifiers to avoid abuse. However, It is still possible for hackers to hijack your api request between your client and back-end server. To prevent this issue, we provide a security token value. A security token is an unique value per campaign. You can generate the token while you're creating a reward campaign. You can provide hack-proof rewards using the security token as follows:
 
-1. You will store a security token to your own database before starting a reward campaign. You should reject any reward requests with invalid token value.
-2. if some users are trying to request with the same token value more than once, you should reject that those requests.
+1. You will store a security token to your own database before starting a reward campaign. You should reject any reward requests with an invalid token value.
+2. If some users are trying to request with the same token value more than once, you should reject those requests.
 3. If you think your security token is exposed to hackers, you can always change the value in our dashboard.
 
 ### Promotion
 
-Using sales promotion campaign, you can promote your in-app item to your users. When users tap an action button of image message, a purchase UI will appear to proceed user's purchase. SDK will automatically detect if users made a purchase or not, and then will update the campaign performance to dashboard in real time.
+Using sales promotion campaigns, you can promote your in-app item to your users. When users tap on an action button of an image message, a purchase UI will appear to proceed with the user's purchase. Our SDK will automatically detect if the users made a purchase or not, and then will update the campaign performance to our dashboard in real time.
 
-To apply promotion feature, you should implement AFPromotionListener. onPromotion() event is automatically called when users tap an action button of image message in sale promotion campaign. You just need to show purchase UI of promotion item using 'promotionPurchase' object. 
+To apply our promotion features, you should implement AFPromotionListener. onPromotion() event is automatically called when users tap on an action button of an image message for sale promotion campaigns. You just need to show the purchase UI of the promotion item using 'promotionPurchase' object. 
 
-For Actual Currency Item, you should usee your in-app billing library codes to show purchase UI. You can get SKU value from getItemId() method of promotionPurchase object.
+For Actual Currency Items, you should use your in-app billing library codes to show the purchase UI. You can get the SKU value from getItemId() method of promotionPurchase object.
 
-For Virtual Currency Item, you should use your own purchase UI which might be already implemented in your store page. Also there are discount options for virtual item sales promotion campaign. You can check the discount type using getDiscountType() method of promotionPurchase object
+For Virtual Currency Items, you should use your own purchase UI which might be already implemented in your store page. Also there are discount options for virtual item sales promotion campaigns. You can check the discount type using getDiscountType() method of promotionPurchase object.
 
-1. **Discount Price**: users can buy a promotion item with specific discounted price. You can get price form getPrice() method.
+1. **Discount Price**: Users can buy a promotion item at a specific discounted price. You can get price from getPrice() method.
 
-2. **Discount Rate**: users can buy a promotion item with discount rate. You will calculate the discounted price applying the discount rate which can be earned from getDiscountRate() method.
+2. **Discount Rate**: users can buy a promotion item at a discounted rate. You will calculate the discounted price by applying the discount rate which can be earned from getDiscountRate() method.
 
 ```java
 AdFresca.setPromotionListener(new AFPromotionListener(){
@@ -449,14 +449,14 @@ AdFresca.setPromotionListener(new AFPromotionListener(){
 ); 
 ```
 
-SDK will detect if users made a purchase using [In-App Purchase Tracking](#in-app-purchase-tracking-beta) feature. Thus, you should implement it to complete this promotion feature. Please make sure that you implement 'cancelPromotionPurchase()' method when users cancelled or failed to purchase items.
+Our SDK will detect if users made a purchase using our [In-App Purchase Tracking](#in-app-purchase-tracking-beta) features. Therefore, you should implement it to complete this promotion feature. Please make sure that you implement 'cancelPromotionPurchase()' method when the users cancelled or failed to purchase items.
 * * *
 
 ## Dynamic Targeting
 
 ### Custom Parameter
 
-Our SDK can collect user specific profiles such as level, stage, maximum score and etc. We use it to deliver a personalized and targeted message in real time to specific user segment that you can define.
+Our SDK can collect user specific profiles such as level, stage, maximum score, etc. We use it to deliver a personalized and targeted message in real time to specific user segments that you can define.
 
 To implement codes, simply call setCustomParameterValue method with passing parameter's index and value. You can get the custom parameter's index in our [Dashboard](https://admin.adfresca.com): 1) Select a App 2) In 'Overview' menu, click 'Settings - Custom Parameters' button.
 
@@ -488,13 +488,13 @@ You will call the method after your app is launched and the values have changed.
   }
 ```
 
-In some cases, you may not able to set some custom parameters before startSession() since you may need to get the values from you server. If so, you will need to set the custom parameters right after the user sign in.
+In some cases, you may not able to set some custom parameters before startSession() since you may need to get the values from your server. If so, you will need to set the custom parameters right after the user signs in.
 
 * * *
 
 ### Marketing Moment
 
-Marketing Moment means the moment you want to engage with your users. For example, you may need to deliver the message when the user completes a quest or enters an item store. You will be able to use it with the [custom parameters](#custom-parameter) so you can deliver the personalized and targeted message in specific moment in real time.
+A Marketing Moment means the exact moment you want to engage with your users. For example, you may need to deliver a message when the user completes a quest or enters an item store. You will be able to use it with the [custom parameters](#custom-parameter) so you can deliver a personalized and targeted message at a specific moment in real time.
 
 To implement codes, simply call **load(index)** method with passing marketing moment's index. You can get the marketing moment's index in our [Dashboard](https://admin.adfresca.com): 1) Select a App 2) In 'Overview' menu, click 'Settings - Marketing Moment' button. 
 
@@ -521,7 +521,7 @@ You will call the method after the moment has happened in the app.
 
 ### Custom Banner
 
-_Android SDK_ provides with two kinds of _Custom Banner_ that makes it possible to show the images of various sizes. One is [Floating View](#floating-view) and the other is [Banner View](#banner-view).
+_Android SDK_ provides with two kinds of _Custom Banner_ that makes it possible to show images of various sizes. One is [Floating View](#floating-view) and the other is [Banner View](#banner-view).
 
 [Floating View](#floating-view) is supposed to overlay other UI components and is closable by user interaction. On the other hand, [Banner View](#banner-view) is supposed to occupy the part of screen and is not closable.
 
@@ -604,12 +604,12 @@ protected void onCreate(Bundle savedInstanceState) {
 
 _AFShowListener_ is called when a campaign is finished.
 
-That, a campaign is finished, means the following two cases.
+When a campaign is finished, it means the following two cases.
 
 1. The content was shown and it has been closed.
-2. A campaign was failed because it was expired or there was no [Custom Banner](#custom-banner) for its _Image Size Index_.
+2. A campaign was failed because it expired or there was no [Custom Banner](#custom-banner) for its _Image Size Index_.
 
-You can differentiate these 3 cases by `view` that is given by `AFShowListener.show(int eventIndex, AFView view)`
+You can differentiate these 2 cases by `view` that is given by `AFShowListener.show(int eventIndex, AFView view)`
 
 - if `view != null`, it was the first case. At this time, `view` is one of [ _Default View_ | _Floating View_ | _Banner View_ ]. (`view` is _Default View_ if `view.isDefaultView()` returns true.)
 - if `view == null`, it was the second case.
@@ -633,7 +633,7 @@ fresca.show(new AFShowListener(){
   }
 });
 ```
-**Example:** The following code show a content at _Intro Activity_ and will move to _Main Activity_ when it is finished.
+**Example:** The following code shows content at _Intro Activity_ and will move to _Main Activity_ when it is finished.
 
 ```java
 AdFresca fresca = AdFresca.getInstance(this);
@@ -648,13 +648,13 @@ fresca.show(EVENT_INDEX_INTRO, new AFShowListener(){
 ```
 
 **_Caution!_**
-If user clicked contents that opens Google Play or other applications, user will leave our of your app screen.
+If a user clicked contents that opens Google Play or other applications, the user will leave your app screen.
 
-In this case, if you implemented onFinish() event like above example, user may see unnatural paging animation since app was temporally paused by other application.
+In this case, if you implemented onFinish() event like above example, the user may see an unnatural paging animation since the app was temporally paused by another application.
 
 To fix this issue, follow the steps below:
 
-In admin dashboard, you should change 'Close mode' to 'Override' in your event settings. (it will prevent to close view when user clicked)
+In the admin dashboard, you should change 'Close mode' to 'Override' in your event settings. (it will prevent to close view when user clicked)
 In app codes, override Activity's onResume() method like below:
 
 ```java
@@ -672,7 +672,7 @@ public void onResume() {
 
 ### Timeout Interval
 
-You can set a timeout interval for messaging request. If message is not loaded within this time interval, Message won't be displayed to users and SDK will return the control to your app.
+You can set a timeout interval for a messaging request. If message is not loaded within this time interval, Message won't be displayed to users and SDK will return the control to your app.
 
 Default is 5 seconds and you can set from 1 seconds to 5 seconds.
 
@@ -687,7 +687,7 @@ Default is 5 seconds and you can set from 1 seconds to 5 seconds.
 
 ### Custom URL Schema
 
-You can set your own URL Schema as 'Click URL' of the campaigns. So, you can navigate your users to the specific page or do some custom actions when user clicked the image message. 
+You can set your own URL Schema as a 'Click URL' in the campaigns and you can navigate your users to the specific page or do some custom actions when the user clicks the image message. 
 To use this feature, add scheme in AndroidManifest.xml
 
 ```xml
@@ -718,9 +718,9 @@ public void onCreate(Bundle savedInstanceState) {
 
 #### Using Custom URL on Coscos2d-x
 
-Unlike the native android application that uses multiple activities as its pages, coscos2d-x and Unity engine use only one activity and implements engine's own paginations internally. So, there is a problem to add schema information since you cannot set schema on 'MAIN' launcher activity.
+Unlike the native android application that uses multiple activities as its pages, coscos2d-x and Unity engines use only one activity and implements the engine's own paginations internally. So, there is a problem to add schema information since you cannot set schema on 'MAIN' launcher activity.
 
-To solve this issue, you need to do some extra works as below.
+To solve this issue, you need to do some extra works as follows.
 
 1) Override startActivity(intent) of Main Activity to handle Custom URL for Announcement Campaign.
 
@@ -747,11 +747,11 @@ public void startActivity(Intent intent) {
 ```
 (In this case, you don't need to add any schema information in AndroidMenefest.xml)
 
-2) Handle custom url form Push Notification Campaign
+2) Handle custom url for Push Notification Campaigns
 
-When your app receive a push notification with custom url, you can execute your own custom action. A notification is mostly received when user is outside of game. So, we should handle custom url with a little bit different approach. 
+When your app receives a push notification with a custom url, you can execute your own custom action. A notification is mostly received when user is outside of the game. So, we should handle a custom url with a different approach. 
 
-Firstly, create a new activity class named 'PushProxyActivity', and register the activity in AndroidMenefest.xml as below
+First, create a new activity class named 'PushProxyActivity', and register the activity in AndroidMenefest.xml as below
 
 ```xml
 <activity android:name=".PushProxyActivity">
@@ -768,10 +768,10 @@ Firstly, create a new activity class named 'PushProxyActivity', and register the
 <uses-permission  android:name="android.permission.GET_TASKS"/>
 ```
 
-In this case, you should create custom url like myapp://com.adfresca.push?item=abc in your Push Notification Campaign. 
+In this case, you should create ca ustom url like myapp://com.adfresca.push?item=abc in your Push Notification Campaign. 
 
-Then, you should implement PushProxyActivity class. This class is a simple proxy-style activity which only handle url from Android OS and then quit itself. 
-However, there is a exceptional situation when notification is received and your application is not running. In that case, you can't handle custom url in the game engine, so you should manually start an application and pass urls as parameters as below.
+Then, you should implement PushProxyActivity class. This class is a simple proxy-style activity which only handles url from Android OS and then quits itself. 
+However, there is an exceptional situation when notification is received and your application is not running. In that case, you can't handle a custom url in the game engine, so you should manually start an application and pass urls as parameters as noted below.
 
 ```java
 public class PushProxyActivity extends Activity {
@@ -842,14 +842,14 @@ Now, you're done with custom url in coscos2d-x engine!
 
 ### Cross Promotion Configuration
 
-Using Incentivized CPI & CPA Campaign, your users in 'Media App' can get an incentive item when they install 'Adverting App' from the campaigns.
+Using Incentivized CPI & CPA Campaigns, your users in 'Media App' can get an incentive item when they install 'Adverting App' from the campaigns.
 
-- Medial App: the media app which displays the promotion image and gives an incentive item to users
-- AdvertisingApp: the promotion app which is displayed with an image in the media app's screen.
+- Medial App: The media app which displays the promotion image and gives an incentive item to users
+- AdvertisingApp: The promotion app which is displayed with an image in the media app's screen.
 
-For more details of Incentivized campaigns and configuration guide in dashboard, please refer 'Understanding Cross-promotion (Korean)'  guide.
+For more details of Incentivized campaigns and configuration guide in dashboard, please refer to 'Understanding Cross-promotion (Korean)'  guide.
 
-To integrate SDK with this feature, you should set URL Schema value for the adverting app and implement codes to give an incentive item to users in the media app.
+To integrate our SDK with this feature, you should set URL Schema value for the adverting app and implement codes to give an incentive item to users in the media app.
 
 #### Advertising App Configuration:
 
@@ -863,11 +863,11 @@ To integrate SDK with this feature, you should set URL Schema value for the adve
   </manifest>
   ```
 
-  In this case, you should set CPI Identifier value of advertising app to "com.adfresca.demo" in our dashboard.
+  In this case, you should set the CPI Identifier value of advertising app to "com.adfresca.demo" in our dashboard.
 
-  For Incentivized CPI Campaign, SDK Installation of the advertising app is not required. You only check the package name.
+  For Incentivized CPI Campaigns, our SDK Installation of the advertising app is not required. You only check the package name.
 
-  However, If you use Incentivized CPA Campaign, SDK installation is required and you should also implement 'Marketing Moment' feature to check a reward condition. For example, when you set the reward condition to check 'Tutorial Complete' event, you should call the marketing moment method to inform your user achieved the goal.
+  However, if you use Incentivized CPA Campaigns, our SDK installation is required and you should also implement our 'Marketing Moment' feature to check for a reward condition. For example, when you set the reward condition to check 'Tutorial Complete' event, you should call the marketing moment method to inform that your user achieved the goal.
     
   ```java
   public void onUserFinishTutorial() {
@@ -885,13 +885,13 @@ To integrate SDK with this feature, you should set URL Schema value for the adve
 
 ### Google Referrer Tracking
 
-You can see how many users installed your app through Google Play Campaign by tracing referrer information.
+You can see how many users installed your app through Google Play Campaign by tracing the referrer information.
 
-To fetch referrer and set it to our SDK, you can add a receiver and do test below.
+To fetch referrer and send it to our SDK, you can add a receiver and do test below.
 
 1) Check the receiver of AndroidManefest.xml
 
-By registering this receiver, our SDK will automatically collects referrer information and update to AD fresca server. 
+By registering this receiver, our SDK will automatically collect referrer information and update to the Nudge server. 
 
 ```xml
 <receiver android:name="com.adfresca.sdk.referer.AFRefererReciever" android:exported="true">
@@ -903,7 +903,7 @@ By registering this receiver, our SDK will automatically collects referrer infor
 
 2) Test referrer using ADB
 
-After connecting Android device to your computer, open adb shell (adb shell is located platform-tools directory inside of installed Android SDK directory).
+After connecting the Android device to your computer, open adb shell (adb shell is located platform-tools directory inside of installed Android SDK directory).
 
 Then you can manually send INSTALL_REFERRER message to your device. Just change package name and referrer values below.
 (You can see detailed information of each referrer value in [Google Play - Campaign Parameters](https://developers.google.com/analytics/devguides/collection/android/v2/campaigns#campaign-params))
@@ -911,13 +911,13 @@ Then you can manually send INSTALL_REFERRER message to your device. Just change 
 ```sh
 am broadcast -a com.android.vending.INSTALL_REFERRER -n YOUR_PACKAGE/com.adfresca.sdk.referer.AFRefererReciever --es "referrer" "utm_source=test_source&utm_medium=test_medium&utm_term=test_term&utm_content=test_content&utm_campaign=test_name"
 ```
-3) Check if referrer was successfully set on SDK
+3) Check if referrer was successfully set on our SDK
 
 ```java
   AdFresca adfresca = AdFresca.getInstance(this);
   Log.v(TAG, "Google Referrer = " + adfresca.getReferrer());
 ``` 
-(Advanced) If you already uses another broadcast receiver to handle INSTALL_REFERRER, you can manually set your referrer by calling setReferrer(string) method
+(Advanced) If you already use another broadcast receiver to handle INSTALL_REFERRER, you can manually set your referrer by calling setReferrer(string) method
 
 Caution: After your device updates referrer once to our service, it won't be able to change the referrer values for this device.
 
