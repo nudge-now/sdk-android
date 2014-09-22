@@ -17,7 +17,7 @@
   - [AFShowListener](#afshowlistener)
   - [Timeout Interval](#timeout-interval)
 - [Reference](#reference)
-  - [Custom URL Schema](#custom-url-schema)
+  - [Deep Link](#deep-link)
   - [Cross Promotion Configuration](#cross-promotion-configuration)
   - [Google Referrer Tracking](#google-referrer-tracking)
   - [Proguard Configuration](#proguard-configuration)
@@ -685,9 +685,9 @@ Default is 5 seconds and you can set from 1 seconds to 5 seconds.
 
 ## Reference
 
-### Custom URL Schema
+### Deep Link
 
-You can set your own URL Schema as a 'Click URL' in the campaigns and you can navigate your users to the specific page or do some custom actions when the user clicks the image message. 
+You can set your own URL Schema as a 'Deep Link' in the campaigns and you can navigate your users to the specific page or do some custom actions when the user clicks the image message. 
 To use this feature, add scheme in AndroidManifest.xml
 
 ```xml
@@ -716,7 +716,7 @@ public void onCreate(Bundle savedInstanceState) {
 }
 ```
 
-#### Using Custom URL on Coscos2d-x
+#### Using Deep Link with Coscos2d-x
 
 Unlike the native android application that uses multiple activities as its pages, coscos2d-x and Unity engines use only one activity and implements the engine's own paginations internally. So, there is a problem to add schema information since you cannot set schema on 'MAIN' launcher activity.
 
