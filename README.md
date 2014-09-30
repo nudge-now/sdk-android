@@ -5,10 +5,10 @@
   - [In-App Messaging](#in-app-messaging)
   - [Push Messaging](#push-messaging)
   - [Test Device Registration](#test-device-registration)
-- [IAP, Reward and Promotion](#iap-reward-and-promotion)
+- [IAP, Reward and Sales Promotion](#iap-reward-and-sales-promotion)
   - [In-App Purchase Tracking](#in-app-purchase-tracking)
   - [Give Reward](#give-reward)
-  - [Promotion](#promotion)
+  - [Sales Promotion](#sales-promotion)
 - [Dynamic Targeting](#dynamic-targeting)
   - [Custom Parameter](#custom-parameter)
   - [Marketing Moment](#marketing-moment)
@@ -227,7 +227,7 @@ After you have your test device ID, you have to register it to [Dashboard](https
 
 * * *
 
-## IAP, Reward and Promotion
+## IAP, Reward and Sales Promotion
 
 ### In-App Purchase Tracking
 
@@ -397,7 +397,7 @@ Our SDK never calls itemRewarded event more than once per campaign. We always ch
 2. If some users are trying to request with the same token value more than once, you should reject those requests.
 3. If you think your security token is exposed to hackers, you can always change the value in our dashboard.
 
-### Promotion
+### Sales Promotion
 
 Using sales promotion campaigns, you can promote your in-app item to your users. When users tap on an action button of an image message, a purchase UI will appear to proceed with the user's purchase. Our SDK will automatically detect if the users made a purchase or not, and then will update the campaign performance to our dashboard in real time.
 
@@ -953,10 +953,10 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 ## Release Notes
 
 - **v2.4.2 _(2014/08/15 Updated)_**
-  - Support virtual item sales promotion campaign with discount options. Please refer to [Promotion](#promotion) section.
+  - Support virtual item sales promotion campaign with discount options. Please refer to [Sales Promotion](#sales-promotion) section.
   - SDK will match multiple campaigns and show multiple messages in one marketing moment request.
 - v2.4.1
-  - Support actual item sales promotion campaign. Please refer to [Promotion](#promotion) section.
+  - Support actual item sales promotion campaign. Please refer to [Sales Promotion](#sales-promotion) section.
   - Support security token of reward campaign's hack proof. Please refer to [Give Reward](#give-reward) section.
   - Add cancelPromotionPurchase() method to [In-App Purchase Tracking](#in-app-purchase-tracking)
   - Support tap area feature.
