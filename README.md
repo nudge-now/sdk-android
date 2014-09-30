@@ -193,8 +193,8 @@ protected void onMessage(Context context, Intent intent) {
 }
 ```
 
-- If the push message has a Click URL, our SDK will execute the url when users touch the message.
-- If the push message does not have a Click URL, our SDK will execute your targetActivityClass instead.
+- If the push message has a Deep Link, our SDK will execute the url when users touch the message.
+- If the push message does not have a Deep Link, our SDK will execute your targetActivityClass instead.
 - You may also able to use notification.setSound(uri) method to play a sound when the message arrives.
 
 ### Test Device Registration
@@ -722,9 +722,9 @@ Unlike the native android application that uses multiple activities as its pages
 
 To solve this issue, you need to do some extra works as follows.
 
-1) Override startActivity(intent) of Main Activity to handle Custom URL for Announcement Campaign.
+1) Override startActivity(intent) of Main Activity to handle Custom URL for In-App Messaging Campaign.
 
-Click URL from Announcement Campaign is always executed on in-game situation. It is never executed from outside of game like a push notification. Also, SDK uses startActivity() method to execute url. Therefore, you can manually handle urls by overriding startActivity(). The code below shows how to handle custom url with 'myapp://' schema, and it does not open a new activity for custom url 
+Deep Link from In-App Messaging Campaign is always executed on in-game situation. It is never executed from outside of game like a push notification. Also, SDK uses startActivity() method to execute url. Therefore, you can manually handle urls by overriding startActivity(). The code below shows how to handle custom url with 'myapp://' schema, and it does not open a new activity for custom url 
 
 ```java
 \@Override 
@@ -747,7 +747,7 @@ public void startActivity(Intent intent) {
 ```
 (In this case, you don't need to add any schema information in AndroidMenefest.xml)
 
-2) Handle custom url for Push Notification Campaigns
+2) Handle custom url for Push Messaging Campaigns
 
 When your app receives a push notification with a custom url, you can execute your own custom action. A notification is mostly received when user is outside of the game. So, we should handle a custom url with a different approach. 
 
@@ -768,7 +768,7 @@ First, create a new activity class named 'PushProxyActivity', and register the a
 <uses-permission  android:name="android.permission.GET_TASKS"/>
 ```
 
-In this case, you should create ca ustom url like myapp://com.adfresca.push?item=abc in your Push Notification Campaign. 
+In this case, you should create ca ustom url like myapp://com.adfresca.push?item=abc in your Push Messaging Campaign. 
 
 Then, you should implement PushProxyActivity class. This class is a simple proxy-style activity which only handles url from Android OS and then quits itself. 
 However, there is an exceptional situation when notification is received and your application is not running. In that case, you can't handle a custom url in the game engine, so you should manually start an application and pass urls as parameters as noted below.
@@ -971,7 +971,7 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 - v2.4.01
   - [In-App Purchase Tracking](#in-app-purchase-tracking) is added.
 - v2.3.4
-  - Giving Reward Item from announcment campaign is supported.
+  - Giving Reward Item from in-app messaging campaign is supported.
   - Incentivized CPA Campaign is supported with cross promotion feature.
   - AFRewardItemListener is added. For details, please refer to [Give Reward](#give-reward) section.
 - v2.3.3
@@ -1040,7 +1040,7 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
     - Bug fixed that there was a exception occurred in specific condition in loading AD.
     - 'Nudge' logo is now located on the left of top bar.
 - v0.9.5
-    - AD Slot feature added as an announcement feature added (See 'AD Slot Setting')
+    - AD Slot feature added as an In-App Messaging feature added (See 'AD Slot Setting')
     - getTestDeviceId(), setPrintTestDeviceId() methods are added to support a test mode (See 'Checking Test Device ID)
     - The AD Caching feature is optimized for better performance.
 - v0.9.4 

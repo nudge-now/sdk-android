@@ -198,8 +198,8 @@ protected void onMessage(Context context, Intent intent) {
   }
 }
 ```
-- 푸시 메시지에 Click URL이 포함되어 있다면, 사용자가 메시지 터치 시에 SDK는 해당 URL을 실행합니다.
-- 푸시 메시지에 Click URL이 없다면, SDK는 targetActivityClass를 실행하여 앱을 실행합니다. 
+- 푸시 메시지에 Deep Link가 포함되어 있다면, 사용자가 메시지 터치 시에 SDK는 해당 URL을 실행합니다.
+- 푸시 메시지에 Deep Link가 없다면, SDK는 targetActivityClass를 실행하여 앱을 실행합니다. 
 - notification.setSound(uri) 메소드를 이용하면 메시지 수신 시에 사운드 파일을 재생할 수도 있습니다.
 
 ### Test Device Registration
@@ -855,7 +855,7 @@ public void onResume() {
         </intent-filter> 
   </activity>
 ```
-위와 같이 설정한 경우, 캠페인의 _Click URL_ 값을 myapp://com.adfresca.zone?item=abc 으로 설정하여 DemoZoneActivity가 바로 실행되도록 할 수 있습니다.
+위와 같이 설정한 경우, 캠페인의 _Deep Link_ 값을 myapp://com.adfresca.zone?item=abc 으로 설정하여 DemoZoneActivity가 바로 실행되도록 할 수 있습니다.
 
 함께 넘어온 파라미터 (item=abc) 값을 얻기 위해서는 DemoZoneActivity를 아래와 같이 구현합니다.
 
@@ -878,9 +878,9 @@ public void onCreate(Bundle savedInstanceState) {
 
 그래서 아래와 같은 방법들을 사용하여 Deep Link를 처리합니다.
 
-1) Main 액티비티의 startActivity(intent) 메소드를 오버라이딩하여 Custom URL 처리하기 (Annoucnement 캠페인)
+1) Main 액티비티의 startActivity(intent) 메소드를 오버라이딩하여 Custom URL 처리하기 (인-앱 메시징 캠페인)
 
-Annoucnement 캠페인을 통해 전달되는 Click URL은 항상 인게임 상황에서 전달되며, SDK가 내부적으로 startActivity() 메소드를 이용하여 호출하고 있습니다. 이러한 조건에서는 게임이 실행되고 있는 Main 액티비티의 startActivity() 메소드를 직접 구현함으로써 Custom URL 처리가 가능합니다. 아래와 같이 코드를 구현하면 'myapp://' 형식의 Custom URL이 전달 될 시에 새로운 액티비티를 호출하지 않고 직접 처리할 수 있습니다.
+인-앱 메시징 캠페인을 통해 전달되는 Deep Link은 항상 인게임 상황에서 전달되며, SDK가 내부적으로 startActivity() 메소드를 이용하여 호출하고 있습니다. 이러한 조건에서는 게임이 실행되고 있는 Main 액티비티의 startActivity() 메소드를 직접 구현함으로써 Custom URL 처리가 가능합니다. 아래와 같이 코드를 구현하면 'myapp://' 형식의 Custom URL이 전달 될 시에 새로운 액티비티를 호출하지 않고 직접 처리할 수 있습니다.
 
 ```java
 \@Override 
@@ -903,7 +903,7 @@ public void startActivity(Intent intent) {
 ```
 (위 방법을 적용할 때에는 AndroidMenefest.xml 파일을 별도로 설정하지 않고 모든 값을 코드로 처리합니다.)
 
-2) Push Notification을 통해 넘어오는 Deep Link 처리하기 (Push Notificiaton 캠페인)
+2) Push Notification을 통해 넘어오는 Deep Link 처리하기 (푸시 메시징 캠페인)
 
 Deep Link가 설정된 Push Notification을 수신한 경우, Notification을 터치 시 원하는 액션을 지정할 수 있습니다. 단, 이 경우는 인게임 상황이 아니기 때문에 조금 다른 방법을 사용합니다.
 
@@ -923,7 +923,7 @@ Deep Link가 설정된 Push Notification을 수신한 경우, Notification을 �
 
 <uses-permission  android:name="android.permission.GET_TASKS"/>
 ```
-위와 같이 설정한 경우 Push Notificaiton 캠페인에서는 myapp://com.adfresca.push?item=abc 와 같은 형식의 Click URL을 입력해야 합니다.
+위와 같이 설정한 경우 푸시 메시징 캠페인에서는 myapp://com.adfresca.push?item=abc 와 같은 형식의 Deep Link를 입력해야 합니다.
 
 다음은 PushProxyActivity 클래스의 내용을 구현해야 합니다. PushProxyActivity 클래스는 Android OS로 부터 수신하는 Deep Link 정보를 받아 처리하고 바로 자신을 종료하는 단순한 프록시 형태의 액티비티입니다. 만약 현재 게임이 실행 중이 아니라면 Deep Link를 처리할 수 없으므로 새로 게임을 시작하며 uri 값을 넘겨야 합니다.
 
@@ -1199,7 +1199,7 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
     - 이미지 메시지의 Tap Area 기능을 지원합니다.
     - iap beta 버전이 2.4.1부터 통합되었습니다. 
 - v2.4.04
-    - v2.3.4에서 적용된 'Announcement 캠페인을 통한 Reward Item 지급 기능'을 지원합니다.
+    - v2.3.4에서 적용된 '인-앱 메시징 캠페인을 통한 Reward Item 지급 기능'을 지원합니다.
     - v2.3.4에서 적용된 Incentivized CPA 캠페인 기능을 지원합니다. 자세한 내용은 [Cross Promotion Configuration](#cross-promotion-configuration) 항목을 참고하여 주세요.
     - v2.3.4에서 개선된 [Give Reward](#give-reward) 기능이 적용되었습니다. 
 - v2.4.03 
@@ -1210,7 +1210,7 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 - v2.4.01
     - 앱 내에서 발생하는 In-App Purchase 데이터를 트랙킹할 수 있는 기능이 추가되었습니다. 자세한 내용은 [In-App Purchase Tracking](#in-app-purchase-tracking) 항목을 참고하여 주세요. [In-App Purchase Tracking](#in-app-purchase-tracking) 항목을 참고하여 주세요.
 - **v2.3.4 _(2014/04/06 Updated)_**
-   - Announcement 캠페인을 통한 Reward Item 지급 기능을 지원합니다.
+   - 인-앱 메시징 캠페인을 통한 Reward Item 지급 기능을 지원합니다.
    - Incentivized CPA 캠페인 기능을 지원합니다. 자세한 내용은 [Cross Promotion Configuration](#cross-promotion-configuration) 항목을 참고하여 주세요.
    - AFRewardItemListener 구현 기능이 추가되어, 지급 가능한 아이템이 발생할 시에 자동으로 onReward 이벤트가 발생합니다. 보다 자세한 내용은 [Reward Item](#reward-item) 항목을 참고하여 주세요.
 - v2.3.3 _(01/30/2014 Updated)_ 
@@ -1223,7 +1223,7 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 - v2.3.0 
     - Nudge SDK에서 Baidu Push를 이용할 수 있도록 지원합니다. 자세한 내용은 [Baidu Push Service](#baidu-push-service) 항목을 참고하여 주세요.
 - v2.2.3
-    - Push Notification 캠페인에서 설정한 title, ticker 메시지가 표시될 수 있도록 지원합니다.
+    - Push Messaging 캠페인에서 설정한 title, ticker 메시지가 표시될 수 있도록 지원합니다.
     - `AdFresca.generateNotification` 메소드가 Deprecated 되었습니다. `AdFresca.generateAFPushNotification()` 메소드를 사용합니다.
 - v2.2.2
     - 로컬 캐시 기능이 개선되었습니다.
