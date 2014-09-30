@@ -17,7 +17,7 @@
   - [AFShowListener](#afshowlistener)
   - [Timeout Interval](#timeout-interval)
 - [Reference](#reference)
-  - [Custom URL Schema](#custom-url-schema)
+  - [Deep Link](#deep-link)
   - [Cross Promotion Configuration](#cross-promotion-configuration)
   - [Google Referrer Tracking](#google-referrer-tracking)
   - [Image Push Notification](#image-push-notification)
@@ -837,9 +837,9 @@ public void onResume() {
 
 ## Reference
 
-### Custom URL Schema
+### Deep Link
 
-캠페인의 Click URL 설정 시에 Custom URL Schema를 지정할 수 있습니다.
+캠페인의 Deep Link 설정 시에 Custom URL Schema를 지정할 수 있습니다.
 
 이를 통해 사용자가 콘텐츠를 클릭할 경우, 자신이 원하는 특정 앱 페이지로 이동하는 등의 액션을 지정할 수 있습니다.
 
@@ -870,13 +870,13 @@ public void onCreate(Bundle savedInstanceState) {
 }
 ```
 
-#### Cocos2d-x 환경에서 Custom URL Schema 사용하기
+#### Cocos2d-x 환경에서 Deep Link 사용하기
 
 액티비티를 페이지 개념으로 사용하는 네이티브 환경과 달리, Cocos2d-x나 Unity와 같은 엔진을 사용하여 안드로이드 애플리케이션을 개발하는 경우 단 하나의 액티비티만을 사용하며 엔진 내부적으로 페이지를 처리합니다.
 
 때문에 위와 같이 schema를 지정할 수 있는 액티비티의 제약이 생깁니다. MAIN 으로 지정된 액티비티는 url schema를 적용할 수 없습니다. 
 
-그래서 아래와 같은 방법들을 사용하여 Custom URL Schema를 처리합니다.
+그래서 아래와 같은 방법들을 사용하여 Deep Link를 처리합니다.
 
 1) Main 액티비티의 startActivity(intent) 메소드를 오버라이딩하여 Custom URL 처리하기 (Annoucnement 캠페인)
 
@@ -903,9 +903,9 @@ public void startActivity(Intent intent) {
 ```
 (위 방법을 적용할 때에는 AndroidMenefest.xml 파일을 별도로 설정하지 않고 모든 값을 코드로 처리합니다.)
 
-2) Push Notification을 통해 넘어오는 Custom URL Schema 처리하기 (Push Notificiaton 캠페인)
+2) Push Notification을 통해 넘어오는 Deep Link 처리하기 (Push Notificiaton 캠페인)
 
-Custom URL Schema가 설정된 Push Notification을 수신한 경우, Notification을 터치 시 원하는 액션을 지정할 수 있습니다. 단, 이 경우는 인게임 상황이 아니기 때문에 조금 다른 방법을 사용합니다.
+Deep Link가 설정된 Push Notification을 수신한 경우, Notification을 터치 시 원하는 액션을 지정할 수 있습니다. 단, 이 경우는 인게임 상황이 아니기 때문에 조금 다른 방법을 사용합니다.
 
 먼저 PushProxyActivity 라는 이름의 액티비티 클래스를 하나 생성합니다. 그리고 AndroidMenefest.xml 내용을 아래와 같이 추가합니다. 
 
@@ -925,7 +925,7 @@ Custom URL Schema가 설정된 Push Notification을 수신한 경우, Notificati
 ```
 위와 같이 설정한 경우 Push Notificaiton 캠페인에서는 myapp://com.adfresca.push?item=abc 와 같은 형식의 Click URL을 입력해야 합니다.
 
-다음은 PushProxyActivity 클래스의 내용을 구현해야 합니다. PushProxyActivity 클래스는 Android OS로 부터 수신하는 Custom URL Schema 정보를 받아 처리하고 바로 자신을 종료하는 단순한 프록시 형태의 액티비티입니다. 만약 현재 게임이 실행 중이 아니라면 Custom URL Schema를 처리할 수 없으므로 새로 게임을 시작하며 uri 값을 넘겨야 합니다.
+다음은 PushProxyActivity 클래스의 내용을 구현해야 합니다. PushProxyActivity 클래스는 Android OS로 부터 수신하는 Deep Link 정보를 받아 처리하고 바로 자신을 종료하는 단순한 프록시 형태의 액티비티입니다. 만약 현재 게임이 실행 중이 아니라면 Deep Link를 처리할 수 없으므로 새로 게임을 시작하며 uri 값을 넘겨야 합니다.
 
 ```java
 public class PushProxyActivity extends Activity {
@@ -989,7 +989,7 @@ public class PushProxyActivity extends Activity {
   }
 ```
 
-Cocos2d-x 환경에서 Custom URL Schema를 처리할 수 있는 모든 방법을 구현하였습니다.
+Cocos2d-x 환경에서 Deep Link를 처리할 수 있는 모든 방법을 구현하였습니다.
 
 * * *
 
