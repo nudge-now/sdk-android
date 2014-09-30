@@ -6,7 +6,7 @@
   - [Push Messaging](#push-messaging)
   - [Test Device Registration](#test-device-registration)
 - [IAP, Reward and Promotion](#iap-reward-and-promotion)
-  - [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta)
+  - [In-App Purchase Tracking](#in-app-purchase-tracking)
   - [Give Reward](#give-reward)
   - [Promotion](#promotion)
 - [Dynamic Targeting](#dynamic-targeting)
@@ -177,7 +177,7 @@ protected void onUnregistered(Context context, String registrationId) {
 }
 
 protected void onMessage(Context context, Intent intent) {
-  // Check if this notification is from AD fresca
+  // Check if this notification is from Nudge
   if (AdFresca.isFrescaNotification(intent)) {
 
     Class<?> targetActivityClass = YourMainActivity.class;
@@ -208,7 +208,7 @@ To register your test device to our dashboard, you need to know your test device
 
   ```java
   AdFresca fresca = AdFresca.getInstance(this);
-  Log.d(TAG, "AD fresca Test Device ID is = " + fresca.getTestDeviceId());
+  Log.d(TAG, "Nudge Test Device ID is = " + fresca.getTestDeviceId());
   ```
 
 2. Displaying test device ID on your app screen using printTestDeviceId property
@@ -229,9 +229,9 @@ After you have your test device ID, you have to register it to [Dashboard](https
 
 ## IAP, Reward and Promotion
 
-### In-App Purchase Tracking (Beta)
+### In-App Purchase Tracking
 
-With In-App-Purchase Tracking, you can analyze all the purchases of your users, and use it for targeting specific user segments to display your campaigns. (targeting feature is coming soon)
+With In-App-Purchase Tracking, you can analyze all the purchases of your users, and use it for targeting specific user segments to display your campaigns. 
 
 There are two types of purchases you can track with our SDK.
 
@@ -244,7 +244,7 @@ Let's get started and implement SDK codes with the examples below.
 
 #### Actual Item Tracking
 
-The purchase of 'Actual Items’ is made with the store's billing library such as Google Play Billing. When your user purchased the item successfully, simply create AFPurchase object and use logPurchase() method. Also, call cancelPromotionPurchase() method when a user cancelled or failed to purchase.
+The purchase of 'Actual Items’ is made with the store's billing library such as Google Play Billing. When your user purchased the item successfully, simply create AFPurchase object and use logPurchase() method. Also, call CancelPromotionPurchase() method when a user cancelled or failed to purchase.
 
 Example: Google Play Billing 
 ```java
@@ -301,7 +301,7 @@ setReceipt(string, string, string) | Set the receipt property of purchase object
 
 #### Virtual Item Tracking
 
-When users purchase virtual items in the app, you can also create AFPurchase object and call logPurchase() method. Also, call cancelPromotionPurchase() method when a user cancelled or failed to purchase.
+When users purchase virtual items in the app, you can also create AFPurchase object and call logPurchase() method. Also, call cancelPromotionPurchase() method when a user cancelled or failed to purchase. 
 
 ```java
 public void onVirtualItemPurchased(Item item, Date purchasedDate) {
@@ -449,7 +449,7 @@ AdFresca.setPromotionListener(new AFPromotionListener(){
 ); 
 ```
 
-Our SDK will detect if users made a purchase using our [In-App Purchase Tracking](#in-app-purchase-tracking-beta) features. Therefore, you should implement it to complete this promotion feature. Please make sure that you implement 'cancelPromotionPurchase()' method when the users cancelled or failed to purchase items.
+Our SDK will detect if users made a purchase using our [In-App Purchase Tracking](#in-app-purchase-tracking) features. Therefore, you should implement it to complete this promotion feature. Please make sure that you implement 'cancelPromotionPurchase()' method when the users cancelled or failed to purchase items.
 * * *
 
 ## Dynamic Targeting
@@ -954,22 +954,22 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 
 - **v2.4.2 _(2014/08/15 Updated)_**
   - Support virtual item sales promotion campaign with discount options. Please refer to [Promotion](#promotion) section.
-    - SDK will match multiple campaigns and show multiple messages in one marketing moment request.
+  - SDK will match multiple campaigns and show multiple messages in one marketing moment request.
 - v2.4.1
   - Support actual item sales promotion campaign. Please refer to [Promotion](#promotion) section.
   - Support security token of reward campaign's hack proof. Please refer to [Give Reward](#give-reward) section.
-  - Add cancelPromotionPurchase() method to [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta)
+  - Add cancelPromotionPurchase() method to [In-App Purchase Tracking](#in-app-purchase-tracking)
   - Support tap area feature.
-  - - Include IAP Beta features to 2.4.1
-- v2.4.0-beta4
+  - Include IAP Beta features to 2.4.1
+- v2.4.04
   - Include v2.3.4
-- v2.4.0-beta3
+- v2.4.03
   - Include v2.3.3
-- v2.4.0-beta2
+- v2.4.02
   - Include v2.3.2
-  - Unity Plugin 2.2.0-beta1 is supported.
-- v2.4.0-beta1
-  - [In-App Purchase Tracking (Beta)](#in-app-purchase-tracking-beta) is added.
+  - Unity Plugin 2.2.01 is supported.
+- v2.4.01
+  - [In-App Purchase Tracking](#in-app-purchase-tracking) is added.
 - v2.3.4
   - Giving Reward Item from announcment campaign is supported.
   - Incentivized CPA Campaign is supported with cross promotion feature.
@@ -978,24 +978,24 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
   - Image Push Notifcaiton feature is added.
   - showNotification uses BigTextStyle as default.
 - v2.3.2 
-    - When load() method method is called but timed out, AFShowListener's onFinish() event will be called by SDK. Please refer to [AFShowListener](#afshowlistener) section for detailed information of onFinish() event
+  - When load() method method is called but timed out, AFShowListener's onFinish() event will be called by SDK. Please refer to [AFShowListener](#afshowlistener) section for detailed information of onFinish() event
 - v2.3.1 
-    - When GCM Registration ID is registred or changed, SDK now updates ID value to our service in real-time. (Previous SDKs only updated when app session started)
+  - When GCM Registration ID is registred or changed, SDK now updates ID value to our service in real-time. (Previous SDKs only updated when app session started)
 - v2.3.0 
-    - Added a support for Baidu Push Notification. English version of Baidu push guide will be updated soon.
+  - Added a support for Baidu Push Notification. English version of Baidu push guide will be updated soon.
 - v2.2.3
-    - Added a support for title and ticker messages for Pus hNotification Campaign
-    - Deprecated `AdFresca.generateNotification` method. Use `AdFresca.generateAFPushNotification()` instead
+  - Added a support for title and ticker messages for Pus hNotification Campaign
+  - Deprecated `AdFresca.generateNotification` method. Use `AdFresca.generateAFPushNotification()` instead
 - v2.2.2 
     - Improved local cache features
 - v2.2.1 
-    -  Added 'Close mode' feature. You can control the closing action of an interstitial view on our dashboard.
+  -  Added 'Close mode' feature. You can control the closing action of an interstitial view on our dashboard.
 - v2.2.0 
-    - Added [Google Referrer Tracking](#google-referrer-tracking) feature.
-    - Deprecated `AdFresca.setCustomParameter` method. Use  `setCustomParameterValue()` instead
-    - Deprecated `AdFresca.setInAppPurchaseCount` method. Use `setNumberOfInAppPurchases()` instead
-    - `setCustomParameterValue()` supports 64 bit integer (long type).
-    -  Added local cache feature to cache custom parameters and in-app purchase count.
+  - Added [Google Referrer Tracking](#google-referrer-tracking) feature.
+  - Deprecated `AdFresca.setCustomParameter` method. Use  `setCustomParameterValue()` instead
+  - Deprecated `AdFresca.setInAppPurchaseCount` method. Use `setNumberOfInAppPurchases()` instead
+  - `setCustomParameterValue()` supports 64 bit integer (long type).
+  -  Added local cache feature to cache custom parameters and in-app purchase count.
 - v2.1.3 
     - Fix a minot bug that test mode was not able to test multiple Incentivized Campaign
 - v2.1.2
@@ -1007,7 +1007,7 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
     - Added `getAvailableRewardItems()`, `checkRewardItems()`, `checkRewardItems(boolean)`. You can give users reward items with _Incentivized Campaign_.
 - v2.0.0
     - Deprecated `AdExceptionListner`, `AdException`. Please use `AFExceptionListner`, `AFException` instead.
-- v2.0.0-beta.1
+- v2.0.0.1
     - Deprecated `AdFrescaView`. Use `AdFresca` instead.
     - Added [Custom Banner](#custom-banner)([Floating View](#floating-view), [Banner View](#banner-view)).
 - v1.1.2
@@ -1038,7 +1038,7 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 - v0.9.6 
     - closeAd() method is added. When a user touches 'back' button on the device, AD can be closed using closeAd() (See 'Adding AD view into App')
     - Bug fixed that there was a exception occurred in specific condition in loading AD.
-    - 'AD fresca' logo is now located on the left of top bar.
+    - 'Nudge' logo is now located on the left of top bar.
 - v0.9.5
     - AD Slot feature added as an announcement feature added (See 'AD Slot Setting')
     - getTestDeviceId(), setPrintTestDeviceId() methods are added to support a test mode (See 'Checking Test Device ID)
@@ -1057,4 +1057,4 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
     - 0.9.1
     - Bug fixed that timeout feature did not work correctly
 - v0.9.0
-    - AD fresca iOS SDK is now released! basic AD feature is included.
+    - Nudge iOS SDK is now released! basic AD feature is included.
