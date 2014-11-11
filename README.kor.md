@@ -1189,7 +1189,11 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 
 ## Release Notes
 
-- **v2.4.2 _(2014/08/15 Updated)_**
+- **v2.4.4 _(2014/10/09 Updated)_**
+  - A/B 테스트 기능을 지원합니다. 해당 기능은 별도의 코딩 작업 없이 이용 가능합니다.
+- v2.4.3 
+  - Stickiness 커스텀 파리미터의 안드로이드 베타 버전을 지원합니다.
+- v2.4.2
     - Sales Promotion 캠페인 기능을 이용하여 Virtual Currency 아이템의 프로모션 기능을 지원합니다. 자세한 내용은 [Sales Promotion](#sales-promotion) 항목을 참고하여 주세요.
     - 캠페인 매칭 시에 여러 개의 캠페인이 동시에 매칭될 수 있습니다. 새로운 SDK는 순차적으로 매칭된 캠페인들의 메시지를 표시합니다.
 - v2.4.1

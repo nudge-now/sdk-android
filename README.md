@@ -951,8 +951,11 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 * * *
 
 ## Release Notes
-
-- **v2.4.2 _(2014/08/15 Updated)_**
+- **v2.4.4 _(2014/10/09 Updated)_**
+  - Support A/B Test feature. No SDK cod is required.
+- v2.4.3 
+  - Support Stickiness Custom Parameter BETA.
+- v2.4.2 
   - Support virtual item sales promotion campaign with discount options. Please refer to [Sales Promotion](#sales-promotion) section.
   - SDK will match multiple campaigns and show multiple messages in one marketing moment request.
 - v2.4.1
