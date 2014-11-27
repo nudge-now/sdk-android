@@ -115,7 +115,7 @@ When you first call in-app messaging methods, you will see the test message belo
 
 You can also deliver your push messages anytime you want. Follow the steps below to configure the push notification settings in your app.
 
-Before you start, you need to have your GCM project number from Google API Console, and set GCM API Key value to our [Dashboard](https://admin.adfresca.com). Please refer to '[Android Push Notification Guide](https://adfresca.zendesk.com/entries/28526764)'
+Before you start, you need to have your GCM project number from Google API Console, and set GCM API Key value to our [Dashboard](https://admin.adfresca.com). Please refer to '[Android Push Notification Guide](https://adfresca.zendesk.com/entries/82771087)'
 
 1) Check your GCM library installation
   - To use GCM service, your should have GCM client library in your project.
