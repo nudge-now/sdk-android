@@ -235,16 +235,16 @@ With In-App-Purchase Tracking, you can analyze all the purchases of your users, 
 
 There are two types of purchases you can track with our SDK.
 
-1. **Actual Item Purchase Tracking:**  The purchases made with real money. For example, user purchased ’$1.99' to get 'Gold 100' cash item.
-2. **Virtual Item Purchase Tracking:** The purchases made with virtual money. For example, user purchased 'Gold 10' to get 'Rocket Launcher' item 
+1. **Hard Currency Item Purchase Tracking:**  The purchases made with real money. For example, user purchased ’$1.99' to get 'Gold 100' cash item.
+2. **Soft Currency Item Purchase Tracking:** The purchases made with virtual money. For example, user purchased 'Gold 10' to get 'Rocket Launcher' item 
 
 You don't need to write down any item list manually. All the Items tracked by our SDK are automatically added to our dashboard. To see the list of items, go to 'Overview > Settings > In-App Items' page on our dashboard.
 
 Let's get started and implement SDK codes with the examples below. 
 
-#### Actual Item Tracking
+#### Hard Currency Item Tracking
 
-The purchase of 'Actual Items’ is made with the store's billing library such as Google Play Billing. When your user purchased the item successfully, simply create AFPurchase object and use logPurchase() method. Also, call CancelPromotionPurchase() method when a user cancelled or failed to purchase.
+The purchase of 'Hard Currency Items’ is made with the store's billing library such as Google Play Billing. When your user purchased the item successfully, simply create AFPurchase object and use logPurchase() method. Also, call CancelPromotionPurchase() method when a user cancelled or failed to purchase.
 
 Example: Google Play Billing 
 ```java
@@ -271,7 +271,7 @@ IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelpe
       String receiptData = purchase.getOriginalJson();
       String signature = purchase.getSignature();
 
-      AFPurchase actualPurchase = new AFPurchase.Builder(AFPurchase.Type.ACTUAL_ITEM)
+      AFPurchase hardPurchase = new AFPurchase.Builder(AFPurchase.Type.HARD_ITEM)
                             .setItemId(itemId)
                             .setCurrencyCode(currencyCode)
                             .setPrice(price)
@@ -279,7 +279,7 @@ IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelpe
                             .setReceipt(orderId, receiptData, signature)
                             .build();
 
-      AdFresca.getInstance(MainActivity.this).logPurchase(actualPurchase);
+      AdFresca.getInstance(MainActivity.this).logPurchase(hardPurchase);
     }
     
     ......
@@ -289,7 +289,7 @@ IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelpe
 
 The above example is written for Google Play. You can also get the required values from other billing libraries such as Amazon.
 
-For more details of AFPurchase object with the actual item, check the table below.
+For more details of AFPurchase object with the hard currency item, check the table below.
 
 Method | Description
 ------------ | ------------- | ------------
@@ -299,33 +299,33 @@ setPrice(double) | Set the item price. you may use SkuDetails's value or manuall
 setPurchaseDate(date) | Set the date of purchase. You may use purchase.getPurchaseTime() value. If you set null value, it will be automatically recorded by our SDK and server. Please don't use local time of the user's device.
 setReceipt(string, string, string) | Set the receipt property of purchase object (Google Play only). We will use it to verify the receipt in the future. 
 
-#### Virtual Item Tracking
+#### Soft Currency Item Tracking
 
-When users purchase virtual items in the app, you can also create AFPurchase object and call logPurchase() method. Also, call cancelPromotionPurchase() method when a user cancelled or failed to purchase. 
+When users purchase soft currency items in the app, you can also create AFPurchase object and call logPurchase() method. Also, call cancelPromotionPurchase() method when a user cancelled or failed to purchase. 
 
 ```java
-public void onVirtualItemPurchased(Item item, Date purchasedDate) {
-  AFPurchase virtualPurchase = new AFPurchase.Builder(AFPurchase.Type.VIRTUAL_ITEM)
+public void onSoftItemPurchased(Item item, Date purchasedDate) {
+  AFPurchase softPurchase = new AFPurchase.Builder(AFPurchase.Type.SOFT_ITEM)
                   .setItemId(item.getId()) // "long_sword"
                   .setCurrencyCode(item.getCurrencyCode()) // "gold"
                   .setPurchaseDate(purchaseDate) // Date object or null
                   .setPrice(item.getPrice()) // 10
                   .build();
   
-  AdFresca.getInstance(this).logPurchase(virtualPurchase);
+  AdFresca.getInstance(this).logPurchase(softPurchase);
 }
 
-public void onPurchaseVirtualItemFailure() {
+public void onPurchaseSoftItemFailure() {
   AdFresca.getInstance(this).cancelPromotionPurchase();
 }
 ```
 
-For more details of AFPurchase object with the virtual item, check the table below.
+For more details of AFPurchase object with the soft currency item, check the table below.
 
 Method | Description
 ------------ | ------------- | ------------
 setItemId(string) | Set the unique identifier of your item. This value may not be different per the os platform or app store. We recommend that you make this value unique for all platforms and stores. Our service can distinguish each item by this value.
-setCurrencyCode(string) | Set the item's virtual currency code. (ex: 'gold', 'gas')
+setCurrencyCode(string) | Set the item's soft currency code. (ex: 'gold', 'gas')
 setPrice(double) | Set the item price. You may get this value from your server. (ex: 100 of gold)
 setPurchaseDate(date) | Set the date of purchase. If you set null value, it will be automatically recorded by our SDK and server. Please don't use local time of the user's device.
 
@@ -403,9 +403,9 @@ Using sales promotion campaigns, you can promote your in-app item to your users.
 
 To apply our promotion features, you should implement AFPromotionListener. onPromotion() event is automatically called when users tap on an action button of an image message for sale promotion campaigns. You just need to show the purchase UI of the promotion item using 'promotionPurchase' object. 
 
-For Actual Currency Items, you should use your in-app billing library codes to show the purchase UI. You can get the SKU value from getItemId() method of promotionPurchase object.
+For Hard Currency Items, you should use your in-app billing library codes to show the purchase UI. You can get the SKU value from getItemId() method of promotionPurchase object.
 
-For Virtual Currency Items, you should use your own purchase UI which might be already implemented in your store page. Also there are discount options for virtual item sales promotion campaigns. You can check the discount type using getDiscountType() method of promotionPurchase object.
+For Soft Currency Items, you should use your own purchase UI which might be already implemented in your store page. Also there are discount options for soft currency item sales promotion campaigns. You can check the discount type using getDiscountType() method of promotionPurchase object.
 
 1. **Discount Price**: Users can buy a promotion item at a specific discounted price. You can get price from getPrice() method.
 
@@ -418,13 +418,13 @@ AdFresca.setPromotionListener(new AFPromotionListener(){
     String itemId = promotionPurchase.getItemId();
     String logMessage = "no logMessage";
         
-    if (promotionPurchase.getCurrencyType() == AFPurchase.Type.ACTUAL_ITEM) {
+    if (promotionPurchase.getCurrencyType().getType() == AFPurchase.Type.HARD_ITEM.getType()) {
       // Using Google Play In-app Billing Library   
       iabHelper.launchPurchaseFlow(MainActivity.this, promotionPurchase.getItemId(), 0, yourPurchaseFinishedListener, "YOUR_PAYLOAD");
       
-      logMessage = String.format("on ACTUAL_ITEM Promotion (%s)", itemId);  
+      logMessage = String.format("on HARD_ITEM Promotion (%s)", itemId);  
       
-    } else if (promotionPurchase.getCurrencyType() == AFPurchase.Type.VIRTUAL_ITEM) {         
+    } else if (promotionPurchase.getCurrencyType().getType() == AFPurchase.Type.SOFT_ITEM.getType()) {  
       String currencyCode = promotionPurchase.getCurrencyCode();
           
       if (promotionPurchase.getDiscountType() == AFPurchase.DiscountType.DISCOUNTED_TYPE_PRICE) {
@@ -433,7 +433,7 @@ AdFresca.setPromotionListener(new AFPromotionListener(){
       
         showPurchaseUIWithDiscountedPrice(itemId, currencyCode, discountedPrice);
         
-        logMessage = String.format("on VIRTUAL_ITEM Promotion (%s) with %.2f %s", promotionPurchase.getItemName(), discountedPrice, currencyCode);    
+        logMessage = String.format("on SOFT_ITEM Promotion (%s) with %.2f %s", promotionPurchase.getItemName(), discountedPrice, currencyCode);    
         
       } else if (promotionPurchase.getDiscountType() == AFPurchase.DiscountType.DISCOUNT_TYPE_RATE) {
         // Use this rate to calculate a discounted price of item. discountedPrice = originalPrice - (originalPrice * discountRate)
@@ -441,7 +441,7 @@ AdFresca.setPromotionListener(new AFPromotionListener(){
         
         showPurchaseUIWithDiscountRate(itemId, currencyCode, discountRate);
         
-        logMessage = String.format("on VIRTUAL_ITEM Promotion (%s) with %.2f %% discount", promotionPurchase.getItemName(), discountRate * 100.0);
+        logMessage = String.format("on SOFT_ITEM Promotion (%s) with %.2f %% discount", promotionPurchase.getItemName(), discountRate * 100.0);
       }
     }
     Log.d(TAG, logMessage);
@@ -951,15 +951,17 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 * * *
 
 ## Release Notes
-- **v2.4.4 _(2014/10/09 Updated)_**
+- **v2.4.5 _(2014/12/05 Updated)_**
+  - HARD_ITEM and SOFT_ITEM enums are added to AFPurchase class to replace ACTUAL_ITEM and VIRTUAL_ITEM which will be deprecated. Please refer to [In-App Purchase Tracking](#in-app-purchase-tracking) section.
+- v2.4.4
   - Support A/B Test feature. No SDK cod is required.
 - v2.4.3 
   - Support Stickiness Custom Parameter BETA.
 - v2.4.2 
-  - Support virtual item sales promotion campaign with discount options. Please refer to [Sales Promotion](#sales-promotion) section.
+  - Support soft currency item sales promotion campaign with discount options. Please refer to [Sales Promotion](#sales-promotion) section.
   - SDK will match multiple campaigns and show multiple messages in one marketing moment request.
 - v2.4.1
-  - Support actual item sales promotion campaign. Please refer to [Sales Promotion](#sales-promotion) section.
+  - Support hard currency item sales promotion campaign. Please refer to [Sales Promotion](#sales-promotion) section.
   - Support security token of reward campaign's hack proof. Please refer to [Give Reward](#give-reward) section.
   - Add cancelPromotionPurchase() method to [In-App Purchase Tracking](#in-app-purchase-tracking)
   - Support tap area feature.

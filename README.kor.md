@@ -242,8 +242,8 @@ _In-App-Purchase Tracking_  기능을 통하여 현재 앱에서 발생하고 �
 
 Nudge의 In-App-Purchase Tracking은 2가지 유형이 있습니다.
 
-1. 실제 화폐를 통해 결제되는 Actual Item Purchase Tracking (예: USD $1.99를 결제하여 Gold 100개 아이템을 구입)
-2. 가상 화폐를 통해 결제되는 Virtual Item Purchase Tracking (예: Gold 10개를 이용하여 포션 아이템을 구입)
+1. 실제 화폐를 통해 결제되는 Hard Currency Item Purchase Tracking (예: USD $1.99를 결제하여 Gold 100개 아이템을 구입)
+2. 가상 화폐를 통해 결제되는 Soft Currency Item Purchase Tracking (예: Gold 10개를 이용하여 포션 아이템을 구입)
 
 위 2가지 유형의 데이터를 모두 Tracking 함으로써 앱의 매출뿐만 아니라 인-앱 사용자들의 아이템 구매 추이 분석까지 가능합니다.
 
@@ -251,9 +251,9 @@ Nudge의 In-App-Purchase Tracking은 2가지 유형이 있습니다.
 
 아래의 적용 예제를 참고하여 간단히 In-App-Purchase Tracking 기능을 적용합니다.
 
-#### Actual Item Tracking
+#### Hard Currency Item Tracking
 
-Actual Item의 결제는 각 앱스토어별 인-앱 결제 라이브러리를 통해 이루어집니다. 각 결제 라이브러리에서 _'결제 성공'_ 이벤트가 발생 할 시에 AFPurchase 객체를 생성하고 logPurchase(purchase) 메소드를 호출합니다. 그리고 _'결제 실패'_ 이벤트가 발생 할 시에는 cancelPromotionPurchase() 메소드를 호출합니다.
+Hard Currency Item의 결제는 각 앱스토어별 인-앱 결제 라이브러리를 통해 이루어집니다. 각 결제 라이브러리에서 _'결제 성공'_ 이벤트가 발생 할 시에 AFPurchase 객체를 생성하고 logPurchase(purchase) 메소드를 호출합니다. 그리고 _'결제 실패'_ 이벤트가 발생 할 시에는 cancelPromotionPurchase() 메소드를 호출합니다.
 
 적용 예제: Google Play 결제 
 ```java
@@ -280,7 +280,7 @@ IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelpe
       String receiptData = purchase.getOriginalJson();
       String signature = purchase.getSignature();
 
-      AFPurchase actualPurchase = new AFPurchase.Builder(AFPurchase.Type.ACTUAL_ITEM)
+      AFPurchase hardPurchase = new AFPurchase.Builder(AFPurchase.Type.HARD_ITEM)
                             .setItemId(itemId)
                             .setCurrencyCode(currencyCode)
                             .setPrice(price)
@@ -288,7 +288,7 @@ IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelpe
                             .setReceipt(orderId, receiptData, signature)
                             .build();
 
-      AdFresca.getInstance(MainActivity.this).logPurchase(actualPurchase);
+      AdFresca.getInstance(MainActivity.this).logPurchase(hardPurchase);
     }
     
     ......
@@ -298,7 +298,7 @@ IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelpe
 
 위 예제는 Google Play 결제 라이브러리를 기준으로 작성되었지만 아마존이나 티스토어 등 모든 결제 라이브러리에서도 AFPurchase 객체에 필요한 값을 얻어올 수 있습니다.
 
-Actual Item을 위한 AFPurchase.Builder의 보다 자세한 설명은 아래와 같습니다.
+Hard Currency Item을 위한 AFPurchase.Builder의 보다 자세한 설명은 아래와 같습니다.
 
 Method | Description
 ------------ | ------------- | ------------
@@ -308,30 +308,30 @@ setPrice(double) | 아이템의 가격을 설정합니다. 결제 라이브러�
 setPurchaseDate(date) | 결제된 시간을 Date 객체 형태로 설정합니다. 값이 설정되지 않은 경우 Nudge 서비스에 기록되는 시간이 결제 시간으로 자동 설정됩니다.
 setReceipt(string, string, string) | 추후 Receipt Verficiation 기능을 위해 필요한 데이터를 설정합니다. 현재 버전의 SDK는 Google Play만 지원하며 타 결제 라이브러리의 경우는 값을 설정하지 않습니다.
 
-#### Virtual Item Tracking
+#### Soft Currency Item Tracking
 
-Virtual Item의 결제는 앱 내의 가상 화폐로 아이템을 결제한 경우를 의미합니다. 앱 내에서 가상 화폐를 이용한 결제 이벤트가 성공한 경우 아래 예제와 같이 AFPurchase 객체를 생성하고 logPurchase(purchase) 메소드를 호출합니다. 그리고 _'결제 실패'_ 이벤트가 발생 할 시에는 cancelPromotionPurchase() 메소드를 호출합니다.
+Soft Currency Item의 결제는 앱 내의 가상 화폐로 아이템을 결제한 경우를 의미합니다. 앱 내에서 가상 화폐를 이용한 결제 이벤트가 성공한 경우 아래 예제와 같이 AFPurchase 객체를 생성하고 logPurchase(purchase) 메소드를 호출합니다. 그리고 _'결제 실패'_ 이벤트가 발생 할 시에는 cancelPromotionPurchase() 메소드를 호출합니다.
 
 적용 예제: 
 ```java
-public void onVirtualItemPurchased(Item item, Date purchasedDate) {
-  AFPurchase virtualPurchase = new AFPurchase.Builder(AFPurchase.Type.VIRTUAL_ITEM)
+public void onSoftItemPurchased(Item item, Date purchasedDate) {
+  AFPurchase softPurchase = new AFPurchase.Builder(AFPurchase.Type.SOFT_ITEM)
                   .setItemId(item.getId()) // "long_sword"
                   .setCurrencyCode(item.getCurrencyCode()) // "gold"
                   .setPurchaseDate(purchaseDate) // Date object or null
                   .setPrice(item.getPrice()) // 10
                   .build();
   
-  AdFresca.getInstance(this).logPurchase(virtualPurchase);
+  AdFresca.getInstance(this).logPurchase(softPurchase);
 }
 
 // 사용자가 결제를 취소했거나, 실패한 경우
-public void onPurchaseVirtualItemFailure() {
+public void onPurchaseSoftItemFailure() {
   AdFresca.getInstance(this).cancelPromotionPurchase();
 }
 ```
 
-Virtual Item을 위한 AFPurchase.Builder의 보다 자세한 설명은 아래와 같습니다.
+Soft Currency Item을 위한 AFPurchase.Builder의 보다 자세한 설명은 아래와 같습니다.
 
 Method | Description
 ------------ | ------------- | ------------
@@ -428,9 +428,9 @@ Sales Promotion 캠페인을 이용하여 특정 아이템의 구매를 유도�
 
 프로모션 기능을 적용하기 위해서 AFPromotionListener를 구현합니다. 프로모션 캠페인이 노출된 후 사용자가 이미지 메시지의 액션 영역을 탭하면 onPromotion() 이벤트가 발생합니다. 이벤트에 넘어오는 promotionPurchase 객체 정보를 이용하여 사용자에게 아이템 결제 UI를 표시하도록 코드를 적용합니다.
 
-Actual Currency 아이템의 경우 인-앱 결제 라이브러리를 이용하여 결제 UI를 표시합니다. promotionPurchase 객체의 ItemId 값이 아이템의 SKU 값에 해당됩니다. 아래의 예제는 구글 플레이의 결제 라이브러리 코드를 이용하고 있습니다.
+Hard Currency 아이템의 경우 인-앱 결제 라이브러리를 이용하여 결제 UI를 표시합니다. promotionPurchase 객체의 ItemId 값이 아이템의 SKU 값에 해당됩니다. 아래의 예제는 구글 플레이의 결제 라이브러리 코드를 이용하고 있습니다.
 
-Virtual Currency 아이템의 경우는 앱이 기존에 사용하고 있는 상점 내 아이템 결제 UI를 표시하도록 코드를 작성합니다. Virtual Currency 프로모션의 경우는 2가지 가격 할인 옵션을 제공하고 있습니다. getDiscountType() 메소드를 이용하여 할인 옵션을 확인할 수 있습니다.
+Soft Currency 아이템의 경우는 앱이 기존에 사용하고 있는 상점 내 아이템 결제 UI를 표시하도록 코드를 작성합니다. Soft Currency 프로모션의 경우는 2가지 가격 할인 옵션을 제공하고 있습니다. getDiscountType() 메소드를 이용하여 할인 옵션을 확인할 수 있습니다.
 
 1. **Discount Price**: 캠페인에 직접 지정된 가격으로 아이템을 판매합니다. getPrice() 메소드를 이용하여 가격 정보를 얻습니다.
 2. **Discount Rate**: 캠페인에 지정된 할인율을 적용하여 아이템을 판매합니다. getDiscountRate() 메소드를 이용하여 할인율 정보를 받아옵니다.
@@ -444,13 +444,13 @@ AdFresca.setPromotionListener(new AFPromotionListener(){
     String itemId = promotionPurchase.getItemId();
     String logMessage = "no logMessage";
         
-    if (promotionPurchase.getCurrencyType() == AFPurchase.Type.ACTUAL_ITEM) {
+    if (promotionPurchase.getCurrencyType().getType() == AFPurchase.Type.HARD_ITEM.getType()) {
       // Using Google Play In-app Billing Library   
       iabHelper.launchPurchaseFlow(MainActivity.this, promotionPurchase.getItemId(), 0, yourPurchaseFinishedListener, "YOUR_PAYLOAD");
       
-      logMessage = String.format("on ACTUAL_ITEM Promotion (%s)", itemId);  
+      logMessage = String.format("on HARD_ITEM Promotion (%s)", itemId);  
       
-    } else if (promotionPurchase.getCurrencyType() == AFPurchase.Type.VIRTUAL_ITEM) {         
+    } else if (promotionPurchase.getCurrencyType().getType() == AFPurchase.Type.SOFT_ITEM.getType()) {          
       String currencyCode = promotionPurchase.getCurrencyCode();
           
       if (promotionPurchase.getDiscountType() == AFPurchase.DiscountType.DISCOUNTED_TYPE_PRICE) {
@@ -459,7 +459,7 @@ AdFresca.setPromotionListener(new AFPromotionListener(){
       
         showPurchaseUIWithDiscountedPrice(itemId, currencyCode, discountedPrice);
         
-        logMessage = String.format("on VIRTUAL_ITEM Promotion (%s) with %.2f %s", promotionPurchase.getItemName(), discountedPrice, currencyCode);    
+        logMessage = String.format("on SOFT_ITEM Promotion (%s) with %.2f %s", promotionPurchase.getItemName(), discountedPrice, currencyCode);    
         
       } else if (promotionPurchase.getDiscountType() == AFPurchase.DiscountType.DISCOUNT_TYPE_RATE) {
         // Use this rate to calculate a discounted price of item. discountedPrice = originalPrice - (originalPrice * discountRate)
@@ -467,7 +467,7 @@ AdFresca.setPromotionListener(new AFPromotionListener(){
         
         showPurchaseUIWithDiscountRate(itemId, currencyCode, discountRate);
         
-        logMessage = String.format("on VIRTUAL_ITEM Promotion (%s) with %.2f %% discount", promotionPurchase.getItemName(), discountRate * 100.0);
+        logMessage = String.format("on SOFT_ITEM Promotion (%s) with %.2f %% discount", promotionPurchase.getItemName(), discountRate * 100.0);
       }
     }
     Log.d(TAG, logMessage);
@@ -1189,16 +1189,19 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 
 ## Release Notes
 
-- **v2.4.4 _(2014/10/09 Updated)_**
+- **v2.4.5 _(2014/12/05 Updated)_**
+  - AFPurchase 객체에 HARD_ITEM, SOFT_ITEM purchase type이 추가되고 ACTUAL_ITEM, SOFT_ITEM 값이 deprecated 되었습니다. 자세한 내용은 [In-App Purchase Tracking](#in-app-purchase-tracking) 항목을 참고하여 주세요.
+  - HARD_ITEM, SOFT_ITEM 값이 추가됨에 따라 [Sales Promotion](#sales-promotion) 항목의 예제 코드가 변경되었습니다. 반드시 getType()을 이용하여 화폐 유형을 검사해야 합니다.
+-v2.4.4
   - A/B 테스트 기능을 지원합니다. 해당 기능은 별도의 코딩 작업 없이 이용 가능합니다.
 - v2.4.3 
   - Stickiness 커스텀 파리미터의 안드로이드 베타 버전을 지원합니다.
 - v2.4.2
-    - Sales Promotion 캠페인 기능을 이용하여 Virtual Currency 아이템의 프로모션 기능을 지원합니다. 자세한 내용은 [Sales Promotion](#sales-promotion) 항목을 참고하여 주세요.
+    - Sales Promotion 캠페인 기능을 이용하여 Soft Currency 아이템의 프로모션 기능을 지원합니다. 자세한 내용은 [Sales Promotion](#sales-promotion) 항목을 참고하여 주세요.
     - 캠페인 매칭 시에 여러 개의 캠페인이 동시에 매칭될 수 있습니다. 새로운 SDK는 순차적으로 매칭된 캠페인들의 메시지를 표시합니다.
 - v2.4.1
     - 리워드 지급 시에 시큐리티 토큰값을 이용하여 보안 이슈를 해결할 수 있습니다. 자세한 내용은 [Give Reward](#give-reward) 항목을 참고하여 주세요.
-    - Sales Promotion 캠페인 기능을 이용하여 Actual Currency 아이템의 프로모션 기능을 지원합니다. 자세한 내용은 [Sales Promotion](#sales-promotion) 항목을 참고하여 주세요.
+    - Sales Promotion 캠페인 기능을 이용하여 Hard Currency 아이템의 프로모션 기능을 지원합니다. 자세한 내용은 [Sales Promotion](#sales-promotion) 항목을 참고하여 주세요.
     - [In-App Purchase Tracking](#in-app-purchase-tracking) 기능에서 cancelPromotionPurchase() 메소드가 추가되었습니다. 
     - 이미지 메시지의 Tap Area 기능을 지원합니다.
     - iap beta 버전이 2.4.1부터 통합되었습니다. 
