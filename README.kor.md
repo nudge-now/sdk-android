@@ -11,6 +11,7 @@
   - [Sales Promotion](#sales-promotion)
 - [Dynamic Targeting](#dynamic-targeting)
   - [Custom Parameter](#custom-parameter)
+  - [Stickiness Custom Parameter](#stickiness-custom-parameter)
   - [Marketing Moment](#marketing-moment)
 - [Advanced](#advanced)
   - [Custom Banner (Android Only)](#custom-banner)
@@ -511,12 +512,31 @@ Integer, Boolean 형태의 데이터를 상태 값으로 설정할 수 있으며
     
     AdFresca fresca = AdFresca.getInstance(this);     
     fresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_LEVEL, User.level);
-    fresca.load(MOMENT_INDEX_LEVEL_UP);
-    fresca.show();
   }
 ```
 
 특정 커스텀 파라미터의 경우, 사용자의 로그인 작업 이후 설정이 가능할 수 있습니다. 해당 경우는 사용자의 로그인 이후에 필요한 커스텀 파라미터를 모두 설정할 수 있도록 합니다.
+
+* * *
+
+### Stickiness Custom Parameter
+
+(Stickiness 커스텀 파라미터 기능은 현재 베타 서비스로 제공되고 있습니다. 이용을 위해서는 [고객지원팀](mailto:support@nudge.do)으로 문의하여 주세요.)
+
+스테이지형 게임에서 게임 플레이 횟수와 같이 사용자의 Stickiness 지표를 측정할 수 있는 값이 있다면, Stickiness 커스텀 파라미터 등록하여 '최근 1주일간 30회 이상 플레이한 사용자', '오늘 5회 이상 플레이한 사용자'와 같은 사용자 세그먼트를 등록하고 관리할 수 있습니다.
+
+먼저 누적 플레이 횟수와 같은 값을 커스텀 파라미터로 등록하고 Stickiness 모드로 지정합니다. (현재 Stickiness 지정은 Nudge 팀을 통해서만 가능합니다.)
+
+코드 적용 시에는 해당 값이 증가하는 이벤트가 발생할 때 setCustomParameterValue(index, amount) 메소드를 이용하여 증가되는 값을 기록합니다. SDK는 자동으로 누적값을 계산함과 동시에 일별 증가 수치를 계산하여 해당 사용자의 프로화일을 업데이트합니다.
+
+이후 대쉬보드에서 '오늘의 플레이 횟수', '최근 1주일간의 플레이 횟수', '최근 1주일간의 평균 플레이 횟수'와 같은 조건을 사용자 세그먼트 정의에 이용할 수 있습니다.
+
+```java
+  public void OnGameFinished {
+    AdFresca fresca = AdFresca.getInstance(this);     
+    fresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_PLAY_COUNT, 1);
+  }
+```
 
 * * *
 

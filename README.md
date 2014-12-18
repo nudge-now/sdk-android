@@ -11,6 +11,7 @@
   - [Sales Promotion](#sales-promotion)
 - [Dynamic Targeting](#dynamic-targeting)
   - [Custom Parameter](#custom-parameter)
+  - [Stickiness Custom Parameter](#stickiness-custom-parameter)
   - [Marketing Moment](#marketing-moment)
 - [Advanced](#advanced)
   - [Custom Banner (Android Only)](#custom-banner)
@@ -489,6 +490,29 @@ You will call the method after your app is launched and the values have changed.
 ```
 
 In some cases, you may not able to set some custom parameters before startSession() since you may need to get the values from your server. If so, you will need to set the custom parameters right after the user signs in.
+
+* * *
+
+### Stickiness Custom Parameter
+
+(Stickiness Custom Parameter is currently in beta. To use this feature, contact our [support team](mailto:support@nudge.do))
+
+If your app has any value to measure user stickiness such as ‘play count’ in a stage based game, you can use it to create a  'Stickiness Custom Parameter' with Nudge. ou can define user segments such as 'users who played 30 times in a week' and 'Users who played 5 times today'.
+
+To begin, you first need to set a new custom parameter such as 'play count’, and then configure it to a stickiness mode (stickiness mode can only be configured by Nudge team currently).
+
+To implement codes, simply pass the value to **incrCustomParameterWithAmount** method whenever the stickiness value is increased. Our SDK will automatically calculate the accumulated value and daily increased value and update user profiles.
+
+After you write the code, you can now use 'Today's play count, 'Average play count in a week', and 'Total play count in a week' conditions to define your user segments in our dashboard.
+
+```objective-c
+- (void)didFinishGame
+{
+  AdFrescaView *fresca = [AdFrescaView sharedAdView];   
+  [fresca incrCustomParameterWithAmount:[NSNumber numberWithInt:1] forIndex:CUSTOM_PARAM_INDEX_PLAY_COUNT];
+}
+....
+```
 
 * * *
 
