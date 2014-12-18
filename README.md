@@ -501,17 +501,15 @@ If your app has any value to measure user stickiness such as ‘play count’ in
 
 To begin, you first need to set a new custom parameter such as 'play count’, and then configure it to a stickiness mode (stickiness mode can only be configured by Nudge team currently).
 
-To implement codes, simply pass the value to **incrCustomParameterWithAmount** method whenever the stickiness value is increased. Our SDK will automatically calculate the accumulated value and daily increased value and update user profiles.
+To implement codes, simply pass the value to **incrCustomParameterValue(index, amount)** method whenever the stickiness value is increased. Our SDK will automatically calculate the accumulated value and daily increased value and update user profiles.
 
 After you write the code, you can now use 'Today's play count, 'Average play count in a week', and 'Total play count in a week' conditions to define your user segments in our dashboard.
 
-```objective-c
-- (void)didFinishGame
-{
-  AdFrescaView *fresca = [AdFrescaView sharedAdView];   
-  [fresca incrCustomParameterWithAmount:[NSNumber numberWithInt:1] forIndex:CUSTOM_PARAM_INDEX_PLAY_COUNT];
-}
-....
+```java
+  public void OnGameFinished {
+    AdFresca fresca = AdFresca.getInstance(this);     
+    fresca.incrCustomParameterValue(CUSTOM_PARAM_INDEX_PLAY_COUNT, 1);
+  }
 ```
 
 * * *

@@ -527,14 +527,14 @@ Integer, Boolean 형태의 데이터를 상태 값으로 설정할 수 있으며
 
 먼저 누적 플레이 횟수와 같은 값을 커스텀 파라미터로 등록하고 Stickiness 모드로 지정합니다. (현재 Stickiness 지정은 Nudge 팀을 통해서만 가능합니다.)
 
-코드 적용 시에는 해당 값이 증가하는 이벤트가 발생할 때 setCustomParameterValue(index, amount) 메소드를 이용하여 증가되는 값을 기록합니다. SDK는 자동으로 누적값을 계산함과 동시에 일별 증가 수치를 계산하여 해당 사용자의 프로화일을 업데이트합니다.
+코드 적용 시에는 해당 값이 증가하는 이벤트가 발생할 때 incrCustomParameterValue(index, amount) 메소드를 이용하여 증가되는 값을 기록합니다. SDK는 자동으로 누적값을 계산함과 동시에 일별 증가 수치를 계산하여 해당 사용자의 프로화일을 업데이트합니다.
 
 이후 대쉬보드에서 '오늘의 플레이 횟수', '최근 1주일간의 플레이 횟수', '최근 1주일간의 평균 플레이 횟수'와 같은 조건을 사용자 세그먼트 정의에 이용할 수 있습니다.
 
 ```java
   public void OnGameFinished {
     AdFresca fresca = AdFresca.getInstance(this);     
-    fresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_PLAY_COUNT, 1);
+    fresca.incrCustomParameterValue(CUSTOM_PARAM_INDEX_PLAY_COUNT, 1);
   }
 ```
 
