@@ -506,10 +506,23 @@ To implement codes, simply pass the value to **incrCustomParameterValue(index, a
 After you write the code, you can now use 'Today's play count, 'Average play count in a week', and 'Total play count in a week' conditions to define your user segments in our dashboard.
 
 ```java
-  public void OnGameFinished {
-    AdFresca fresca = AdFresca.getInstance(this);     
-    fresca.incrCustomParameterValue(CUSTOM_PARAM_INDEX_PLAY_COUNT, 1);
+public void OnGameFinished {
+  AdFresca fresca = AdFresca.getInstance(this);     
+  fresca.incrCustomParameterValue(CUSTOM_PARAM_INDEX_PLAY_COUNT, 1);
+}
+```
+
+If your app was already launched to app stores, you need to set the accumulated value before you call incrCustomParameterValue method. You can check if the custom parameter value is already set or not by using **hasCustomParameterValue(index)** method. If the value is not set yet, set the accumulated value from your app server.
+
+```java
+public void onUserSignIn {
+  ....
+
+  AdFresca fresca = AdFresca.getInstance(this);     
+  if (!fresca.hasCustomParameterValue(CUSTOM_PARAM_INDEX_PLAY_COUNT)) {
+    fresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_PLAY_COUNT, User.totalPlayCount);
   }
+}
 ```
 
 * * *
@@ -973,7 +986,9 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 * * *
 
 ## Release Notes
-- **v2.4.5 _(2014/12/05 Updated)_**
+- **v2.4.6 _(2014/12/22 Updated)_**
+  - Add hasCustomParameterWithIndex method. 
+- v2.4.5
   - HARD_ITEM and SOFT_ITEM enums are added to AFPurchase class to replace ACTUAL_ITEM and VIRTUAL_ITEM which will be deprecated. Please refer to [In-App Purchase Tracking](#in-app-purchase-tracking) section.
 - v2.4.4
   - Support A/B Test feature. No SDK cod is required.

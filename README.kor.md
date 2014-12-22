@@ -532,10 +532,23 @@ Integer, Boolean 형태의 데이터를 상태 값으로 설정할 수 있으며
 이후 대쉬보드에서 '오늘의 플레이 횟수', '최근 1주일간의 플레이 횟수', '최근 1주일간의 평균 플레이 횟수'와 같은 조건을 사용자 세그먼트 정의에 이용할 수 있습니다.
 
 ```java
-  public void OnGameFinished {
-    AdFresca fresca = AdFresca.getInstance(this);     
-    fresca.incrCustomParameterValue(CUSTOM_PARAM_INDEX_PLAY_COUNT, 1);
+public void onGameFinished {
+  AdFresca fresca = AdFresca.getInstance(this);     
+  fresca.incrCustomParameterValue(CUSTOM_PARAM_INDEX_PLAY_COUNT, 1);
+}
+```
+
+만약 기존에 출시된 앱에서 새로 Stickiness Custom Parameter를 적용하는 경우, incrCustomParameterValue 호출 이전에 기존의 누적값을 설정해두어야 합니다. **hasCustomParameterValue(index)** 메소드를 이용하여 기존에 설정된 값이 존재하는지 검사한 후 아직 설정된 값이 없다면 누적 값을 미리 설정합니다. (기존의 누적 값은 앱 서버를 통하여 받아옵니다.)
+
+```java
+public void onUserSignIn {
+  ....
+
+  AdFresca fresca = AdFresca.getInstance(this);     
+  if (!fresca.hasCustomParameterValue(CUSTOM_PARAM_INDEX_PLAY_COUNT)) {
+    fresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_PLAY_COUNT, User.totalPlayCount);
   }
+}
 ```
 
 * * *
@@ -1208,8 +1221,9 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 * * *
 
 ## Release Notes
-
-- **v2.4.5 _(2014/12/05 Updated)_**
+- **v2.4.6 _(2014/12/22 Updated)_**
+  - Add hasCustomParameterWithIndex method. 
+- v2.4.5
   - AFPurchase 객체에 HARD_ITEM, SOFT_ITEM purchase type이 추가되고 ACTUAL_ITEM, SOFT_ITEM 값이 deprecated 되었습니다. 자세한 내용은 [In-App Purchase Tracking](#in-app-purchase-tracking) 항목을 참고하여 주세요.
   - HARD_ITEM, SOFT_ITEM 값이 추가됨에 따라 [Sales Promotion](#sales-promotion) 항목의 예제 코드가 변경되었습니다. 반드시 getType()을 이용하여 화폐 유형을 검사해야 합니다.
 -v2.4.4
