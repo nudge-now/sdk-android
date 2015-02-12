@@ -459,16 +459,16 @@ Our SDK will detect if users made a purchase using our [In-App Purchase Tracking
 
 Our SDK can collect user specific profiles such as level, stage, maximum score, etc. We use it to deliver a personalized and targeted message in real time to specific user segments that you can define.
 
-To implement codes, simply call setCustomParameterValue method with passing parameter's index and value. You can get the custom parameter's index in our [Dashboard](https://admin.adfresca.com): 1) Select a App 2) In 'Overview' menu, click 'Settings - Custom Parameters' button.
+To implement codes, simply call setCustomParameterValue method with passing parameter's unique key and its value.
 
-You will call the method after your app is launched and the values have changed. 
+You will call the method after your app is launched and the values have changed. (if you can't set the values without user sign in, you may set them right after users sign in.)
 
 ```java
   public void onCreate() {
     AdFresca fresca = AdFresca.getInstance(this);     
-    fresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_LEVEL, User.level);
-    fresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_STAGE, User.stage);
-    fresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_HAS_FB_ACCOUNT, User.hasFacebookAccount);
+    fresca.setCustomParameterValue("level", User.level);
+    fresca.setCustomParameterValue("age", User.age);
+    fresca.setCustomParameterValue("facebook_flag", User.hasFacebookAccount);
     fresca.startSession();
   }
   
@@ -478,18 +478,15 @@ You will call the method after your app is launched and the values have changed.
     User.level = level
     
     AdFresca fresca = AdFresca.getInstance(this);     
-    fresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_LEVEL, User.level);
-  }
-
-  public void onUserStageChanged(int stage) {
-    User.stage = stage
-    
-    AdFresca fresca = AdFresca.getInstance(this);     
-    fresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_STAGE, User.stage);
+    fresca.setCustomParameterValue("level", User.level);
   }
 ```
 
-In some cases, you may not able to set some custom parameters before startSession() since you may need to get the values from your server. If so, you will need to set the custom parameters right after the user signs in.
+After you write the codes, you will be able to see a list of custom parameters you added on [Dashboard](https://admin.adfresca.com). 1) Select a App 2) In 'Overview' menu, click 'Settings - Custom Parameters' button.
+
+<img src="https://s3-ap-northeast-1.amazonaws.com/file.adfresca.com/guide/sdk/custom_parameter_index.png">
+
+You need to set 'Name' value of each custom parameter to activate. You can activate custom parameters up to 20. Nudge only allows activated custom parameters to collect data and provide targeting features.
 
 * * *
 
@@ -508,19 +505,19 @@ After you write the code, you can now use 'Today's play count, 'Average play cou
 ```java
 public void OnGameFinished {
   AdFresca fresca = AdFresca.getInstance(this);     
-  fresca.incrCustomParameterValue(CUSTOM_PARAM_INDEX_PLAY_COUNT, 1);
+  fresca.incrCustomParameterValue("play_count", 1);
 }
 ```
 
-If your app was already launched to app stores, you need to set the accumulated value before you call incrCustomParameterValue method. You can check if the custom parameter value is already set or not by using **hasCustomParameterValue(index)** method. If the value is not set yet, set the accumulated value from your app server.
+If your app was already launched to app stores, you need to set the accumulated value before you call incrCustomParameterValue method. You can check if the custom parameter value is already set or not by using **hasCustomParameterValue(key)** method. If the value is not set yet, set the accumulated value from your app server.
 
 ```java
 public void onUserSignIn {
   ....
 
   AdFresca fresca = AdFresca.getInstance(this);     
-  if (!fresca.hasCustomParameterValue(CUSTOM_PARAM_INDEX_PLAY_COUNT)) {
-    fresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_PLAY_COUNT, User.totalPlayCount);
+  if (!fresca.hasCustomParameterValue("play_count")) {
+    fresca.setCustomParameterValue("play_count", User.totalPlayCount);
   }
 }
 ```

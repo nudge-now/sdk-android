@@ -488,20 +488,16 @@ SDK가 사용자의 실제 구매 여부를 트랙킹하기 위해서는 [In-App
 
 Nudge SDK는 기본적으로 '국가, 언어, 앱 버전, 실행 횟수 등'의 디바이스 고유 데이터를 수집하며, 동시에 각 앱 내에서 고유하게 사용되는 특수한 상태 값들(예: 캐릭터 레벨, 보유 포인트, 스테이지 등)을 커스텀 파라미터로 정의하고 수집하여 분석 및 타겟팅 기능을 제공합니다.
 
-커스텀 파라미터 설정은 [Dashboard](https://admin.adfresca.com) 사이트를 접속하여 앱의 Overview 메뉴 -> Settings - Custom Parameters 버튼을 클릭하여 확인할 수 있습니다.
-
-SDK 적용을 위해서는 Dashboard에서 지정된 각 커스텀 파라미터의 '인덱스' 값이 필요합니다. 인덱스 값은 1,2,3,4 와 같은 Integer 형태의 고유 값이며 소스코드에 Constant 형태로 지정하여 이용하는 것을 권장합니다.
-
-Integer, Boolean 형태의 데이터를 상태 값으로 설정할 수 있으며, **setCustomParameterValue** 메소드를 사용하여 각 인덱스 값에 맞게 상태 값을 설정합니다.
+Integer, Boolean 형태의 데이터를 상태 값으로 설정할 수 있으며, **setCustomParameterValue** 메소드를 사용하여 각 고유 키 값에 맞게 상태 값을 설정합니다.
 
 앱이 실행되는 시점에 한 번 값을 설정하고, 이후에는 값이 새로 갱신되는 이벤트마다 새로운 값을 설정합니다.
 
 ```java
   public void onCreate() {
     AdFresca fresca = AdFresca.getInstance(this);     
-    fresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_LEVEL, User.level);
-    fresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_AGE, User.age);
-    fresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_HAS_FB_ACCOUNT, User.hasFacebookAccount);
+    fresca.setCustomParameterValue("level", User.level);
+    fresca.setCustomParameterValue("age", User.age);
+    fresca.setCustomParameterValue("facebook_flag", User.hasFacebookAccount);
     fresca.startSession();
   }
   
@@ -511,7 +507,7 @@ Integer, Boolean 형태의 데이터를 상태 값으로 설정할 수 있으며
     User.level = level
     
     AdFresca fresca = AdFresca.getInstance(this);     
-    fresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_LEVEL, User.level);
+    fresca.setCustomParameterValue("level", User.level);
   }
 ```
 
@@ -527,26 +523,26 @@ Integer, Boolean 형태의 데이터를 상태 값으로 설정할 수 있으며
 
 먼저 누적 플레이 횟수와 같은 값을 커스텀 파라미터로 등록하고 Stickiness 모드로 지정합니다. (현재 Stickiness 지정은 Nudge 팀을 통해서만 가능합니다.)
 
-코드 적용 시에는 해당 값이 증가하는 이벤트가 발생할 때 incrCustomParameterValue(index, amount) 메소드를 이용하여 증가되는 값을 기록합니다. SDK는 자동으로 누적값을 계산함과 동시에 일별 증가 수치를 계산하여 해당 사용자의 프로화일을 업데이트합니다.
+코드 적용 시에는 해당 값이 증가하는 이벤트가 발생할 때 incrCustomParameterValue(key, amount) 메소드를 이용하여 증가되는 값을 기록합니다. SDK는 자동으로 누적값을 계산함과 동시에 일별 증가 수치를 계산하여 해당 사용자의 프로화일을 업데이트합니다.
 
 이후 대쉬보드에서 '오늘의 플레이 횟수', '최근 1주일간의 플레이 횟수', '최근 1주일간의 평균 플레이 횟수'와 같은 조건을 사용자 세그먼트 정의에 이용할 수 있습니다.
 
 ```java
 public void onGameFinished {
   AdFresca fresca = AdFresca.getInstance(this);     
-  fresca.incrCustomParameterValue(CUSTOM_PARAM_INDEX_PLAY_COUNT, 1);
+  fresca.incrCustomParameterValue("play_count", 1);
 }
 ```
 
-만약 기존에 출시된 앱에서 새로 Stickiness Custom Parameter를 적용하는 경우, incrCustomParameterValue 호출 이전에 기존의 누적값을 설정해두어야 합니다. **hasCustomParameterValue(index)** 메소드를 이용하여 기존에 설정된 값이 존재하는지 검사한 후 아직 설정된 값이 없다면 누적 값을 미리 설정합니다. (기존의 누적 값은 앱 서버를 통하여 받아옵니다.)
+만약 기존에 출시된 앱에서 새로 Stickiness Custom Parameter를 적용하는 경우, incrCustomParameterValue 호출 이전에 기존의 누적값을 설정해두어야 합니다. **hasCustomParameterValue(key)** 메소드를 이용하여 기존에 설정된 값이 존재하는지 검사한 후 아직 설정된 값이 없다면 누적 값을 미리 설정합니다. (기존의 누적 값은 앱 서버를 통하여 받아옵니다.)
 
 ```java
 public void onUserSignIn {
   ....
 
   AdFresca fresca = AdFresca.getInstance(this);     
-  if (!fresca.hasCustomParameterValue(CUSTOM_PARAM_INDEX_PLAY_COUNT)) {
-    fresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_PLAY_COUNT, User.totalPlayCount);
+  if (!fresca.hasCustomParameterValue("play_count")) {
+    fresca.setCustomParameterValue("play_count", User.totalPlayCount);
   }
 }
 ```
@@ -1221,8 +1217,11 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 * * *
 
 ## Release Notes
-- **v2.4.6 _(2014/12/22 Updated)_**
-  - Add hasCustomParameterWithIndex method. 
+
+- **v2.4.7 _(2015/02/13 Updated)_**
+  - [Custom Parameter](#custom-parameter) 설정 시 정수 형태의 고유 인덱스 값이 아닌 문자열 형태의 고유 키 값을 사용할 수 있도록 변경되었습니다. (인덱스를 이용하는 기존 방식도 그대로 지원합니다.)
+- v2.4.6
+  - hasCustomParameterWithIndex 메소드가 추가되었습니. 
 - v2.4.5
   - AFPurchase 객체에 HARD_ITEM, SOFT_ITEM purchase type이 추가되고 ACTUAL_ITEM, SOFT_ITEM 값이 deprecated 되었습니다. 자세한 내용은 [In-App Purchase Tracking](#in-app-purchase-tracking) 항목을 참고하여 주세요.
   - HARD_ITEM, SOFT_ITEM 값이 추가됨에 따라 [Sales Promotion](#sales-promotion) 항목의 예제 코드가 변경되었습니다. 반드시 getType()을 이용하여 화폐 유형을 검사해야 합니다.
