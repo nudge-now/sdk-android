@@ -80,7 +80,7 @@ To add our SDK into your android project, please follow the instructions below:
 
 ### Start Session
 
-Now, let’s start to put some simple SDK codes in your app. You first need to call startSession() method with setting your API Key. To get your API Key, go to our [Dashboard](https://admin.adfresca.com) and then click 'Settings - API Keys' button in your app's 'Overview' page.
+Now, let’s start to put some simple SDK codes in your app. You first need to call startSession() method with setting your API Key. To get your API Key, go to our [Dashboard](https://dashboard.nudge.do) and then click 'Settings - API Keys' button in your app's 'Overview' page.
 
 Put startSession() in your first activity class. Please make sure that this method is called once while your app is running.
 
@@ -116,7 +116,7 @@ When you first call in-app messaging methods, you will see the test message belo
 
 You can also deliver your push messages anytime you want. Follow the steps below to configure the push notification settings in your app.
 
-Before you start, you need to have your GCM project number from Google API Console, and set GCM API Key value to our [Dashboard](https://admin.adfresca.com). Please refer to '[Android Push Notification Guide](https://adfresca.zendesk.com/entries/82771087)'
+Before you start, you need to have your GCM project number from Google API Console, and set GCM API Key value to our [Dashboard](https://dashboard.nudge.do). Please refer to '[Android Push Notification Guide](https://adfresca.zendesk.com/entries/82771087)'
 
 1) Check your GCM library installation
   - To use GCM service, your should have GCM client library in your project.
@@ -224,7 +224,7 @@ To register your test device to our dashboard, you need to know your test device
   fresca.show();
   ```
 
-After you have your test device ID, you have to register it to [Dashboard](https://admin.adfresca.com). You can register your device in the 'Test Device' menu.
+After you have your test device ID, you have to register it to [Dashboard](https://dashboard.nudge.do). You can register your device in the 'Test Device' menu.
 
 * * *
 
@@ -482,7 +482,7 @@ You will call the method after your app is launched and the values have changed.
   }
 ```
 
-After you write the codes, you will be able to see a list of custom parameters you added on [Dashboard](https://admin.adfresca.com). 1) Select a App 2) In 'Overview' menu, click 'Settings - Custom Parameters' button.
+After you write the codes, you will be able to see a list of custom parameters you added on [Dashboard](https://dashboard.nudge.do). 1) Select a App 2) In 'Overview' menu, click 'Settings - Custom Parameters' button.
 
 <img src="https://s3-ap-northeast-1.amazonaws.com/file.adfresca.com/guide/sdk/custom_parameter_index.png">
 
@@ -498,7 +498,7 @@ If your app has any value to measure user stickiness such as ‘play count’ in
 
 To begin, you first need to set a new custom parameter such as 'play count’, and then configure it to a stickiness mode (stickiness mode can only be configured by Nudge team currently).
 
-To implement codes, simply pass the value to **incrCustomParameterValue(index, amount)** method whenever the stickiness value is increased. Our SDK will automatically calculate the accumulated value and daily increased value and update user profiles.
+To implement codes, simply pass the value to **incrCustomParameterValue(key, amount)** method whenever the stickiness value is increased. Our SDK will automatically calculate the accumulated value and daily increased value and update user profiles.
 
 After you write the code, you can now use 'Today's play count, 'Average play count in a week', and 'Total play count in a week' conditions to define your user segments in our dashboard.
 
@@ -528,7 +528,7 @@ public void onUserSignIn {
 
 A Marketing Moment means the exact moment you want to engage with your users. For example, you may need to deliver a message when the user completes a quest or enters an item store. You will be able to use it with the [custom parameters](#custom-parameter) so you can deliver a personalized and targeted message at a specific moment in real time.
 
-To implement codes, simply call **load(index)** method with passing marketing moment's index. You can get the marketing moment's index in our [Dashboard](https://admin.adfresca.com): 1) Select a App 2) In 'Overview' menu, click 'Settings - Marketing Moment' button. 
+To implement codes, simply call **load(index)** method with passing marketing moment's index. You can get the marketing moment's index in our [Dashboard](https://dashboard.nudge.do): 1) Select a App 2) In 'Overview' menu, click 'Settings - Marketing Moment' button. 
 
 You will call the method after the moment has happened in the app.
 
