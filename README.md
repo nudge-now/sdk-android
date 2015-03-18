@@ -983,7 +983,9 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 * * *
 
 ## Release Notes
-- **v2.4.6 _(2014/12/22 Updated)_**
+- **v2.4.7 (2015/02/13 Updated)**
+  - [Custom Parameter](#custom-parameter) provides 'string' unique key. (Integer key is still available)
+- v2.4.6
   - Add hasCustomParameterWithIndex method. 
 - v2.4.5
   - HARD_ITEM and SOFT_ITEM enums are added to AFPurchase class to replace ACTUAL_ITEM and VIRTUAL_ITEM which will be deprecated. Please refer to [In-App Purchase Tracking](#in-app-purchase-tracking) section.
