@@ -1221,7 +1221,7 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 - **v2.4.7 _(2015/02/13 Updated)_**
   - [Custom Parameter](#custom-parameter) 설정 시 정수 형태의 고유 인덱스 값이 아닌 문자열 형태의 고유 키 값을 사용할 수 있도록 변경되었습니다. (인덱스를 이용하는 기존 방식도 그대로 지원합니다.)
 - v2.4.6
-  - hasCustomParameterWithIndex 메소드가 추가되었습니. 
+  - hasCustomParameterWithIndex 메소드가 추가되었습니다. 
 - v2.4.5
   - AFPurchase 객체에 HARD_ITEM, SOFT_ITEM purchase type이 추가되고 ACTUAL_ITEM, SOFT_ITEM 값이 deprecated 되었습니다. 자세한 내용은 [In-App Purchase Tracking](#in-app-purchase-tracking) 항목을 참고하여 주세요.
   - HARD_ITEM, SOFT_ITEM 값이 추가됨에 따라 [Sales Promotion](#sales-promotion) 항목의 예제 코드가 변경되었습니다. 반드시 getType()을 이용하여 화폐 유형을 검사해야 합니다.
