@@ -983,7 +983,10 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 * * *
 
 ## Release Notes
-- **v2.4.7 (2015/02/13 Updated)**
+
+- **v2.4.8 _(2015/03/20 Updated)_**
+  - for [Image Push Notification](#image-push-notification), SDK can download an image uploaded in dashboard.
+- v2.4.7
   - [Custom Parameter](#custom-parameter) provides 'string' unique key. (Integer key is still available)
 - v2.4.6
   - Add hasCustomParameterWithIndex method. 

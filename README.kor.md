@@ -1109,7 +1109,7 @@ Log.v(TAG, "Google Referrer = " + fresca.getReferrer());
 _Nudge_ Android SDK는 일반적인 텍스트 형태의 Notification 뿐만 아니라 이미지를 포함한 새로운 형태의 _Image Push Notification_ 기능을 제공하고 있습니다. 이미지 푸시 메시지를 이용하시면 기존의 텍스트 푸시 메시지에 비해 사용자의 주목을 끌 수 있을 뿐만 아니라, 한 눈에 쉽게 내용을 파악할 수 있습니다.
 
 <center>
-<img src="https://adfresca.zendesk.com/attachments/token/ordowzyitlmzvmn/?name=image_push_v1+copy.png" height=500/>&nbsp;
+<img src="https://adfresca.zendesk.com/attachments/token/jzehtdeatza0nde/?name=image_push_v2+copy.png" height=500/>&nbsp;
 <img src="https://adfresca.zendesk.com/attachments/token/5okygnwkprh58k5/?name=image_push_v4+copy.png" height=500/>
 </center>
 
@@ -1128,61 +1128,15 @@ Nudge의 Image Push Notification은 사용자 디바이스 상태에 따라 2가
 
 위 4가지 경우에는 Android Notification 형태의 메시지 뷰가 디바이스에 표시됩니다.
 
-_Image Push Notification_ 기능을 적용하기 위해서는 아래의 과정이 필요합니다.
+_Image Push Notification_ 기능을 적용하기 위해서는 800px * 464px 사이즈의 이미지가 필요합니다. 아래 2가지 방법을 통해 이미지를 준비할 수 있습니다.
 
-1) AndroidMenefest.xml 퍼미션 정보 확인하기
-```xml
-....
-  <uses-permission android:name="android.permission.WAKE_LOCK" />
-  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-  <uses-permission android:name="android.permission.READ_PHONE_STATE" /> 
-  <uses-permission android:name="android.permission.VIBRATE" />
-....
-```
+1) 대쉬보드에서 이미지를 업로드하는 경우
 
-2) 이미지 파일 준비하기
+대쉬보드에서 이미지 파일을 직접 업로드하여 전송할 수 있습니다. SDK는 해당 이미지를 내려받아 표시하기 때문에 아무런 작업이 필요하지 않습니다.
 
-현재 메시지 뷰에 표시되는 이미지 리소스는 애플리케이션 빌드에 포함된 파일이름을 대쉬보드에서 지정하여 적용됩니다. (이후 서비스 업데이트를 통해 대쉬보드에서 별도로 등록한 이미지를 내려받아 표시하는 기능이 추가됩니다.)
+1) 로컬 이미지 리소스를 이용하는 경우
 
 Nudge Android SDK는 애플리케이션 빌드의 'assets', 'res/drawable', 'res/raw' 폴더에 위치한 이미지 파일을 검색하여 표시하고 있습니다. 원하는 이미지 파일을 해당 위치에 저장하여 빌드합니다.
-
-FHD (1080 * 1920) 해상도의 단말기 기준으로 권장하는 이미지 사이즈 리스트는 아래와 같습니다.
-- 464px * 464px (1:1 비율의 이미지를 사용할 경우)
-- 800px * 464px (가로 형태의 이미지를 사용할 경우)
-- 464px * 800px (세로 형태의 이미지를 사용할 경우)
-
-지정된 파일을 원본 비율에 맞추어 아래와 같이 Overlay 형태의 메시지뷰에 표시할 수 있습니다.
-<center>
-<img src="https://adfresca.zendesk.com/attachments/token/ordowzyitlmzvmn/?name=image_push_v1+copy.png" width=200/>&nbsp;
-<img src="https://adfresca.zendesk.com/attachments/token/jzehtdeatza0nde/?name=image_push_v2+copy.png" width=200/>&nbsp;
-<img src="https://adfresca.zendesk.com/attachments/token/lo9ngjyz663um41/?name=image_push_v3+copy.png" width=200/>
-</center>
-
-**주의:** 
-Android Notification 형태의 뷰는 현재 Android UI에서 제공하는 [BigPictureStyle](http://developer.android.com/reference/android/app/Notification.BigPictureStyle.html) 설정을 적용하여 Notification 영역에 표시되고 있습니다. OS 4.1 버전부터 지원되며 OS에서 화면 해상도에 맞게 표시할 이미지 사이즈를 지정하여 표시하게 됩니다. 
-
-이 과정에서 세로 길이가 긴 형태의 이미지들은 이미지가 가운데로 크롭될 가능성이 높습니다. 만약 사용하려는 세로 이미지가 Android Notification 영역에서 비정상적으로 표시된다면 가로 형태의 이미지를 사용하시는 것을 권장합니다.
-
-3) AdFresca.showNotification() 메소드 확인하기
-
-Image Push Notification 기능은 showNotification() 메소드를 통해 메시지를 표시하는 경우에만 동작합니다. 아래의 예제처럼 showNotification() 메소드가 호출되고 있는지 확인합니다.
-
-```java
-protected void onMessage(Context context, Intent intent) {
-  if (AdFresca.isFrescaNotification(intent)) {
-  
-    Class<?> targetActivityClass = YourMainActivity.class;
-    String appName = context.getString(R.string.app_name);
-    int icon = R.drawable.icon;
-    long when = System.currentTimeMillis();
-
-    // 푸시 메시지를 표시합니다. 
-    AFPushNotification notification = AdFresca.generateAFPushNotification(context, intent, targetActivityClass, appName, icon, when);
-    notification.setDefaults(Notification.DEFAULT_ALL); 
-    AdFresca.showNotification(notification);
-  }
-} 
-```
 
 * * *
 
@@ -1217,8 +1171,9 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 * * *
 
 ## Release Notes
-
-- **v2.4.7 _(2015/02/13 Updated)_**
+- **v2.4.8 _(2015/03/20 Updated)_**
+  - [Image Push Notification](#image-push-notification) 전송 시 대쉬보드에 업로드된 이미지를 내려받아 표시하는 기능을 제공합니다.
+- v2.4.7
   - [Custom Parameter](#custom-parameter) 설정 시 정수 형태의 고유 인덱스 값이 아닌 문자열 형태의 고유 키 값을 사용할 수 있도록 변경되었습니다. (인덱스를 이용하는 기존 방식도 그대로 지원합니다.)
 - v2.4.6
   - hasCustomParameterWithIndex 메소드가 추가되었습니다. 
