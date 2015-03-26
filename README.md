@@ -5,6 +5,7 @@
   - [In-App Messaging](#in-app-messaging)
   - [Push Messaging](#push-messaging)
   - [Test Device Registration](#test-device-registration)
+  - [Test Mode](#test-mode)
 - [IAP, Reward and Sales Promotion](#iap-reward-and-sales-promotion)
   - [In-App Purchase Tracking](#in-app-purchase-tracking)
   - [Give Reward](#give-reward)
@@ -105,7 +106,7 @@ protected void onCreate(Bundle savedInstanceState) {
 }
 ```
 
-When you first call in-app messaging methods, you will see the test message below. If you tap on the image, it will redirect to the product page of the app on the app store. You will hide this test message by changing the test mode configuration later.
+When you first call in-app messaging methods, you will see the test message below. If you tap on the image, it will redirect to the product page of the app on the app store. You will hide this test message by changing the test campaign mode configuration later.
 
 <img src="https://adfresca.zendesk.com/attachments/token/zngvftbmcccyajk/?name=device-2013-03-18-133517.png" width="240" />
 &nbsp;
@@ -197,10 +198,11 @@ protected void onMessage(Context context, Intent intent) {
 - If the push message has a Deep Link, our SDK will execute the url when users touch the message.
 - If the push message does not have a Deep Link, our SDK will execute your targetActivityClass instead.
 - You may also able to use notification.setSound(uri) method to play a sound when the message arrives.
+* * *
 
 ### Test Device Registration
 
-Nudge supports a test mode feature. With the test mode feature, you can deliver test messages to only registered test devices. 
+Nudge supports a test campaign feature. With the test campaign feature, you can deliver test messages to only registered test devices. 
 
 To register your test device to our dashboard, you need to know your test device ID from our SDK. Our SDK provides two ways to show test device IDs.
  
@@ -225,6 +227,18 @@ To register your test device to our dashboard, you need to know your test device
   ```
 
 After you have your test device ID, you have to register it to [Dashboard](https://dashboard.nudge.do). You can register your device in the 'Test Device' menu.
+
+### Test Mode
+
+Nudge SDK supports a test mode feature. With the test mode feature, you can verify your SDK codes. When you add **setTestMode(true)** code, SDK will print a log message with a result for each your SDK code. 
+
+  ```java
+ AdFresca.setTestMode(true);
+  ```
+
+<img src="https://s3-ap-northeast-1.amazonaws.com/file.adfresca.com/guide/sdk/android_sdk_test_mode.png" width="900" />
+
+The test mode currently provides 'Start Session', 'Push Messaging', 'In-App Purchase Tracking', 'Custom Parameter', and 'Stickiness Custom Parameter' logs. Other feature support will be available soon.
 
 * * *
 
@@ -984,7 +998,9 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 
 ## Release Notes
 
-- **v2.4.8 _(2015/03/20 Updated)_**
+- **v2.4.9 _(2015/03/27 Updated)_**
+  - [Test Mode](#test-mode) is added.
+- v2.4.8
   - for [Image Push Notification](#image-push-notification), SDK can download an image uploaded in dashboard.
 - v2.4.7
   - [Custom Parameter](#custom-parameter) provides 'string' unique key. (Integer key is still available)
