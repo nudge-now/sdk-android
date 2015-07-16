@@ -16,7 +16,7 @@
   - [Marketing Moment](#marketing-moment)
 - [Advanced](#advanced)
   - [Custom Banner (Android Only)](#custom-banner)
-  - [AFShowListener](#afshowlistener)
+  - [NKShowListener](#nkshowlistener)
   - [Timeout Interval](#timeout-interval)
 - [Reference](#reference)
   - [Deep Link](#deep-link)
@@ -63,10 +63,10 @@ To add our SDK into your android project, please follow the instructions below:
       </service>
 
       <!-- Activity for Reward -->
-      <activity android:name="com.adfresca.sdk.reward.AFRewardActivity" />
+      <activity android:name="nudge.sdk.NKRewardActivity" />
      
       <!-- Boradcast Receiver for Google Referrer Tracking-->
-      <receiver android:name="com.adfresca.sdk.referer.AFRefererReciever" android:exported="true">
+      <receiver android:name="nudge.sdk.NKReferrerReciever" android:exported="true">
         <intent-filter>
           <action android:name="com.android.vending.INSTALL_REFERRER" />
         </intent-filter>
@@ -88,8 +88,8 @@ Put startSession() in your first activity class. Please make sure that this meth
 ```java
 protected void onCreate(Bundle savedInstanceState) {
   ....
-  AdFresca.setApiKey(API_KEY);
-  AdFresca.getInstance(this).startSession();
+  Nudge.setApiKey(API_KEY);
+  Nudge.getInstance(this).startSession();
 }
 ```
 
@@ -100,9 +100,9 @@ With the in-app messaging feature, you can deliver a message to your in-app user
 ```java
 protected void onCreate(Bundle savedInstanceState) {
   ...
-  AdFresca fresca = AdFresca.getInstance(this);
-  fresca.load();
-  fresca.show();
+  Nudge nudge = Nudge.getInstance(this);
+  nudge.load();
+  nudge.show();
 }
 ```
 
@@ -139,7 +139,7 @@ Before you start, you need to have your GCM project number from Google API Conso
       </receiver>
       <service android:name="YOUR.PACKAGE.NAME.GCMIntentService" />  
 
-      <activity android:name="com.adfresca.ads.AdFrescaPushActivity" />
+      <activity android:name="nudge.sdk.NudghPushActivity" />
       ..........
    </application>
     ..........
@@ -162,8 +162,8 @@ Before you start, you need to have your GCM project number from Google API Conso
 3) Set GCM Registration ID
 
 ```java
-AdFresca fresca = AdFresca.getInstance(this);
-fresca.setPushRegistrationIdentifier("GCM_REGISTRATION_ID_OF_THIS_DEVICE");
+Nudge nudge = Nudge.getInstance(this);
+nudge.setPushRegistrationIdentifier("GCM_REGISTRATION_ID_OF_THIS_DEVICE");
 ```
 - If you don't have a GCM registration id yet, please refer to '[How to Get GCM Registration ID](https://gist.github.com/sunku/b47eecee77afe40aa515)'
 
@@ -171,16 +171,16 @@ fresca.setPushRegistrationIdentifier("GCM_REGISTRATION_ID_OF_THIS_DEVICE");
 
 ```java
 protected void onRegistered(Context context, String registrationId) {
- AdFresca.handlePushRegistration(registrationId);
+ nudge.handlePushRegistration(registrationId);
 }
 
 protected void onUnregistered(Context context, String registrationId) {
-  AdFresca.handlePushRegistration(null);
+  nudge.handlePushRegistration(null);
 }
 
 protected void onMessage(Context context, Intent intent) {
   // Check if this notification is from Nudge
-  if (AdFresca.isFrescaNotification(intent)) {
+  if (nudge.isNudgeNotification(intent)) {
 
     Class<?> targetActivityClass = YourMainActivity.class;
     String appName = context.getString(R.string.app_name);
@@ -188,9 +188,9 @@ protected void onMessage(Context context, Intent intent) {
     long when = System.currentTimeMillis();
 
     // Show this message
-    AFPushNotification notification = AdFresca.generateAFPushNotification(context, intent, targetActivityClass, appName, icon, when);
+    NKPushNotification notification = Nudge.generateNKPushNotification(context, intent, targetActivityClass, appName, icon, when);
     notification.setDefaults(Notification.DEFAULT_ALL); 
-    AdFresca.showNotification(notification);
+    nudge.showNotification(notification);
   }
 }
 ```
@@ -210,8 +210,8 @@ To register your test device to our dashboard, you need to know your test device
   - After connecting your device with ADB, you can simply print out test device ID with a logger.
 
   ```java
-  AdFresca fresca = AdFresca.getInstance(this);
-  Log.d(TAG, "Nudge Test Device ID is = " + fresca.getTestDeviceId());
+  Nudge nudge = Nudge.getInstance(this);
+  Log.d(TAG, "Nudge Test Device ID is = " + nudge.getTestDeviceId());
   ```
 
 2. Displaying test device ID on your app screen using printTestDeviceId property
@@ -220,10 +220,10 @@ To register your test device to our dashboard, you need to know your test device
   - printTestDeviceId property must be set to false when you distribute your app on the store. 
 
   ```java
-  AdFresca fresca = AdFresca.getInstance(this);
-  fresca.setPrintTestDeviceId(true);
-  fresca.load();
-  fresca.show();
+  Nudge nudge = Nudge.getInstance(this);
+  nudge.setPrintTestDeviceId(true);
+  nudge.load();
+  nudge.show();
   ```
 
 After you have your test device ID, you have to register it to [Dashboard](https://dashboard.nudge.do). You can register your device in the 'Test Device' menu.
@@ -233,7 +233,7 @@ After you have your test device ID, you have to register it to [Dashboard](https
 Nudge SDK supports a test mode feature. With the test mode feature, you can verify your SDK codes. When you add **setTestMode(true)** code, SDK will print a log message with a result for each your SDK code. 
 
   ```java
- AdFresca.setTestMode(true);
+ Nudge.setTestMode(true);
   ```
 
 <img src="https://s3-ap-northeast-1.amazonaws.com/file.adfresca.com/guide/sdk/android_sdk_test_mode.png" width="900" />
@@ -259,7 +259,7 @@ Let's get started and implement SDK codes with the examples below.
 
 #### Hard Currency Item Tracking
 
-The purchase of 'Hard Currency Items’ is made with the store's billing library such as Google Play Billing. When your user purchased the item successfully, simply create AFPurchase object and use logPurchase() method. Also, call CancelPromotionPurchase() method when a user cancelled or failed to purchase.
+The purchase of 'Hard Currency Items’ is made with the store's billing library such as Google Play Billing. When your user purchased the item successfully, simply create NKPurchase object and use logPurchase() method. Also, call CancelPromotionPurchase() method when a user cancelled or failed to purchase.
 
 Example: Google Play Billing 
 ```java
@@ -270,7 +270,7 @@ IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelpe
 
     if (mHelper == null || result.isFailure() || !verifyDeveloperPayload(purchase)) {
       ......
-      AdFresca.getInstance(MainActivity.this).cancelPromotionPurchase();
+      Nudge.getInstance(MainActivity.this).cancelPromotionPurchase();
       return;
     }
 
@@ -286,7 +286,7 @@ IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelpe
       String receiptData = purchase.getOriginalJson();
       String signature = purchase.getSignature();
 
-      AFPurchase hardPurchase = new AFPurchase.Builder(AFPurchase.Type.HARD_ITEM)
+      NKPurchase hardPurchase = new NKPurchase.Builder(NKPurchase.Type.HARD_ITEM)
                             .setItemId(itemId)
                             .setCurrencyCode(currencyCode)
                             .setPrice(price)
@@ -294,7 +294,7 @@ IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelpe
                             .setReceipt(orderId, receiptData, signature)
                             .build();
 
-      AdFresca.getInstance(MainActivity.this).logPurchase(hardPurchase);
+      Nudge.getInstance(MainActivity.this).logPurchase(hardPurchase);
     }
     
     ......
@@ -304,7 +304,7 @@ IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelpe
 
 The above example is written for Google Play. You can also get the required values from other billing libraries such as Amazon.
 
-For more details of AFPurchase object with the hard currency item, check the table below.
+For more details of NKPurchase object with the hard currency item, check the table below.
 
 Method | Description
 ------------ | ------------- | ------------
@@ -316,26 +316,26 @@ setReceipt(string, string, string) | Set the receipt property of purchase object
 
 #### Soft Currency Item Tracking
 
-When users purchase soft currency items in the app, you can also create AFPurchase object and call logPurchase() method. Also, call cancelPromotionPurchase() method when a user cancelled or failed to purchase. 
+When users purchase soft currency items in the app, you can also create NKPurchase object and call logPurchase() method. Also, call cancelPromotionPurchase() method when a user cancelled or failed to purchase. 
 
 ```java
 public void onSoftItemPurchased(Item item, Date purchasedDate) {
-  AFPurchase softPurchase = new AFPurchase.Builder(AFPurchase.Type.SOFT_ITEM)
+  NKPurchase softPurchase = new NKPurchase.Builder(NKPurchase.Type.SOFT_ITEM)
                   .setItemId(item.getId()) // "long_sword"
                   .setCurrencyCode(item.getCurrencyCode()) // "gold"
                   .setPurchaseDate(purchaseDate) // Date object or null
                   .setPrice(item.getPrice()) // 10
                   .build();
   
-  AdFresca.getInstance(this).logPurchase(softPurchase);
+  Nudge.getInstance(this).logPurchase(softPurchase);
 }
 
 public void onPurchaseSoftItemFailure() {
-  AdFresca.getInstance(this).cancelPromotionPurchase();
+  Nudge.getInstance(this).cancelPromotionPurchase();
 }
 ```
 
-For more details of AFPurchase object with the soft currency item, check the table below.
+For more details of NKPurchase object with the soft currency item, check the table below.
 
 Method | Description
 ------------ | ------------- | ------------
@@ -348,11 +348,11 @@ setPurchaseDate(date) | Set the date of purchase. If you set null value, it will
 
 After you call logPurchase() method, the purchase data is updated to our dashboard in real-time. You can see the list of updated item in 'Overview > Settings > In-App Items' menu.
 
-If you can't see any data in our dashboard, your AFPurchase object may be invalid. To check it, you can implement  AFPurchaseExceptionListener and call log logPurchase(purchase, listener) method. 
+If you can't see any data in our dashboard, your NKPurchase object may be invalid. To check it, you can implement  NKPurchaseExceptionListener and call log logPurchase(purchase, listener) method. 
 
 ```java
-AdFresca.getInstance(this).logPurchase(purchase, new AFPurchaseExceptionListener(){
-  public void onException(AFPurchase purchase, AFException e) {
+Nudge.getInstance(this).logPurchase(purchase, new NKPurchaseExceptionListener(){
+  public void onException(NKPurchase purchase, NKException e) {
     Log.e(TAG, (purchase == null ? "purchase=null" : purchase.toString()));
     Log.e(TAG, e.getMessage());
   }
@@ -370,15 +370,15 @@ When implementing reward item codes, you can check if your user has any reward t
 To implement codes, we use two codes below:
 
 - checkRewardItems method: This method is to check if any item is available to receive. We recommend to put this code when the app becomes active. 
-- AFRewardItemListener implementation: When the reward condition is completed with the current user, onReward event is automatically called with AFRewardItem object from our SDK. You can give an item to the user with AFRewardItem object.
+- NKRewardItemListener implementation: When the reward condition is completed with the current user, onReward event is automatically called with NKRewardItem object from our SDK. You can give an item to the user with NKRewardItem object.
 
 ```java
 public void onResume() {
   ...
 
-  AdFresca.setRewardItemListener(new AFRewardItemListener(){
+  Nudge.setRewardItemListener(new NKRewardItemListener(){
       @Override
-      public void onReward(AFRewardItem item) {
+      public void onReward(NKRewardItem item) {
         String logMessage = String.format("You got the reward item! (%s)", item.getName());
         Log.d(TAG, logMessage);
         
@@ -386,8 +386,8 @@ public void onResume() {
         sendItemToUser(currentUserId, item.getUniqueValue(), item.getQuantity(), item.getSecurityToken());		
       }});
           
-  AdFresca fresca = AdFresca.getInstance(this);
-  fresca.checkRewardItems();
+  Nudge nudge = Nudge.getInstance(this);
+  nudge.checkRewardItems();
 }
 ```
 
@@ -416,7 +416,7 @@ Our SDK never calls itemRewarded event more than once per campaign. We always ch
 
 Using sales promotion campaigns, you can promote your in-app item to your users. When users tap on an action button of an image message, a purchase UI will appear to proceed with the user's purchase. Our SDK will automatically detect if the users made a purchase or not, and then will update the campaign performance to our dashboard in real time.
 
-To apply our promotion features, you should implement AFPromotionListener. onPromotion() event is automatically called when users tap on an action button of an image message for sale promotion campaigns. You just need to show the purchase UI of the promotion item using 'promotionPurchase' object. 
+To apply our promotion features, you should implement NKPromotionListener. onPromotion() event is automatically called when users tap on an action button of an image message for sale promotion campaigns. You just need to show the purchase UI of the promotion item using 'promotionPurchase' object. 
 
 For Hard Currency Items, you should use your in-app billing library codes to show the purchase UI. You can get the SKU value from getItemId() method of promotionPurchase object.
 
@@ -427,22 +427,22 @@ For Soft Currency Items, you should use your own purchase UI which might be alre
 2. **Discount Rate**: users can buy a promotion item at a discounted rate. You will calculate the discounted price by applying the discount rate which can be earned from getDiscountRate() method.
 
 ```java
-AdFresca.setPromotionListener(new AFPromotionListener(){
+Nudge.setPromotionListener(new NKPromotionListener(){
   @Override
-  public void onPromotion(AFPurchase promotionPurchase) {
+  public void onPromotion(NKPurchase promotionPurchase) {
     String itemId = promotionPurchase.getItemId();
     String logMessage = "no logMessage";
         
-    if (promotionPurchase.getCurrencyType().getType() == AFPurchase.Type.HARD_ITEM.getType()) {
+    if (promotionPurchase.getCurrencyType().getType() == NKPurchase.Type.HARD_ITEM.getType()) {
       // Using Google Play In-app Billing Library   
       iabHelper.launchPurchaseFlow(MainActivity.this, promotionPurchase.getItemId(), 0, yourPurchaseFinishedListener, "YOUR_PAYLOAD");
       
       logMessage = String.format("on HARD_ITEM Promotion (%s)", itemId);  
       
-    } else if (promotionPurchase.getCurrencyType().getType() == AFPurchase.Type.SOFT_ITEM.getType()) {  
+    } else if (promotionPurchase.getCurrencyType().getType() == NKPurchase.Type.SOFT_ITEM.getType()) {  
       String currencyCode = promotionPurchase.getCurrencyCode();
           
-      if (promotionPurchase.getDiscountType() == AFPurchase.DiscountType.DISCOUNTED_TYPE_PRICE) {
+      if (promotionPurchase.getDiscountType() == NKPurchase.DiscountType.DISCOUNTED_TYPE_PRICE) {
         // Use a discounted price
         double discountedPrice = promotionPurchase.getPrice(); 
       
@@ -450,7 +450,7 @@ AdFresca.setPromotionListener(new AFPromotionListener(){
         
         logMessage = String.format("on SOFT_ITEM Promotion (%s) with %.2f %s", promotionPurchase.getItemName(), discountedPrice, currencyCode);    
         
-      } else if (promotionPurchase.getDiscountType() == AFPurchase.DiscountType.DISCOUNT_TYPE_RATE) {
+      } else if (promotionPurchase.getDiscountType() == NKPurchase.DiscountType.DISCOUNT_TYPE_RATE) {
         // Use this rate to calculate a discounted price of item. discountedPrice = originalPrice - (originalPrice * discountRate)
         double discountRate = promotionPurchase.getDiscountRate(); 
         
@@ -479,11 +479,11 @@ You will call the method after your app is launched and the values have changed.
 
 ```java
   public void onCreate() {
-    AdFresca fresca = AdFresca.getInstance(this);     
-    fresca.setCustomParameterValue("level", User.level);
-    fresca.setCustomParameterValue("age", User.age);
-    fresca.setCustomParameterValue("facebook_flag", User.hasFacebookAccount);
-    fresca.startSession();
+    Nudge nudge = Nudge.getInstance(this);
+    nudge.setCustomParameterValue("level", User.level);
+    nudge.setCustomParameterValue("age", User.age);
+    nudge.setCustomParameterValue("facebook_flag", User.hasFacebookAccount);
+    nudge.startSession();
   }
   
   .....
@@ -491,8 +491,8 @@ You will call the method after your app is launched and the values have changed.
   public void onUserLevelChanged(int level) {
     User.level = level
     
-    AdFresca fresca = AdFresca.getInstance(this);     
-    fresca.setCustomParameterValue("level", User.level);
+    Nudge nudge = Nudge.getInstance(this);
+    nudge.setCustomParameterValue("level", User.level);
   }
 ```
 
@@ -518,8 +518,8 @@ After you write the code, you can now use 'Today's play count, 'Average play cou
 
 ```java
 public void OnGameFinished {
-  AdFresca fresca = AdFresca.getInstance(this);     
-  fresca.incrCustomParameterValue("play_count", 1);
+  Nudge nudge = Nudge.getInstance(this);
+  nudge.incrCustomParameterValue("play_count", 1);
 }
 ```
 
@@ -529,9 +529,9 @@ If your app was already launched to app stores, you need to set the accumulated 
 public void onUserSignIn {
   ....
 
-  AdFresca fresca = AdFresca.getInstance(this);     
-  if (!fresca.hasCustomParameterValue("play_count")) {
-    fresca.setCustomParameterValue("play_count", User.totalPlayCount);
+  Nudge nudge = Nudge.getInstance(this);
+  if (!nudge.hasCustomParameterValue("play_count")) {
+    nudge.setCustomParameterValue("play_count", User.totalPlayCount);
   }
 }
 ```
@@ -548,18 +548,18 @@ You will call the method after the moment has happened in the app.
 
 ```java
   public void OnUserDidEnterItemStore() {
-    AdFresca fresca = AdFresca.getInstance(this);
-    fresca.load(EVENT_INDEX_STORE_PAGE); 
-    fresca.show();
+    Nudge nudge = Nudge.getInstance(this);
+    nudge.load(EVENT_INDEX_STORE_PAGE); 
+    nudge.show();
   }
 
   public void onUserLevelChanged(int level) {
     User.level = level
     
-    AdFresca fresca = AdFresca.getInstance(this);     
-    fresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_LEVEL, User.level);
-    fresca.load(MOMENT_INDEX_LEVEL_UP); 
-    fresca.show();
+    Nudge nudge = Nudge.getInstance(this);
+    nudge.setCustomParameterValue(CUSTOM_PARAM_INDEX_LEVEL, User.level);
+    nudge.load(MOMENT_INDEX_LEVEL_UP); 
+    nudge.show();
   }
 ```
 
@@ -575,7 +575,7 @@ In order to use _Custom Banner_, you have to add the namespace like the followin
 
 ```xml
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:adfresca="http://schemas.android.com/apk/res/Your.Package.Name"
+    xmlns:nudge="http://schemas.android.com/apk/res/Your.Package.Name"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 </LinearLayout>
@@ -588,42 +588,42 @@ _Android SDK_ matchs _Image Size Index_ of the loaded image with _Image Size Ind
 Add the following tag to layout xml to use _Floating View_.
 
 ```xml
-<com.adfresca.sdk.view.AFFloatingView
+<nudge.sdk.NKFloatingView
     android:layout_width="match_parent"
     android:layout_height="80dp"
-    adfresca:image_size_index="1" />
+    nudge:image_size_index="1" />
 ```
 
-*   `adfresca:image_size_index=1` Set _Image Size Index_.
+*   `nudge:image_size_index=1` Set _Image Size Index_.
 
 You can set _close\_button\_image_ for users to be able to close _Floating View_.
 
 ```xml
-<com.adfresca.sdk.view.AFFloatingView
+<nudge.sdk.NKFloatingView
     android:layout_width="match_parent"
     android:layout_height="80dp"
-    adfresca:image_size_index="1"
-    adfresca:close_button_image="@drawable/close_button" />
+    nudge:image_size_index="1"
+    nudge:close_button_image="@drawable/close_button" />
 ```
 
-*   `adfresca:close_button_image="@drawable/close_button"` Set an image of close button.
+*   `nudge:close_button_image="@drawable/close_button"` Set an image of close button.
 
 #### Banner View
 
 Add the following tag to layout xml to use _Banner View_.
 
 ```xml
-<com.adfresca.sdk.view.AFBannerView
+<nudge.sdk.NKBannerView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    adfresca:image_size_index="1"
-    adfresca:keep_aspect_ratio="width"
-    adfresca:default_image="@drawable/default_banner" />
+    nudge:image_size_index="1"
+    nudge:keep_aspect_ratio="width"
+    nudge:default_image="@drawable/default_banner" />
 ```
 
-- `adfresca:image_size_index="1"` Set _Image Size Index_.
-- `adfresca:keep_aspect_ratio="width"` Keep _Banner View_'s aspect ratio along with  the loaded content. If it is set to _width_, _Banner View_'s height will be changed to keep aspect ratio. In this case, `android:layout_height` must be `wrap_content`. (`adfresca:keep_aspect_ratio` is set to [ _none_ | _width_ | _height_ ]. _none_ is a default.)
-- `adfresca:default_image="@drawable/default_image"` Set _Default Image_ that is displayed before the image is matched.
+- `nudge:image_size_index="1"` Set _Image Size Index_.
+- `nudge:keep_aspect_ratio="width"` Keep _Banner View_'s aspect ratio along with  the loaded content. If it is set to _width_, _Banner View_'s height will be changed to keep aspect ratio. In this case, `android:layout_height` must be `wrap_content`. (`nudge:keep_aspect_ratio` is set to [ _none_ | _width_ | _height_ ]. _none_ is a default.)
+- `nudge:default_image="@drawable/default_image"` Set _Default Image_ that is displayed before the image is matched.
 
 **Example:** Using _Default View(Interstitial View)_ and _Banner View_ in a activity.
 
@@ -635,8 +635,8 @@ protected void onCreate(Bundle savedInstanceState) {
   super.onCreate(savedInstanceState);
   setContentView(R.layout.activity_intro);
   
-  AdFresca.setApiKey(API_KEY);
-  AdFresca fresca = AdFresca.getInstance(this);
+  Nudge.setApiKey(API_KEY);
+  Nudge nudge = Nudge.getInstance(this);
   fresca.startSession();
   fresca.load(EVENT_INDEX_MAIN_PAGE_FOR_BANNER); // load the content for Banner View of Main page
   fresca.load(EVENT_INDEX_MAIN_PAGE_FOR_INTERSTITIAL); // load the content for Interstitial View of Main page
@@ -646,27 +646,27 @@ protected void onCreate(Bundle savedInstanceState) {
 
 * * *
 
-### AFShowListener
+### NKShowListener
 
-_AFShowListener_ is called when a campaign is finished.
+_NKShowListener_ is called when a campaign is finished.
 
 When a campaign is finished, it means the following two cases.
 
 1. The content was shown and it has been closed.
 2. A campaign was failed because it expired or there was no [Custom Banner](#custom-banner) for its _Image Size Index_.
 
-You can differentiate these 2 cases by `view` that is given by `AFShowListener.show(int eventIndex, AFView view)`
+You can differentiate these 2 cases by `view` that is given by `NKShowListener.show(int eventIndex, NKView view)`
 
 - if `view != null`, it was the first case. At this time, `view` is one of [ _Default View_ | _Floating View_ | _Banner View_ ]. (`view` is _Default View_ if `view.isDefaultView()` returns true.)
 - if `view == null`, it was the second case.
 
 ```java
-AdFresca fresca = AdFresca.getInstance(this);
-fresca.startSession();
-fresca.load(EVENT_INDEX_STAGE_CLEAR);
-fresca.show(new AFShowListener(){
+Nudge nudge = Nudge.getInstance(this);
+nudge.startSession();
+nudge.load(EVENT_INDEX_STAGE_CLEAR);
+nudge.show(new NKShowListener(){
   @Override
-  public void onFinish(int eventIndex, AFView view) {
+  public void onFinish(int eventIndex, NKView view) {
     if(view == null) {
       // failed to show
     } else {
@@ -682,12 +682,12 @@ fresca.show(new AFShowListener(){
 **Example:** The following code shows content at _Intro Activity_ and will move to _Main Activity_ when it is finished.
 
 ```java
-AdFresca fresca = AdFresca.getInstance(this);
-fresca.startSession();
-fresca.load(EVENT_INDEX_INTRO);
-fresca.show(EVENT_INDEX_INTRO, new AFShowListener(){
+Nudge nudge = Nudge.getInstance(this);
+nudge.startSession();
+nudge.load(EVENT_INDEX_INTRO);
+nudge.show(EVENT_INDEX_INTRO, new NKShowListener(){
   @Override
-  public void onFinish(int eventIndex, AFView view) {
+  public void onFinish(int eventIndex, NKView view) {
     startActivity(new Intent(IntroActivity.this, MainActivity.class));
   }
 });
@@ -708,10 +708,10 @@ In app codes, override Activity's onResume() method like below:
 public void onResume() {
   super.onResume();
 
-  AdFresca fresca = AdFresca.getInstance(this);
+  Nudge nudge = Nudge.getInstance(this);
   
-  if (fresca.getDefaultViewVisibility() == View.VISIBLE && fresca.isUserClickedDefaultView()) {   
-    fresca.closeAd();
+  if (nudge.getDefaultViewVisibility() == View.VISIBLE && nudge.isUserClickedDefaultView()) {   
+    nudge.closeAd();
   }
 }
 ```
@@ -723,10 +723,10 @@ You can set a timeout interval for a messaging request. If message is not loaded
 Default is 5 seconds and you can set from 1 seconds to 5 seconds.
 
 ```java
-  AdFresca fresca = AdFresca.getInstance(this);
-  AdFresca.setTimeoutInterval(5) // # 5 seconds
-  fresca.load();
-  fresca.show();
+  Nudge nudge = Nudge.getInstance(this);
+  Nudge.setTimeoutInterval(5) // # 5 seconds
+  nudge.load();
+  nudge.show();
 ```
 
 ## Reference
@@ -805,7 +805,7 @@ First, create a new activity class named 'PushProxyActivity', and register the a
     <action android:name="android.intent.action.VIEW" /> 
     <category android:name="android.intent.category.DEFAULT" /> 
     <category android:name="android.intent.category.BROWSABLE" /> 
-    <data android:scheme="myapp" android:host="com.adfresca.push" />
+    <data android:scheme="myapp" android:host="nudge.push" />
   </intent-filter> 
 </activity>
 
@@ -814,7 +814,7 @@ First, create a new activity class named 'PushProxyActivity', and register the a
 <uses-permission  android:name="android.permission.GET_TASKS"/>
 ```
 
-In this case, you should create ca ustom url like myapp://com.adfresca.push?item=abc in your Push Messaging Campaign. 
+In this case, you should create ca ustom url like myapp://nudge.push?item=abc in your Push Messaging Campaign. 
 
 Then, you should implement PushProxyActivity class. This class is a simple proxy-style activity which only handles url from Android OS and then quits itself. 
 However, there is an exceptional situation when notification is received and your application is not running. In that case, you can't handle a custom url in the game engine, so you should manually start an application and pass urls as parameters as noted below.
@@ -833,15 +833,15 @@ public class PushProxyActivity extends Activity {
     Uri uri = getIntent().getData();
     if (uri != null) {
       if (isActivityRunning()) {
-        // Log.d("AdFresca", "PushProxyActivity.onCreate() with isActivityRunning : url = " + uri.toString());
+        // Log.d("Nudge", "PushProxyActivity.onCreate() with isActivityRunning : url = " + uri.toString());
         // Do something with uri
     
      } else {
-       // Log.d("AdFresca", "PushProxyActivity.onCreate() wihtout isActivityRunning :  uri = " + uri.toString());
+       // Log.d("Nudge", "PushProxyActivity.onCreate() wihtout isActivityRunning :  uri = " + uri.toString());
        
        // Run a new cocos2dx activity with uri
        Intent intent = new Intent(this, SimpleGame.class);
-       intent.putExtra(Constant.FRESCA_URL_KEY, uri.toString());
+       intent.putExtra(Constant.NUDGE_URL_KEY, uri.toString());
        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
        startActivity(intent);
      }        
@@ -873,9 +873,9 @@ Finally, you should handle url from PushProxyActivity on your Main activity.
   public void onCreate(Bundle savedInstanceState) {
     ......
     // Handle custom uri from PushProxcyActivity
-    String frescaURL = this.getIntent().getStringExtra(Constant.FRESCA_URL_KEY);
-    if (frescaURL != null) {
-      // Log.d("AdFresca", "MainActivity.onCreate() with uri = " + frescaURL);  
+    String nudgeURL = this.getIntent().getStringExtra(Constant.NUDGE_URL_KEY);
+    if (nudgeURL != null) {
+      // Log.d("Nudge", "MainActivity.onCreate() with uri = " + nudgeURL);  
       // Do something with uri
     }   
     ......
@@ -904,12 +904,12 @@ To integrate our SDK with this feature, you should set URL Schema value for the 
   You can find the package name in AndroidManifest.xml
 
   ```xml
-  <manifest package="com.adfresca.demo">
+  <manifest package="nudge.demo">
     ...
   </manifest>
   ```
 
-  In this case, you should set the CPI Identifier value of advertising app to "com.adfresca.demo" in our dashboard.
+  In this case, you should set the CPI Identifier value of advertising app to "nudge.demo" in our dashboard.
 
   For Incentivized CPI Campaigns, our SDK Installation of the advertising app is not required. You only check the package name.
 
@@ -917,9 +917,9 @@ To integrate our SDK with this feature, you should set URL Schema value for the 
     
   ```java
   public void onUserFinishTutorial() {
-    AdFresca fresca = AdFresca.getInstance(this);     
-    fresca.load(MOMENT_INDEX_TUTORIAL); 
-    fresca.show();
+    Nudge nudge = Nudge.getInstance(this);
+    nudge.load(MOMENT_INDEX_TUTORIAL); 
+    nudge.show();
   }
   ```
 
@@ -940,7 +940,7 @@ To fetch referrer and send it to our SDK, you can add a receiver and do test bel
 By registering this receiver, our SDK will automatically collect referrer information and update to the Nudge server. 
 
 ```xml
-<receiver android:name="com.adfresca.sdk.referer.AFRefererReciever" android:exported="true">
+<receiver android:name="nudge.sdk.NKReferrerReciever" android:exported="true">
   <intent-filter>
           <action android:name="com.android.vending.INSTALL_REFERRER" />
       </intent-filter>
@@ -955,13 +955,13 @@ Then you can manually send INSTALL_REFERRER message to your device. Just change 
 (You can see detailed information of each referrer value in [Google Play - Campaign Parameters](https://developers.google.com/analytics/devguides/collection/android/v2/campaigns#campaign-params))
 
 ```sh
-am broadcast -a com.android.vending.INSTALL_REFERRER -n YOUR_PACKAGE/com.adfresca.sdk.referer.AFRefererReciever --es "referrer" "utm_source=test_source&utm_medium=test_medium&utm_term=test_term&utm_content=test_content&utm_campaign=test_name"
+am broadcast -a com.android.vending.INSTALL_REFERRER -n YOUR_PACKAGE/nudge.sdk.NKReferrerReciever --es "referrer" "utm_source=test_source&utm_medium=test_medium&utm_term=test_term&utm_content=test_content&utm_campaign=test_name"
 ```
 3) Check if referrer was successfully set on our SDK
 
 ```java
-  AdFresca adfresca = AdFresca.getInstance(this);
-  Log.v(TAG, "Google Referrer = " + adfresca.getReferrer());
+  Nudge nudge = Nudge.getInstance(this);
+  Log.v(TAG, "Google Referrer = " + nudge.getReferrer());
 ``` 
 (Advanced) If you already use another broadcast receiver to handle INSTALL_REFERRER, you can manually set your referrer by calling setReferrer(string) method
 
@@ -975,6 +975,7 @@ If you use Proguard to protect your APK, you should add exception configurations
 
 ```java
 -keep class com.adfresca.** {*;} 
+-keep class nudge.sdk.** {*; }
 -keep class com.google.gson.** {*;} 
 -keep class org.openudid.** {*;} 
 -keep class sun.misc.Unsafe { *; }
@@ -983,12 +984,12 @@ If you use Proguard to protect your APK, you should add exception configurations
 
 ## Troubleshooting
 
-if our SDK can't show any message or raise errors, you can debug by implementing AFExceptionListener.
+if our SDK can't show any message or raise errors, you can debug by implementing NKExceptionListener.
 
 ```java
-AdFresca.setExceptionListener(new AFExceptionListener(){
+Nudge.setExceptionListener(new NKExceptionListener(){
   @Override
-  public void onExceptionCaught(AFException e) {
+  public void onExceptionCaught(NKException e) {
     Log.w("TAG", e.getCode() + ":" + e.getLocalizedMessage());
   }
 });

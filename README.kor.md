@@ -15,7 +15,7 @@
   - [Marketing Moment](#marketing-moment)
 - [Advanced](#advanced)
   - [Custom Banner (Android Only)](#custom-banner)
-  - [AFShowListener](#afshowlistener)
+  - [NKShowListener](#nkshowlistener)
   - [Timeout Interval](#timeout-interval)
 - [Reference](#reference)
   - [Deep Link](#deep-link)
@@ -65,10 +65,10 @@ SDK를 프로젝트에 설치하기 위하여 아래의 과정을 진행합니�
       </service>
 
       <!-- Activity for Reward -->
-      <activity android:name="com.adfresca.sdk.reward.AFRewardActivity" />
+      <activity android:name="nudge.sdk.NKRewardActivity" />
      
       <!-- Boradcast Receiver for Google Referrer Tracking-->
-      <receiver android:name="com.adfresca.sdk.referer.AFRefererReciever" android:exported="true">
+      <receiver android:name="nudge.sdk.NKRefererReciever" android:exported="true">
         <intent-filter>
           <action android:name="com.android.vending.INSTALL_REFERRER" />
         </intent-filter>
@@ -90,8 +90,8 @@ startSession() 메소드를 앱이 최초로 실행되는 액티비티에 적용
 ```java
 protected void onCreate(Bundle savedInstanceState) {
   ....
-  AdFresca.setApiKey(API_KEY);
-  AdFresca.getInstance(this).startSession();
+  Nudge.setApiKey(API_KEY);
+  Nudge.getInstance(this).startSession();
 }
 ```
 
@@ -102,9 +102,9 @@ protected void onCreate(Bundle savedInstanceState) {
 ```java
 protected void onCreate(Bundle savedInstanceState) {
   ...
-  AdFresca fresca = AdFresca.getInstance(this);
-  fresca.load();
-  fresca.show();
+  Nudge nudge = Nudge.getInstance(this);
+  nudge.load();
+  nudge.show();
 }
 ```
 
@@ -143,7 +143,7 @@ SDK를 적용하기 이전에 [Google API Console](https://cloud.google.com/cons
       </receiver>
       <service android:name="YOUR.PACKAGE.NAME.GCMIntentService" />  
 
-      <activity android:name="com.adfresca.ads.AdFrescaPushActivity" />
+      <activity android:name="nudge.sdk.NudgePushActivity" />
       ..........
    </application>
     ..........
@@ -166,8 +166,8 @@ SDK를 적용하기 이전에 [Google API Console](https://cloud.google.com/cons
 3) GCM Registration ID 설정하기
 
 ```java
-AdFresca fresca = AdFresca.getInstance(this);
-fresca.setPushRegistrationIdentifier("GCM_REGISTRATION_ID_OF_THIS_DEVICE");
+Nudge nudge = Nudge.getInstance(this);
+nudge.setPushRegistrationIdentifier("GCM_REGISTRATION_ID_OF_THIS_DEVICE");
 ```
 
 - 기존에 GCM Registration ID를 등록하고 가져오는 부분을 구현하지 않았다면, '[How to Get GCM Registration ID](https://gist.github.com/sunku/b47eecee77afe40aa515)' 내용을 참고하여 코드를 추가할 수 있습니다.
@@ -176,16 +176,16 @@ fresca.setPushRegistrationIdentifier("GCM_REGISTRATION_ID_OF_THIS_DEVICE");
 
 ```java
 protected void onRegistered(Context context, String registrationId) {
- AdFresca.handlePushRegistration(registrationId);
+ Nudge.handlePushRegistration(registrationId);
 }
 
 protected void onUnregistered(Context context, String registrationId) {
-  AdFresca.handlePushRegistration(null);
+  Nudge.handlePushRegistration(null);
 }
 
 protected void onMessage(Context context, Intent intent) {
   // Check if this notification is from Nudge
-  if (AdFresca.isFrescaNotification(intent)) {
+  if (Nudge.isNudgeNotification(intent)) {
 
     Class<?> targetActivityClass = YourMainActivity.class;
     String appName = context.getString(R.string.app_name);
@@ -193,9 +193,9 @@ protected void onMessage(Context context, Intent intent) {
     long when = System.currentTimeMillis();
 
     // Show this message
-    AFPushNotification notification = AdFresca.generateAFPushNotification(context, intent, targetActivityClass, appName, icon, when);
+    NKPushNotification notification = Nudge.generateNKPushNotification(context, intent, targetActivityClass, appName, icon, when);
     notification.setDefaults(Notification.DEFAULT_ALL); 
-    AdFresca.showNotification(notification);
+    Nudge.showNotification(notification);
   }
 }
 ```
@@ -210,11 +210,11 @@ Nudge는 테스트 모드 기능을 지원하여 테스트를 원하는 디바�
 테스트 기기 등록을 위한 아이디 값은 SDK를 통해 추출이 가능하며 2가지 방법을 지원 합니다.
  
 1. getTestDeviceId() 메소드를 사용하여 로그로 출력하는 방법
-  - After connecting your device with ADB, you can simply print out test device ID with a logger.
+  - ADB에 기기를 연결한 후에 아래의 코드로 쉽게 기기 아이디를 로그로 출력 할 수 있습니다.
 
   ```java
-  AdFresca fresca = AdFresca.getInstance(this);
-  Log.d(TAG, "Nudge Test Device ID is = " + fresca.getTestDeviceId());
+  Nudge nudge = Nudge.getInstance(this);
+  Log.d(TAG, "Nudge Test Device ID is = " + nudge.getTestDeviceId());
   ```
 
 2. setPrintTestDeviceId() 메소드를 사용하여 콘텐츠 뷰에 기기 아이디를 화면에 표시하는 방법
@@ -223,10 +223,10 @@ Nudge는 테스트 모드 기능을 지원하여 테스트를 원하는 디바�
   - 설정이 활성화된 상태로 앱이 배포되지 않도록 주의해야 합니다.
 
   ```java
-  AdFresca fresca = AdFresca.getInstance(this);
-  fresca.setPrintTestDeviceId(true);
-  fresca.load();
-  fresca.show();
+  Nudge nudge = Nudge.getInstance(this);
+  nudge.setPrintTestDeviceId(true);
+  nudge.load();
+  nudge.show();
   ```
 
 테스트 디바이스 아이디를 확인한 이후에는, [Dashboard](https://dashboard.nudge.do)를 접속하여 'Test Device' 메뉴를 통해 디바이스 등록이 가능합니다.
@@ -254,7 +254,7 @@ Nudge의 In-App-Purchase Tracking은 2가지 유형이 있습니다.
 
 #### Hard Currency Item Tracking
 
-Hard Currency Item의 결제는 각 앱스토어별 인-앱 결제 라이브러리를 통해 이루어집니다. 각 결제 라이브러리에서 _'결제 성공'_ 이벤트가 발생 할 시에 AFPurchase 객체를 생성하고 logPurchase(purchase) 메소드를 호출합니다. 그리고 _'결제 실패'_ 이벤트가 발생 할 시에는 cancelPromotionPurchase() 메소드를 호출합니다.
+Hard Currency Item의 결제는 각 앱스토어별 인-앱 결제 라이브러리를 통해 이루어집니다. 각 결제 라이브러리에서 _'결제 성공'_ 이벤트가 발생 할 시에 NKPurchase 객체를 생성하고 logPurchase(purchase) 메소드를 호출합니다. 그리고 _'결제 실패'_ 이벤트가 발생 할 시에는 cancelPromotionPurchase() 메소드를 호출합니다.
 
 적용 예제: Google Play 결제 
 ```java
@@ -265,7 +265,7 @@ IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelpe
 
     if (mHelper == null || result.isFailure() || !verifyDeveloperPayload(purchase)) {
       ......
-      AdFresca.getInstance(MainActivity.this).cancelPromotionPurchase();
+      Nudge.getInstance(MainActivity.this).cancelPromotionPurchase();
       return;
     }
 
@@ -281,7 +281,7 @@ IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelpe
       String receiptData = purchase.getOriginalJson();
       String signature = purchase.getSignature();
 
-      AFPurchase hardPurchase = new AFPurchase.Builder(AFPurchase.Type.HARD_ITEM)
+      NKPurchase hardPurchase = new NKPurchase.Builder(NKPurchase.Type.HARD_ITEM)
                             .setItemId(itemId)
                             .setCurrencyCode(currencyCode)
                             .setPrice(price)
@@ -289,7 +289,7 @@ IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelpe
                             .setReceipt(orderId, receiptData, signature)
                             .build();
 
-      AdFresca.getInstance(MainActivity.this).logPurchase(hardPurchase);
+      Nudge.getInstance(MainActivity.this).logPurchase(hardPurchase);
     }
     
     ......
@@ -297,9 +297,9 @@ IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelpe
 };
 ```
 
-위 예제는 Google Play 결제 라이브러리를 기준으로 작성되었지만 아마존이나 티스토어 등 모든 결제 라이브러리에서도 AFPurchase 객체에 필요한 값을 얻어올 수 있습니다.
+위 예제는 Google Play 결제 라이브러리를 기준으로 작성되었지만 아마존이나 티스토어 등 모든 결제 라이브러리에서도 NKPurchase 객체에 필요한 값을 얻어올 수 있습니다.
 
-Hard Currency Item을 위한 AFPurchase.Builder의 보다 자세한 설명은 아래와 같습니다.
+Hard Currency Item을 위한 NKPurchase.Builder의 보다 자세한 설명은 아래와 같습니다.
 
 Method | Description
 ------------ | ------------- | ------------
@@ -311,28 +311,28 @@ setReceipt(string, string, string) | 추후 Receipt Verficiation 기능을 위�
 
 #### Soft Currency Item Tracking
 
-Soft Currency Item의 결제는 앱 내의 가상 화폐로 아이템을 결제한 경우를 의미합니다. 앱 내에서 가상 화폐를 이용한 결제 이벤트가 성공한 경우 아래 예제와 같이 AFPurchase 객체를 생성하고 logPurchase(purchase) 메소드를 호출합니다. 그리고 _'결제 실패'_ 이벤트가 발생 할 시에는 cancelPromotionPurchase() 메소드를 호출합니다.
+Soft Currency Item의 결제는 앱 내의 가상 화폐로 아이템을 결제한 경우를 의미합니다. 앱 내에서 가상 화폐를 이용한 결제 이벤트가 성공한 경우 아래 예제와 같이 NKPurchase 객체를 생성하고 logPurchase(purchase) 메소드를 호출합니다. 그리고 _'결제 실패'_ 이벤트가 발생 할 시에는 cancelPromotionPurchase() 메소드를 호출합니다.
 
 적용 예제: 
 ```java
 public void onSoftItemPurchased(Item item, Date purchasedDate) {
-  AFPurchase softPurchase = new AFPurchase.Builder(AFPurchase.Type.SOFT_ITEM)
+  NKPurchase softPurchase = new NKPurchase.Builder(NKPurchase.Type.SOFT_ITEM)
                   .setItemId(item.getId()) // "long_sword"
                   .setCurrencyCode(item.getCurrencyCode()) // "gold"
                   .setPurchaseDate(purchaseDate) // Date object or null
                   .setPrice(item.getPrice()) // 10
                   .build();
   
-  AdFresca.getInstance(this).logPurchase(softPurchase);
+  Nudge.getInstance(this).logPurchase(softPurchase);
 }
 
 // 사용자가 결제를 취소했거나, 실패한 경우
 public void onPurchaseSoftItemFailure() {
-  AdFresca.getInstance(this).cancelPromotionPurchase();
+  Nudge.getInstance(this).cancelPromotionPurchase();
 }
 ```
 
-Soft Currency Item을 위한 AFPurchase.Builder의 보다 자세한 설명은 아래와 같습니다.
+Soft Currency Item을 위한 NKPurchase.Builder의 보다 자세한 설명은 아래와 같습니다.
 
 Method | Description
 ------------ | ------------- | ------------
@@ -343,16 +343,16 @@ setPurchaseDate(date) | 결제된 시간을 Date 객체 형태로 설정합니�
 
 #### IAP Trouble Shooting
 
-logPurchase() 메소드를 통해 기록된 AFPurchase 객체는 Nudge 서비스에 업데이트되어 실시간으로 대쉬보드에 반영됩니다. 현재까지 등록된 아이템 리스트는 'Overview' 메뉴의 Settings - In App Items 페이지를 통해 확인할 수 있습니다.
+logPurchase() 메소드를 통해 기록된 NKPurchase 객체는 Nudge 서비스에 업데이트되어 실시간으로 대쉬보드에 반영됩니다. 현재까지 등록된 아이템 리스트는 'Overview' 메뉴의 Settings - In App Items 페이지를 통해 확인할 수 있습니다.
 
-만약 아이템 리스트가 새로 갱신되지 않는 경우, AFPurchaseExceptionListener 구현하여 혹시 에러가 발생하고 있지 않은지 확인해야 합니다. 
+만약 아이템 리스트가 새로 갱신되지 않는 경우, NKPurchaseExceptionListener 구현하여 혹시 에러가 발생하고 있지 않은지 확인해야 합니다. 
 
-만약 AFPurchase 객체의 값이 제대로 설정되지 않은 경우, AFPurchaseExceptionListener 통하여 에러 메시지를 표시하고 있으니 아래와 같이 코드를 적용하여 로그를 확인합니다.
+만약 NKPurchase 객체의 값이 제대로 설정되지 않은 경우, NKPurchaseExceptionListener 통하여 에러 메시지를 표시하고 있으니 아래와 같이 코드를 적용하여 로그를 확인합니다.
 
 ```java
 ......
-AdFresca.getInstance(this).logPurchase(purchase, new AFPurchaseExceptionListener(){
-  public void onException(AFPurchase purchase, AFException e) {
+Nudge.getInstance(this).logPurchase(purchase, new NKPurchaseExceptionListener(){
+  public void onException(NKPurchase purchase, NKException e) {
     Log.e(TAG, (purchase == null ? "purchase=null" : purchase.toString()));
     Log.e(TAG, e.getMessage());
   }
@@ -372,23 +372,23 @@ Reward 캠페인에서 'Reward Item' 항목을 설정하거나, Incentivized CPI
 ```xml
 <manifest>   
   <application>
-      <activity android:name="com.adfresca.sdk.reward.AFRewardActivity" />
+      <activity android:name="nudge.sdk.NKRewardActivity" />
    </application>
 </manifest>
 ```
 
 이제 구현을 위해서 아래 2가지 코드를 이용합니다.
 - checkRewardItems 메소드 호출: 현재 지급 가능한 보상 아이템이 있는지 검사합니다. 사용자가 앱을 실행할 호출하는 것을 권장합니다.
-- AFRewardItemListener 구현: 아이템 지급 조건이 만족되면 onReward 이벤트가 발생됩니다. 인자로 넘어온 아이템 정보를 이용하여 사용자에게 아이템을 지급합니다.
+- NKRewardItemListener 구현: 아이템 지급 조건이 만족되면 onReward 이벤트가 발생됩니다. 인자로 넘어온 아이템 정보를 이용하여 사용자에게 아이템을 지급합니다.
 
 ```java
 @Override
 public void onResume() {
   super.onResume();
 
-  AdFresca.setRewardItemListener(new AFRewardItemListener(){
+  Nudge.setRewardItemListener(new NKRewardItemListener(){
       @Override
-      public void onReward(AFRewardItem item) {
+      public void onReward(NKRewardItem item) {
         String logMessage = String.format("You got the reward item! (%s)", item.toJson());
         Log.d(TAG, logMessage);
         
@@ -396,8 +396,8 @@ public void onResume() {
         sendItemToUser(currentUserId, item.getUniqueValue(), item.getQuantity(), item.getSecurityToken());		
       }});
           
-  AdFresca fresca = AdFresca.getInstance(this);
-  fresca.checkRewardItems();
+  Nudge nudge = Nudge.getInstance(this);
+  nudge.checkRewardItems();
 }
 ```
 
@@ -427,7 +427,7 @@ SDK에서 요청한 아이템을 사용자에게 지급해야 합니다. 클라�
 
 Sales Promotion 캠페인을 이용하여 특정 아이템의 구매를 유도할 수 있습니다. 사용자가 캠페인에 노출된 이미지 메시지를 클릭할 경우 해당 아이템의 결제 UI가 표시됩니다. SDK는 사용자의 실제 결제 여부까지 자동으로 트랙킹하여 대쉬보드에서 실시간으로 통계를 제공합니다. 
 
-프로모션 기능을 적용하기 위해서 AFPromotionListener를 구현합니다. 프로모션 캠페인이 노출된 후 사용자가 이미지 메시지의 액션 영역을 탭하면 onPromotion() 이벤트가 발생합니다. 이벤트에 넘어오는 promotionPurchase 객체 정보를 이용하여 사용자에게 아이템 결제 UI를 표시하도록 코드를 적용합니다.
+프로모션 기능을 적용하기 위해서 NKPromotionListener를 구현합니다. 프로모션 캠페인이 노출된 후 사용자가 이미지 메시지의 액션 영역을 탭하면 onPromotion() 이벤트가 발생합니다. 이벤트에 넘어오는 promotionPurchase 객체 정보를 이용하여 사용자에게 아이템 결제 UI를 표시하도록 코드를 적용합니다.
 
 Hard Currency 아이템의 경우 인-앱 결제 라이브러리를 이용하여 결제 UI를 표시합니다. promotionPurchase 객체의 ItemId 값이 아이템의 SKU 값에 해당됩니다. 아래의 예제는 구글 플레이의 결제 라이브러리 코드를 이용하고 있습니다.
 
@@ -439,22 +439,22 @@ Soft Currency 아이템의 경우는 앱이 기존에 사용하고 있는 상점
 
 
 ```java
-AdFresca.setPromotionListener(new AFPromotionListener(){
+Nudge.setPromotionListener(new NKPromotionListener(){
   @Override
-  public void onPromotion(AFPurchase promotionPurchase) {
+  public void onPromotion(NKPurchase promotionPurchase) {
     String itemId = promotionPurchase.getItemId();
     String logMessage = "no logMessage";
         
-    if (promotionPurchase.getCurrencyType().getType() == AFPurchase.Type.HARD_ITEM.getType()) {
+    if (promotionPurchase.getCurrencyType().getType() == NKPurchase.Type.HARD_ITEM.getType()) {
       // Using Google Play In-app Billing Library   
       iabHelper.launchPurchaseFlow(MainActivity.this, promotionPurchase.getItemId(), 0, yourPurchaseFinishedListener, "YOUR_PAYLOAD");
       
       logMessage = String.format("on HARD_ITEM Promotion (%s)", itemId);  
       
-    } else if (promotionPurchase.getCurrencyType().getType() == AFPurchase.Type.SOFT_ITEM.getType()) {          
+    } else if (promotionPurchase.getCurrencyType().getType() == NKPurchase.Type.SOFT_ITEM.getType()) {          
       String currencyCode = promotionPurchase.getCurrencyCode();
           
-      if (promotionPurchase.getDiscountType() == AFPurchase.DiscountType.DISCOUNTED_TYPE_PRICE) {
+      if (promotionPurchase.getDiscountType() == NKPurchase.DiscountType.DISCOUNTED_TYPE_PRICE) {
         // Use a discounted price
         double discountedPrice = promotionPurchase.getPrice(); 
       
@@ -462,7 +462,7 @@ AdFresca.setPromotionListener(new AFPromotionListener(){
         
         logMessage = String.format("on SOFT_ITEM Promotion (%s) with %.2f %s", promotionPurchase.getItemName(), discountedPrice, currencyCode);    
         
-      } else if (promotionPurchase.getDiscountType() == AFPurchase.DiscountType.DISCOUNT_TYPE_RATE) {
+      } else if (promotionPurchase.getDiscountType() == NKPurchase.DiscountType.DISCOUNT_TYPE_RATE) {
         // Use this rate to calculate a discounted price of item. discountedPrice = originalPrice - (originalPrice * discountRate)
         double discountRate = promotionPurchase.getDiscountRate(); 
         
@@ -494,11 +494,11 @@ Integer, Boolean 형태의 데이터를 상태 값으로 설정할 수 있으며
 
 ```java
   public void onCreate() {
-    AdFresca fresca = AdFresca.getInstance(this);     
-    fresca.setCustomParameterValue("level", User.level);
-    fresca.setCustomParameterValue("age", User.age);
-    fresca.setCustomParameterValue("facebook_flag", User.hasFacebookAccount);
-    fresca.startSession();
+    Nudge nudge = Nudge.getInstance(this);
+    nudge.setCustomParameterValue("level", User.level);
+    nudge.setCustomParameterValue("age", User.age);
+    nudge.setCustomParameterValue("facebook_flag", User.hasFacebookAccount);
+    nudge.startSession();
   }
   
   .....
@@ -506,8 +506,8 @@ Integer, Boolean 형태의 데이터를 상태 값으로 설정할 수 있으며
   public void onUserLevelChanged(int level) {
     User.level = level
     
-    AdFresca fresca = AdFresca.getInstance(this);     
-    fresca.setCustomParameterValue("level", User.level);
+    Nudge nudge = Nudge.getInstance(this);
+    nudge.setCustomParameterValue("level", User.level);
   }
 ```
 
@@ -529,8 +529,8 @@ Integer, Boolean 형태의 데이터를 상태 값으로 설정할 수 있으며
 
 ```java
 public void onGameFinished {
-  AdFresca fresca = AdFresca.getInstance(this);     
-  fresca.incrCustomParameterValue("play_count", 1);
+  Nudge nudge = Nudge.getInstance(this);
+  nudge.incrCustomParameterValue("play_count", 1);
 }
 ```
 
@@ -540,9 +540,9 @@ public void onGameFinished {
 public void onUserSignIn {
   ....
 
-  AdFresca fresca = AdFresca.getInstance(this);     
-  if (!fresca.hasCustomParameterValue("play_count")) {
-    fresca.setCustomParameterValue("play_count", User.totalPlayCount);
+  Nudge nudge = Nudge.getInstance(this);
+  if (!nudge.hasCustomParameterValue("play_count")) {
+    nudge.setCustomParameterValue("play_count", User.totalPlayCount);
   }
 }
 ```
@@ -568,9 +568,9 @@ SDK 적용을 위해서는 Dashboard에서 지정된 각 마케팅 모멘트의 
 ```java
   public class MainPageActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
-      AdFresca fresca = AdFresca.getInstance(this);     
-      fresca.load(MOMENT_INDEX_MAIN_PAGE);  // 메인 페이지에 설정한 콘텐츠츠를 노출
-      fresca.show(MOMENT_INDEX_MAIN_PAGE);
+      Nudge nudge = Nudge.getInstance(this);
+      nudge.load(MOMENT_INDEX_MAIN_PAGE);  // 메인 페이지에 설정한 콘텐츠를 노출
+      nudge.show(MOMENT_INDEX_MAIN_PAGE);
     }
   }
 ```
@@ -579,10 +579,10 @@ SDK 적용을 위해서는 Dashboard에서 지정된 각 마케팅 모멘트의 
 
 ```java
   public void onUserLevelChanged(int level) {
-    AdFresca fresca = AdFresca.getInstance(this);
-    fresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_LEVEL, level); // 사용자 level 정보를 가장 최신으로 업데이트
-    fresca.load(MOMENT_INDEX_LEVEL_UP); // 레벨업 모멘트에 설정한 콘텐츠를 노출
-    fresca.show(MOMENT_INDEX_LEVEL_UP);
+    Nudge nudge = Nudge.getInstance(this);
+    nudge.setCustomParameterValue(CUSTOM_PARAM_INDEX_LEVEL, level); // 사용자 level 정보를 가장 최신으로 업데이트
+    nudge.load(MOMENT_INDEX_LEVEL_UP); // 레벨업 모멘트에 설정한 콘텐츠를 노출
+    nudge.show(MOMENT_INDEX_LEVEL_UP);
   }
 ```
 
@@ -596,13 +596,13 @@ _(Custom Banner 기능은 Android Platform에 한하여 적용 가능합니다.)
 
 Android SDK 에서는 _Floating View_와 _Banner View_ 두가지 종류의 커스텀 배너를 제공합니다. 커스텀 배너는 dashboard 에서 이미지 사이즈를 등록한 후 해당 이미지 사이즈를 사용하는 캠페인이 매칭되었을 때 이미지를 커스텀 배너에 보여줍니다.
 
-`AdFresca.load()` 와 `AdFresca.show()` 를 통해 이미지를 보여주는 점은 기존 캠페인과 같습니다. _Floating View_는 다른 UI Component 위에 위치하며 닫을 수 있으며, _Banner View_는 _Floating View_와는 반대로 화면의 일정 영역을 차지하며 닫을 수 없습니다. 
+`Nudge.load()` 와 `Nudge.show()` 를 통해 이미지를 보여주는 점은 기존 캠페인과 같습니다. _Floating View_는 다른 UI Component 위에 위치하며 닫을 수 있으며, _Banner View_는 _Floating View_와는 반대로 화면의 일정 영역을 차지하며 닫을 수 없습니다. 
 
 커스텀 배너를 사용하기 위해서는 아래와 같이 namespace 를 layout xml 파일에 추가해야합니다.
 
 ```xml
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:adfresca="http://schemas.android.com/apk/res/Your.Package.Name"
+    xmlns:nudge="http://schemas.android.com/apk/res/Your.Package.Name"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 </LinearLayout>
@@ -613,42 +613,42 @@ Android SDK 에서는 _Floating View_와 _Banner View_ 두가지 종류의 커�
 Floating View 를 사용하기 위해 태그를 추가합니다.
 
 ```xml
-<com.adfresca.sdk.view.AFFloatingView
+<nudge.sdk.NKFloatingView
     android:layout_width="match_parent"
     android:layout_height="80dp"
-    adfresca:image_size_index="1" />
+    nudge:image_size_index="1" />
 ```
 
-*   `adfresca:image_size_index=1` _이미지 사이즈 인덱스_를 설정합니다.
+*   `nudge:image_size_index=1` _이미지 사이즈 인덱스_를 설정합니다.
 
 닫기 버튼 이미지를 설정하여 사용자가 _Floating View_를 닫을 수 있도록 할 수 있습니다.
 
 ```xml
-<com.adfresca.sdk.view.AFFloatingView
+<nudge.sdk.NKFloatingView
     android:layout_width="match_parent"
     android:layout_height="80dp"
-    adfresca:image_size_index="1"
-    adfresca:close_button_image="@drawable/close_button" />
+    nudge:image_size_index="1"
+    nudge:close_button_image="@drawable/close_button" />
 ```
 
-*   `adfresca:close_button_image="@drawable/close_button"` 닫기 버튼 이미지를 설정합니다.
+*   `nudge:close_button_image="@drawable/close_button"` 닫기 버튼 이미지를 설정합니다.
 
 #### Banner View
 
 _Banner View_ 를 사용하기 위해 태그를 추가합니다.
 
 ```xml
-<com.adfresca.sdk.view.AFBannerView
+<nudge.sdk.NKBannerView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    adfresca:image_size_index="1"
-    adfresca:keep_aspect_ratio="width"
-    adfresca:default_image="@drawable/default_banner" />
+    nudge:image_size_index="1"
+    nudge:keep_aspect_ratio="width"
+    nudge:default_image="@drawable/default_banner" />
 ```
 
-- `adfresca:image_size_index="1"` 이미지 사이즈 인덱스를 설정합니다.
-- `adfresca:keep_aspect_ratio="width"` 로드된 콘텐츠츠에 따라 _Banner View_의 가로세로 비율을 유지합니다. _width_가 세팅된 경우 _Banner View_의 세로값을 변경하여 비율을 유지합니다. 이 경우 `android:layout_height`는 반드시 `wrap_content` 가 되어야합니다. (`adfresca:keep_aspect_ratio`는  [ _none_ | _width_ | _height_ ] 중에 하나의 값을 가지며 디폴트는 _none_ 입니다.)
-- `adfresca:default_image="@drawable/default_image"` 이미지가 로드되기 전 표시할 디폴트 이미지를 지정합니다.
+- `nudge:image_size_index="1"` 이미지 사이즈 인덱스를 설정합니다.
+- `nudge:keep_aspect_ratio="width"` 로드된 콘텐츠츠에 따라 _Banner View_의 가로세로 비율을 유지합니다. _width_가 세팅된 경우 _Banner View_의 세로값을 변경하여 비율을 유지합니다. 이 경우 `android:layout_height`는 반드시 `wrap_content` 가 되어야합니다. (`nudge:keep_aspect_ratio`는  [ _none_ | _width_ | _height_ ] 중에 하나의 값을 가지며 디폴트는 _none_ 입니다.)
+- `nudge:default_image="@drawable/default_image"` 이미지가 로드되기 전 표시할 디폴트 이미지를 지정합니다.
 
 **Example:** 한 액티비티에서 기본 _Interstitial View_와 _Banner View_ 두 개의 View를 동시에 사용하기
 
@@ -656,10 +656,10 @@ _Banner View_ 를 사용하기 위해 태그를 추가합니다.
 
 ```java
 protected void onCreate(Bundle savedInstanceState) {
-  AdFresca fresca = AdFresca.getInstance(this);
-  fresca.load(MOMENT_INDEX_MAIN_PAGE_FOR_BANNER); // 메인 페이지진입 시 Banner View 를 위한 콘텐츠츠를 load 합니다.
-  fresca.load(MOMENT_INDEX_MAIN_PAGE_FOR_INTERSTITIAL); // 메인 페이지 진입 시 Interstitial View 를 위한 콘텐츠츠를 load 합니다.
-  fresca.show(); // load 된 모든 콘텐츠츠를 show 합니다.
+  Nudge nudge = Nudge.getInstance(this);
+  nudge.load(MOMENT_INDEX_MAIN_PAGE_FOR_BANNER); // 메인 페이지진입 시 Banner View 를 위한 콘텐츠츠를 load 합니다.
+  nudge.load(MOMENT_INDEX_MAIN_PAGE_FOR_INTERSTITIAL); // 메인 페이지 진입 시 Interstitial View 를 위한 콘텐츠츠를 load 합니다.
+  nudge.show(); // load 된 모든 콘텐츠츠를 show 합니다.
 }
 ```
 
@@ -682,7 +682,7 @@ SDK를 적용하기 이전에 ["Baidu Cloud Push" ](http://developer.baidu.com/w
   <application>
       .........
        <!-- Baidu push service -->
-        <activity android:name="com.adfresca.ads.AdFrescaPushActivity" /> 
+        <activity android:name="nudge.sdk.NudgePushActivity" /> 
         
         <receiver android:name="YOUR_PACKAGE.BaiduPushMessageReceiver">    <!-- Baidu Push Notification을 처리하기 위해 직접 구현하는 내용입니다 -->
             <intent-filter>
@@ -744,8 +744,8 @@ SDK를 적용하기 이전에 ["Baidu Cloud Push" ](http://developer.baidu.com/w
         PushConstants.LOGIN_TYPE_API_KEY, 
         "YOUR_BAIDU_PUSH_API_KEY");
 
-  AdFresca fresca = AdFresca.getInstance(this);
-  fresca.startSession();
+  Nudge nudge = Nudge.getInstance(this);
+  nudge.startSession();
 ```
 
 4) BaiduPushMessageReceiver 클래스 구현하기
@@ -756,19 +756,19 @@ public class BaiduPushMessageReceiver extends BroadcastReceiver {
   @Override
   public void onReceive(final Context context, Intent intent) {
     if (intent.getAction().equals(PushConstants.ACTION_MESSAGE)) {
-      if (AdFresca.isFrescaNotification(intent)) {
+      if (Nudge.isNudgeNotification(intent)) {
         Class<?> targetActivityClass = YourMainActivity.class;
         String appName = context.getString(R.string.app_name);
         int icon = R.drawable.icon;
         long when = System.currentTimeMillis();
 
         // 푸시 메시지를 표시합니다. 
-        AFPushNotification notification = AdFresca.generateAFPushNotification(context, intent, targetActivityClass, appName, icon, when);
+        NKPushNotification notification = Nudge.generateNKPushNotification(context, intent, targetActivityClass, appName, icon, when);
         notification.setDefaults(Notification.DEFAULT_ALL); 
-        AdFresca.showNotification(notification);
+        Nudge.showNotification(notification);
       }
     } else if (intent.getAction().equals(PushConstants.ACTION_RECEIVE)) {
-      AdFresca.handleBaiduPushRegistration(intent);
+      Nudge.handleBaiduPushRegistration(intent);
     }
   }
 }
@@ -778,9 +778,9 @@ Baidu Push 적용이 완료되었습니다.
 
 * * *
 
-### AFShowListener
+### NKShowListener
 
-`AFShowListener`는 SDK에서 콘텐츠츠 프로세싱이 종료되었을 때 이벤트 처리를 위한 _이벤트 리스너_입니다.
+`NKShowListener`는 SDK에서 콘텐츠츠 프로세싱이 종료되었을 때 이벤트 처리를 위한 _이벤트 리스너_입니다.
 
 콘텐츠츠 프로세싱이 종료되었다는 것은 다음 3가지를 의미합니다.
 
@@ -788,17 +788,17 @@ Baidu Push 적용이 완료되었습니다.
 2. 콘텐츠츠가 매칭되지 않았거나 콘텐츠츠에 맞는 view를 찾을 수 없어서 화면에 보여지지 않고 끝난 경우
 3. 네트워크 이슈로 콘텐츠츠 매칭 요청 시간 초과 (Timeout) 이벤트가 발생한 경우
 
-이 두가지 경우를 `AFShowListener.show(int eventIndex, AFView view)`의 두번째 인자 `view`로 판별할 수 있습니다.
+이 두가지 경우를 `NKShowListener.show(int eventIndex, NKView view)`의 두번째 인자 `view`로 판별할 수 있습니다.
 
-- `view != null`이면 콘텐츠츠가 정상적으로 보여진 경우입니다. 이때 `view`는 [ _Default View_ | _Floating View_ | _Banner View_ ] 가 됩니다. `AFView.isDefaultView()`로 _Default View_ 인지 판별할 수 있습니다.
+- `view != null`이면 콘텐츠츠가 정상적으로 보여진 경우입니다. 이때 `view`는 [ _Default View_ | _Floating View_ | _Banner View_ ] 가 됩니다. `NKView.isDefaultView()`로 _Default View_ 인지 판별할 수 있습니다.
 - `view == null`이면 콘텐츠츠가 보여지지 않고 끝난 경우입니다.
 
 ```java
-AdFresca fresca = AdFresca.getInstance(this);
-fresca.load(MOMENT_INDEX_STAGE_CLEAR);
-fresca.show(new AFShowListener(){
+Nudge nudge = Nudge.getInstance(this);
+nudge.load(MOMENT_INDEX_STAGE_CLEAR);
+nudge.show(new NKShowListener(){
   @Override
-  public void onFinish(int eventIndex, AFView view) {
+  public void onFinish(int eventIndex, NKView view) {
     if(view == null) {
       // failed to show
     } else {
@@ -814,11 +814,11 @@ fresca.show(new AFShowListener(){
 **Example:** _인트로 액티비티_에서 콘텐츠츠를 보여주고 끝나면 _메인 액티비티_로 이동
 
 ```java
-AdFresca fresca = AdFresca.getInstance(this);
-fresca.load(MOMENT_INDEX_INTRO);
-fresca.show(MOMENT_INDEX_INTRO, new AFShowListener(){
+Nudge nudge = Nudge.getInstance(this);
+nudge.load(MOMENT_INDEX_INTRO);
+nudge.show(MOMENT_INDEX_INTRO, new NKShowListener(){
   @Override
-  public void onFinish(int eventIndex, AFView view) {
+  public void onFinish(int eventIndex, NKView view) {
     startActivity(new Intent(IntroActivity.this, MainActivity.class));
   }
 });
@@ -838,10 +838,10 @@ Dashboard 에서 Marketing Moment의 Close Mode 를 Override 로 변경 합니�
 public void onResume() {
   super.onResume();
 
-  AdFresca fresca = AdFresca.getInstance(this);
+  Nudge nudge = Nudge.getInstance(this);
   
-  if (fresca.getDefaultViewVisibility() == View.VISIBLE && fresca.isUserClickedDefaultView()) {   
-    fresca.closeAd();
+  if (nudge.getDefaultViewVisibility() == View.VISIBLE && nudge.isUserClickedDefaultView()) {   
+    nudge.closeAd();
   }
 }
 ```
@@ -855,11 +855,11 @@ public void onResume() {
 최소 1초 이상 지정이 가능하며, 지정하지 않을 시 기본 값으로 5초가 지정 됩니다.
 
 ```java
-  AdFresca.setTimeoutInterval(5) // # 5 seconds
+  Nudge.setTimeoutInterval(5) // # 5 seconds
 
-  AdFresca fresca = AdFresca.getInstance(this);
-  fresca.load();
-  fresca.show();
+  Nudge nudge = Nudge.getInstance(this);
+  nudge.load();
+  nudge.show();
 ```
 
 * * *
@@ -880,11 +880,11 @@ public void onResume() {
              <action android:name="android.intent.action.VIEW" /> 
              <category android:name="android.intent.category.DEFAULT" /> 
              <category android:name="android.intent.category.BROWSABLE" /> 
-             <data android:scheme="myapp" android:host="com.adfresca.zone" />
+             <data android:scheme="myapp" android:host="nudge.sdk" />
         </intent-filter> 
   </activity>
 ```
-위와 같이 설정한 경우, 캠페인의 _Deep Link_ 값을 myapp://com.adfresca.zone?item=abc 으로 설정하여 DemoZoneActivity가 바로 실행되도록 할 수 있습니다.
+위와 같이 설정한 경우, 캠페인의 _Deep Link_ 값을 myapp://nudge.sdk?item=abc 으로 설정하여 DemoZoneActivity가 바로 실행되도록 할 수 있습니다.
 
 함께 넘어온 파라미터 (item=abc) 값을 얻기 위해서는 DemoZoneActivity를 아래와 같이 구현합니다.
 
@@ -944,7 +944,7 @@ Deep Link가 설정된 Push Notification을 수신한 경우, Notification을 �
     <action android:name="android.intent.action.VIEW" /> 
     <category android:name="android.intent.category.DEFAULT" /> 
     <category android:name="android.intent.category.BROWSABLE" /> 
-    <data android:scheme="myapp" android:host="com.adfresca.push" />
+    <data android:scheme="myapp" android:host="nudge.sdk" />
   </intent-filter> 
 </activity>
 
@@ -952,7 +952,7 @@ Deep Link가 설정된 Push Notification을 수신한 경우, Notification을 �
 
 <uses-permission  android:name="android.permission.GET_TASKS"/>
 ```
-위와 같이 설정한 경우 푸시 메시징 캠페인에서는 myapp://com.adfresca.push?item=abc 와 같은 형식의 Deep Link를 입력해야 합니다.
+위와 같이 설정한 경우 푸시 메시징 캠페인에서는 myapp://nudge.sdk?item=abc 와 같은 형식의 Deep Link를 입력해야 합니다.
 
 다음은 PushProxyActivity 클래스의 내용을 구현해야 합니다. PushProxyActivity 클래스는 Android OS로 부터 수신하는 Deep Link 정보를 받아 처리하고 바로 자신을 종료하는 단순한 프록시 형태의 액티비티입니다. 만약 현재 게임이 실행 중이 아니라면 Deep Link를 처리할 수 없으므로 새로 게임을 시작하며 uri 값을 넘겨야 합니다.
 
@@ -970,15 +970,15 @@ public class PushProxyActivity extends Activity {
     Uri uri = getIntent().getData();
     if (uri != null) {
       if (isActivityRunning()) {
-        // Log.d("AdFresca", "PushProxyActivity.onCreate() with isActivityRunning : url = " + uri.toString());
+        // Log.d("Nudge", "PushProxyActivity.onCreate() with isActivityRunning : url = " + uri.toString());
         // Do something with uri
     
      } else {
-       // Log.d("AdFresca", "PushProxyActivity.onCreate() wihtout isActivityRunning :  uri = " + uri.toString());
+       // Log.d("Nudge", "PushProxyActivity.onCreate() wihtout isActivityRunning :  uri = " + uri.toString());
        
        // Run a new cocos2dx activity with uri
        Intent intent = new Intent(this, SimpleGame.class);
-       intent.putExtra(Constant.FRESCA_URL_KEY, uri.toString());
+       intent.putExtra(Constant.NUDGE_URL_KEY, uri.toString());
        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
        startActivity(intent);
      }        
@@ -1009,9 +1009,9 @@ public class PushProxyActivity extends Activity {
   public void onCreate(Bundle savedInstanceState) {
     ......
     // Handle custom url from PushProxcyActivity
-    String frescaURL = this.getIntent().getStringExtra(Constant.FRESCA_URL_KEY);
-    if (frescaURL != null) {
-      // Log.d("AdFresca", "MainActivity.onCreate() with uri = " + frescaURL);  
+    String nudgeURL = this.getIntent().getStringExtra(Constant.Nudge_URL_KEY);
+    if (nudgeURL != null) {
+      // Log.d("Nudge", "MainActivity.onCreate() with uri = " + nudgeURL);  
       // Do something with uri
     }   
     ......
@@ -1042,20 +1042,20 @@ SDK 적용을 위해서는 Advertising App에서의 패키지 이름 확인 및 
   AndroidManifest.xml 파일을 열어 패키지 이름을 확인합니다.
 
   ```xml
-  <manifest package="com.adfresca.demo">
+  <manifest package="nudge.demo">
     ...
   </manifest>
   ```
 
-  위 경우 [Dashboard](https://dashboard.nudge.do) 사이트에서 Advertising App의 CPI Identifier 값을 'com.adfresca.demo' 으로 설정하게 됩니다. 
+  위 경우 [Dashboard](https://dashboard.nudge.do) 사이트에서 Advertising App의 CPI Identifier 값을 'nudge.demo' 으로 설정하게 됩니다. 
 
   마지막으로, Incentivized CPA 캠페인을 진행할 경우는 보상 조건으로 지정한 마케팅 모멘트가 발생되어야 합니다. 사용자가 보상 조건을 완료한 이후 아래와 같이 지정한 마케팅 모멘트를 호출합니다.
     
   ```java
   // 튜토리얼 완료 모멘트를 보상 조건으로 지정한 경우
-  AdFresca fresca = AdFresca.getInstance(this);     
-  fresca.load(MOMENT_INDEX_TUTORIAL); 
-  fresca.show(MOMENT_INDEX_TUTORIAL);
+  Nudge nudge = Nudge.getInstance(this);
+  nudge.load(MOMENT_INDEX_TUTORIAL); 
+  nudge.show(MOMENT_INDEX_TUTORIAL);
   ```
 
 #### Media App SDK 적용하기:
@@ -1075,7 +1075,7 @@ Referrer 정보를 추출하여 SDK에 설정하기 위하여 아래와 같이 �
 Reciever를 등록하여 Google Play 앱을 통해 전달되는 Referrer 값을 자동으로 SDK에 적용합니다.
 
 ```xml
-<receiver android:name="com.adfresca.sdk.referer.AFRefererReciever" android:exported="true">
+<receiver android:name="nudge.sdk.NKReferrerReciever" android:exported="true">
   <intent-filter>
           <action android:name="com.android.vending.INSTALL_REFERRER" />
       </intent-filter>
@@ -1090,13 +1090,13 @@ Reciever를 등록하여 Google Play 앱을 통해 전달되는 Referrer 값을 
 (referrer 값의 각 파라미터 내용은 [Google Play - Campaign Parameters](https://developers.google.com/analytics/devguides/collection/android/v2/campaigns#campaign-params) 가이드에서 자세한 내용을 확인할 수 있습니다.)
 
 ```sh
-am broadcast -a com.android.vending.INSTALL_REFERRER -n YOUR_PACKAGE/com.adfresca.sdk.referer.AFRefererReciever --es "referrer" "utm_source=test_source&utm_medium=test_medium&utm_term=test_term&utm_content=test_content&utm_campaign=test_name"
+am broadcast -a com.android.vending.INSTALL_REFERRER -n YOUR_PACKAGE/nudge.sdk.NKRefererReciever --es "referrer" "utm_source=test_source&utm_medium=test_medium&utm_term=test_term&utm_content=test_content&utm_campaign=test_name"
 ```
 3) referrer 값이 SDK에 설정 되었는지 확인하기
 
 ```java
-AdFresca fresca = AdFresca.getInstance(this);
-Log.v(TAG, "Google Referrer = " + fresca.getReferrer());
+Nudge nudge = Nudge.getInstance(this);
+Log.v(TAG, "Google Referrer = " + nudge.getReferrer());
 ``` 
 (Advanced) 이미 INSTALL_REFERRER를 추출하는 다른 boradcast recicever를 적용 중인 경우, setReferrer(string) 메소드를 이용하여 직접 SDK에 값을 전달할 수 있습니다.
 
@@ -1146,6 +1146,7 @@ Proguard 툴을 이용하여 APK 파일을 보호하는 경우 몇 가지 예외
 
 ```java
 -keep class com.adfresca.** {*;} 
+-keep class nudge.sdk.** {*;}
 -keep class com.google.gson.** {*;} 
 -keep class org.openudid.** {*;} 
 -keep class sun.misc.Unsafe { *; }
@@ -1157,12 +1158,12 @@ Proguard 툴을 이용하여 APK 파일을 보호하는 경우 몇 가지 예외
 
 ## Troubleshooting
 
-콘텐츠츠 제대로 출력되지 않거나, 에러가 발생한다면 AdExceptionListener 인터페이스를 구현하여, 에러 정보를 확인 할 수 있습니다.
+콘텐츠츠 제대로 출력되지 않거나, 에러가 발생한다면 NKExceptionListener 인터페이스를 구현하여, 에러 정보를 확인 할 수 있습니다.
 
 ```java
-AdFresca.setExceptionListener(new AFExceptionListener(){
+Nudge.setExceptionListener(new NKExceptionListener(){
   @Override
-  public void onExceptionCaught(AFException e) {
+  public void onExceptionCaught(NKException e) {
     Log.w("TAG", e.getCode() + ":" + e.getLocalizedMessage());
   }
 });
