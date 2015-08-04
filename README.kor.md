@@ -535,7 +535,7 @@ public void onGameFinished {
 
 Stickiness 커스텀 파라미터는 사용자의 stickiness를 측정하기 위해 사용하는 특수한 형태의 커스텀 파라미터입니다. 예를 들어 사용자의 플레이 횟수를 커스텀 파라미터로 지정하고 Stickiness 커스텀 파라미터로 설정하면 해당 사용자의 '오늘 총 플레이 횟수', '최근 7일간의 총 플레이 횟수', '최근 7일간의 일평균 플레이 횟수' 등을 세그먼트 필터로 사용할 수 있습니다. Stickiness 커스텀 파라미터를 이용하면 사용자들의 충성도 (또는 몰입도)에 따라 세그먼트를 나누고 모니터링할 수 있습니다.
 
-Stickiness 커스텀 파라미터로 사용하고자 하는 커스텀 파라미터는 반드시 **incrCustomParameterWithAmount** 메소드를 이용해야 합니다.  Stickiness 커스텀 파라미터를 사용하고자 하는 경우해당 커스텀 파라미터를 활성화한 후 support@nudge.do 로 메일 주시기 바랍니다.
+Stickiness 커스텀 파라미터로 사용하고자 하는 커스텀 파라미터는 반드시 **incrCustomParameterValue** 메소드를 이용해야 합니다.  Stickiness 커스텀 파라미터를 사용하고자 하는 경우 해당 커스텀 파라미터를 활성화한 후 support@nudge.do 로 메일 주시기 바랍니다.
 
 * * *
 
