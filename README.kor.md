@@ -11,7 +11,6 @@
   - [Sales Promotion](#sales-promotion)
 - [Dynamic Targeting](#dynamic-targeting)
   - [Custom Parameter](#custom-parameter)
-  - [Stickiness Custom Parameter](#stickiness-custom-parameter)
   - [Marketing Moment](#marketing-moment)
 - [Advanced](#advanced)
   - [Custom Banner (Android Only)](#custom-banner)
@@ -529,9 +528,7 @@ public void onGameFinished {
 
  Overview 메뉴 -> Settings - Custom Parameters 버튼을 클릭하면 커스텀 파라미터 목록이 표시됩니다. 해당 커스텀 파라미터의 Unique Key를 찾은 다음, 이름 ('Name')을 입력하고 활성화 (Activate)합니다.
 
-* * *
-
-### Stickiness Custom Parameter
+#### Stickiness Custom Parameter
 
 Stickiness 커스텀 파라미터는 사용자의 stickiness를 측정하기 위해 사용하는 특수한 형태의 커스텀 파라미터입니다. 예를 들어 사용자의 플레이 횟수를 커스텀 파라미터로 지정하고 Stickiness 커스텀 파라미터로 설정하면 해당 사용자의 '오늘 총 플레이 횟수', '최근 7일간의 총 플레이 횟수', '최근 7일간의 일평균 플레이 횟수' 등을 세그먼트 필터로 사용할 수 있습니다. Stickiness 커스텀 파라미터를 이용하면 사용자들의 충성도 (또는 몰입도)에 따라 세그먼트를 나누고 모니터링할 수 있습니다.
 
