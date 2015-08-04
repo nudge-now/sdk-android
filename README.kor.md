@@ -507,7 +507,7 @@ public void onCreate() {
   fresca.setCustomParameterValue("facebook_flag", User.hasFacebookAccount);
   fresca.startSession();
 }
-.....
+```
 
 커스텀 파라미터의 값이 변경되는 시점 (이벤트 발생 시)에 상태 값을 갱신하거나 횟수를 증가시킵니다.
   
