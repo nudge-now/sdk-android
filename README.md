@@ -734,43 +734,53 @@ You can set your own URL Schema as a 'Deep Link' in the campaigns and you can na
 To use this feature, add scheme in AndroidManifest.xml
 
 ```xml
-  <activity android:name=".DemoZoneActivity">
+  <activity android:name=".MainActivity">
       <intent-filter> 
              <action android:name="android.intent.action.VIEW" /> 
              <category android:name="android.intent.category.DEFAULT" /> 
              <category android:name="android.intent.category.BROWSABLE" /> 
-             <data android:scheme="myapp" android:host="item" />
+             <data android:scheme="myapp" android:host="myaction" />
         </intent-filter> 
   </activity>
 ```
 
-In this example, you can set url as myapp://item?name=abc to launch DemoZoneActivity when user responds.
+In this example, you can set url as myapp://myaction?name=abc to launch MainActivity when user responds.
 
-on DemoZoneActivity, you can get parameter values (name=abc) as example codes below.
+on MainActivity, you can get parameter values (name=abc) as example codes below.
 
 ```java
+@Override
 public void onCreate(Bundle savedInstanceState) {
   super.onCreate(savedInstanceState);
 
   Uri uri = getIntent().getData();
+  handleUri(uri);
+}
+
+@Override
+protected void onNewIntent(Intent intent) {
+  super.onNewIntent(intent);
+  setIntent(intent);
+
+  Uri uri = intent.getData();
+  handleUri(uri);
+}
+
+private handleUri(Uri uri) {
   if (uri != null && uri.getScheme().equals("myapp")) { 
-    String name = uri.getQueryParameter("name");
+    String item = uri.getQueryParameter("item");
   }
 }
 ```
 
-#### Using Deep Link with Coscos2d-x
+#### Handling In-App Deep Link with Coscos2d-x
 
-Unlike the native android application that uses multiple activities as its pages, coscos2d-x and Unity engines use only one activity and implements the engine's own paginations internally. So, there is a problem to add schema information since you cannot set schema on 'MAIN' launcher activity.
+Unlike the native android application that uses multiple activities as its pages, coscos2d-x and Unity engines use only one activity and implements the engine's own paginations internally. So, you should not run any new activity when deep link is executed by our SDK.
 
-To solve this issue, you need to do some extra works as follows.
-
-1) Override startActivity(intent) of Main Activity to handle Custom URL for In-App Messaging Campaign.
-
-Deep Link from In-App Messaging Campaign is always executed on in-game situation. It is never executed from outside of game like a push notification. Also, SDK uses startActivity() method to execute url. Therefore, you can manually handle urls by overriding startActivity(). The code below shows how to handle custom url with 'myapp://' schema, and it does not open a new activity for custom url 
+You need to override startActivity(intent) of Cocos2dxActivity to handle deep links.
 
 ```java
-\@Override 
+@Override 
 public void startActivity(Intent intent) { 
   boolean isStartActivity = true;
 
@@ -783,103 +793,9 @@ public void startActivity(Intent intent) {
   if (isStartActivity) { 
     super.startActivity(intent); 
   } else { 
-    // Log.d("TEST", "MainActivity.startActivity() : uri = " + uri.toString());   
-    // Do something with uri
+    handleUri(uri);
   } 
 }
-```
-(In this case, you don't need to add any schema information in AndroidMenefest.xml)
-
-2) Handle custom url for Push Messaging Campaigns
-
-When your app receives a push notification with a custom url, you can execute your own custom action. A notification is mostly received when user is outside of the game. So, we should handle a custom url with a different approach. 
-
-First, create a new activity class named 'PushProxyActivity', and register the activity in AndroidMenefest.xml as below
-
-```xml
-<activity android:name=".PushProxyActivity">
-  <intent-filter> 
-    <action android:name="android.intent.action.VIEW" /> 
-    <category android:name="android.intent.category.DEFAULT" /> 
-    <category android:name="android.intent.category.BROWSABLE" /> 
-    <data android:scheme="myapp" android:host="com.adfresca.push" />
-  </intent-filter> 
-</activity>
-
-.......
-
-<uses-permission  android:name="android.permission.GET_TASKS"/>
-```
-
-In this case, you should create ca ustom url like myapp://com.adfresca.push?item=abc in your Push Messaging Campaign. 
-
-Then, you should implement PushProxyActivity class. This class is a simple proxy-style activity which only handles url from Android OS and then quits itself. 
-However, there is an exceptional situation when notification is received and your application is not running. In that case, you can't handle a custom url in the game engine, so you should manually start an application and pass urls as parameters as noted below.
-
-```java
-public class PushProxyActivity extends Activity {
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    
-    // hide ui
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-    Uri uri = getIntent().getData();
-    if (uri != null) {
-      if (isActivityRunning()) {
-        // Log.d("AdFresca", "PushProxyActivity.onCreate() with isActivityRunning : url = " + uri.toString());
-        // Do something with uri
-    
-     } else {
-       // Log.d("AdFresca", "PushProxyActivity.onCreate() wihtout isActivityRunning :  uri = " + uri.toString());
-       
-       // Run a new cocos2dx activity with uri
-       Intent intent = new Intent(this, SimpleGame.class);
-       intent.putExtra(Constant.FRESCA_URL_KEY, uri.toString());
-       intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-       startActivity(intent);
-     }        
-   }
-               
-    finish();
-  }
-  
-  private boolean isActivityRunning() { 
-    ActivityManager activityManager = (ActivityManager)this.getSystemService (Context.ACTIVITY_SERVICE); 
-    List<RunningTaskInfo> activitys = activityManager.getRunningTasks(Integer.MAX_VALUE); 
-    boolean isActivityFound = false; 
-    String activityInfo = "ComponentInfo{YOUR_PACKAGE/YOUR_PACKAGE.GAME_ACTIVITY_NAME}" // "ComponentInfo{org.cocos2dx.simplegame/org.cocos2dx.simplegame.SimpleGame}"
-    for (int i = 0; i < activitys.size(); i++) { 
-      if (activitys.get(i).topActivity.toString().equalsIgnoreCase(activityInfo)) {
-        isActivityFound = true;
-        break;
-      }
-    } 
-    return isActivityFound; 
-  } 
-}
-```
-
-Finally, you should handle url from PushProxyActivity on your Main activity.
-
-```java
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    ......
-    // Handle custom uri from PushProxcyActivity
-    String frescaURL = this.getIntent().getStringExtra(Constant.FRESCA_URL_KEY);
-    if (frescaURL != null) {
-      // Log.d("AdFresca", "MainActivity.onCreate() with uri = " + frescaURL);  
-      // Do something with uri
-    }   
-    ......
-  }
-```
-
-Now, you're done with custom url in coscos2d-x engine!
 
 * * *
 

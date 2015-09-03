@@ -859,44 +859,52 @@ public void onResume() {
 해당 기능을 지원하기 위해서는 AndroidManifest.xml 파일을 수정하여 scheme 정보를 추가해야 합니다.
 
 ```xml
-  <activity android:name=".DemoZoneActivity">
+  <activity android:name=".MainActivity">
       <intent-filter> 
              <action android:name="android.intent.action.VIEW" /> 
              <category android:name="android.intent.category.DEFAULT" /> 
              <category android:name="android.intent.category.BROWSABLE" /> 
-             <data android:scheme="myapp" android:host="com.adfresca.zone" />
+             <data android:scheme="myapp" android:host="myaction" />
         </intent-filter> 
   </activity>
 ```
-위와 같이 설정한 경우, 캠페인의 _Deep Link_ 값을 myapp://com.adfresca.zone?item=abc 으로 설정하여 DemoZoneActivity가 바로 실행되도록 할 수 있습니다.
+위와 같이 설정한 경우, 캠페인의 _Deep Link_ 값을 myapp://myaction?item=abc 으로 설정하여 MainActivity가 바로 실행되도록 할 수 있습니다.
 
-함께 넘어온 파라미터 (item=abc) 값을 얻기 위해서는 DemoZoneActivity를 아래와 같이 구현합니다.
+함께 넘어온 파라미터 (item=abc) 값을 얻기 위해서는 MainActivity 아래와 같이 구현합니다.
 
 ```java
+@Override
 public void onCreate(Bundle savedInstanceState) {
   super.onCreate(savedInstanceState);
 
   Uri uri = getIntent().getData();
+  handleUri(uri);
+}
+
+@Override
+protected void onNewIntent(Intent intent) {
+  super.onNewIntent(intent);
+  setIntent(intent);
+
+  Uri uri = intent.getData();
+  handleUri(uri);
+}
+
+private handleUri(Uri uri) {
   if (uri != null && uri.getScheme().equals("myapp")) { 
     String item = uri.getQueryParameter("item");
   }
 }
 ```
 
-#### Cocos2d-x 환경에서 Deep Link 사용하기
+#### Cocos2d-x 환경에서 인앱 메시징 Deep Link 처리하기
 
-액티비티를 페이지 개념으로 사용하는 네이티브 환경과 달리, Cocos2d-x나 Unity와 같은 엔진을 사용하여 안드로이드 애플리케이션을 개발하는 경우 단 하나의 액티비티만을 사용하며 엔진 내부적으로 페이지를 처리합니다.
+액티비티를 페이지 개념으로 사용하는 네이티브 환경과 달리, Cocos2d-x나 Unity와 같은 엔진을 사용하여 안드로이드 애플리케이션을 개발하는 경우 단 하나의 액티비티만을 사용하며 엔진 내부적으로 페이지를 처리합니다. 때문에 인앱 메시징을 통해 실행되는 Deep Link를 Cocos2dxActivity를 벗어나지 않고 처리할 수 있도록 추가 작업이 필요합니다. 
 
-때문에 위와 같이 schema를 지정할 수 있는 액티비티의 제약이 생깁니다. MAIN 으로 지정된 액티비티는 url schema를 적용할 수 없습니다. 
-
-그래서 아래와 같은 방법들을 사용하여 Deep Link를 처리합니다.
-
-1) Main 액티비티의 startActivity(intent) 메소드를 오버라이딩하여 Custom URL 처리하기 (인-앱 메시징 캠페인)
-
-인-앱 메시징 캠페인을 통해 전달되는 Deep Link은 항상 인게임 상황에서 전달되며, SDK가 내부적으로 startActivity() 메소드를 이용하여 호출하고 있습니다. 이러한 조건에서는 게임이 실행되고 있는 Main 액티비티의 startActivity() 메소드를 직접 구현함으로써 Custom URL 처리가 가능합니다. 아래와 같이 코드를 구현하면 'myapp://' 형식의 Custom URL이 전달 될 시에 새로운 액티비티를 호출하지 않고 직접 처리할 수 있습니다.
+Cocos2dxActivity 클래스의 startActivity() 메소드를 아래와 같이 구현합니다.
 
 ```java
-\@Override 
+@Override 
 public void startActivity(Intent intent) { 
   boolean isStartActivity = true;
 
@@ -909,100 +917,10 @@ public void startActivity(Intent intent) {
   if (isStartActivity) { 
     super.startActivity(intent); 
   } else { 
-    // Log.d("TEST", "MainActivity.startActivity() : uri = " + uri.toString());   
-    // Do something with uri
+    handleUri(uri);
   } 
 }
 ```
-(위 방법을 적용할 때에는 AndroidMenefest.xml 파일을 별도로 설정하지 않고 모든 값을 코드로 처리합니다.)
-
-2) Push Notification을 통해 넘어오는 Deep Link 처리하기 (푸시 메시징 캠페인)
-
-Deep Link가 설정된 Push Notification을 수신한 경우, Notification을 터치 시 원하는 액션을 지정할 수 있습니다. 단, 이 경우는 인게임 상황이 아니기 때문에 조금 다른 방법을 사용합니다.
-
-먼저 PushProxyActivity 라는 이름의 액티비티 클래스를 하나 생성합니다. 그리고 AndroidMenefest.xml 내용을 아래와 같이 추가합니다. 
-
-```xml
-<activity android:name=".PushProxyActivity">
-  <intent-filter> 
-    <action android:name="android.intent.action.VIEW" /> 
-    <category android:name="android.intent.category.DEFAULT" /> 
-    <category android:name="android.intent.category.BROWSABLE" /> 
-    <data android:scheme="myapp" android:host="com.adfresca.push" />
-  </intent-filter> 
-</activity>
-
-.......
-
-<uses-permission  android:name="android.permission.GET_TASKS"/>
-```
-위와 같이 설정한 경우 푸시 메시징 캠페인에서는 myapp://com.adfresca.push?item=abc 와 같은 형식의 Deep Link를 입력해야 합니다.
-
-다음은 PushProxyActivity 클래스의 내용을 구현해야 합니다. PushProxyActivity 클래스는 Android OS로 부터 수신하는 Deep Link 정보를 받아 처리하고 바로 자신을 종료하는 단순한 프록시 형태의 액티비티입니다. 만약 현재 게임이 실행 중이 아니라면 Deep Link를 처리할 수 없으므로 새로 게임을 시작하며 uri 값을 넘겨야 합니다.
-
-```java
-public class PushProxyActivity extends Activity {
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    
-    // hide ui
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-    Uri uri = getIntent().getData();
-    if (uri != null) {
-      if (isActivityRunning()) {
-        // Log.d("AdFresca", "PushProxyActivity.onCreate() with isActivityRunning : url = " + uri.toString());
-        // Do something with uri
-    
-     } else {
-       // Log.d("AdFresca", "PushProxyActivity.onCreate() wihtout isActivityRunning :  uri = " + uri.toString());
-       
-       // Run a new cocos2dx activity with uri
-       Intent intent = new Intent(this, SimpleGame.class);
-       intent.putExtra(Constant.FRESCA_URL_KEY, uri.toString());
-       intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-       startActivity(intent);
-     }        
-   }
-               
-    finish();
-  }
-  
-  private boolean isActivityRunning() { 
-    ActivityManager activityManager = (ActivityManager)this.getSystemService (Context.ACTIVITY_SERVICE); 
-    List<RunningTaskInfo> activitys = activityManager.getRunningTasks(Integer.MAX_VALUE); 
-    boolean isActivityFound = false; 
-    String activityInfo = "ComponentInfo{YOUR_PACKAGE/YOUR_PACKAGE.GAME_ACTIVITY_NAME}" // "ComponentInfo{org.cocos2dx.simplegame/org.cocos2dx.simplegame.SimpleGame}"
-    for (int i = 0; i < activitys.size(); i++) { 
-      if (activitys.get(i).topActivity.toString().equalsIgnoreCase(activityInfo)) {
-        isActivityFound = true;
-        break;
-      }
-    } 
-    return isActivityFound; 
-  } 
-}
-```
-마지막으로 PushProxyActivity를 통해 게임이 실행된 경우 넘어오는 uri 값을 처리합니다. Main 액티비티에 아래와 같은 내용을 추가합니다.
-
-```java
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    ......
-    // Handle custom url from PushProxcyActivity
-    String frescaURL = this.getIntent().getStringExtra(Constant.FRESCA_URL_KEY);
-    if (frescaURL != null) {
-      // Log.d("AdFresca", "MainActivity.onCreate() with uri = " + frescaURL);  
-      // Do something with uri
-    }   
-    ......
-  }
-```
-
-Cocos2d-x 환경에서 Deep Link를 처리할 수 있는 모든 방법을 구현하였습니다.
 
 * * *
 
