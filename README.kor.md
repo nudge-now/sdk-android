@@ -852,7 +852,7 @@ public void onResume() {
 
 ### Deep Link
 
-캠페인의 Deep Link 설정 시에 Custom URL Schema를 지정할 수 있습니다. 이를 통해 사용자가 인앱 메시지나 푸시 메시지를 탭할 때 자신이 원하는 특정 앱 페이지로 이동하거나 특정 액션을 실행하도록 지정할 수 있습니다.
+캠페인의 Deep Link 설정 시에 Custom URL Schema를 지정할 수 있습니다. 이를 통해 사용자가 인앱 메시지나 푸시 메시지를 탭할 때 특정 페이지로 이동하거나 액션을 실행하도록 할 수 있습니다.
 
 먼저 AndroidManifest.xml 파일을 수정하여 scheme 정보를 추가해야 합니다.
 
