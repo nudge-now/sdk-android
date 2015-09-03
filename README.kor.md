@@ -859,14 +859,18 @@ public void onResume() {
 해당 기능을 지원하기 위해서는 AndroidManifest.xml 파일을 수정하여 scheme 정보를 추가해야 합니다.
 
 ```xml
-  <activity android:name=".MainActivity">
-      <intent-filter> 
-             <action android:name="android.intent.action.VIEW" /> 
-             <category android:name="android.intent.category.DEFAULT" /> 
-             <category android:name="android.intent.category.BROWSABLE" /> 
-             <data android:scheme="myapp" android:host="myaction" />
-        </intent-filter> 
-  </activity>
+<activity android:name=".MainActivity">
+    <intent-filter>
+      <action android:name="android.intent.action.MAIN" />
+      <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
+    <intent-filter> 
+      <action android:name="android.intent.action.VIEW" /> 
+      <category android:name="android.intent.category.DEFAULT" /> 
+      <category android:name="android.intent.category.BROWSABLE" /> 
+      <data android:scheme="myapp" android:host="myaction" />
+    </intent-filter> 
+</activity>
 ```
 위와 같이 설정한 경우, 캠페인의 _Deep Link_ 값을 myapp://myaction?item=abc 으로 설정하여 MainActivity가 바로 실행되도록 할 수 있습니다.
 
@@ -901,7 +905,7 @@ private handleUri(Uri uri) {
 
 액티비티를 페이지 개념으로 사용하는 네이티브 환경과 달리, Cocos2d-x나 Unity와 같은 엔진을 사용하여 안드로이드 애플리케이션을 개발하는 경우 단 하나의 액티비티만을 사용하며 엔진 내부적으로 페이지를 처리합니다. 때문에 인앱 메시징을 통해 실행되는 Deep Link를 Cocos2dxActivity를 벗어나지 않고 처리할 수 있도록 추가 작업이 필요합니다. 
 
-Cocos2dxActivity 클래스의 startActivity() 메소드를 아래와 같이 구현합니다.
+Cocos2dxActivity 클래스의 startActivity(intent) 메소드를 아래와 같이 구현합니다.
 
 ```java
 @Override 

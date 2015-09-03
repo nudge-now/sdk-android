@@ -734,14 +734,18 @@ You can set your own URL Schema as a 'Deep Link' in the campaigns and you can na
 To use this feature, add scheme in AndroidManifest.xml
 
 ```xml
-  <activity android:name=".MainActivity">
-      <intent-filter> 
-             <action android:name="android.intent.action.VIEW" /> 
-             <category android:name="android.intent.category.DEFAULT" /> 
-             <category android:name="android.intent.category.BROWSABLE" /> 
-             <data android:scheme="myapp" android:host="myaction" />
-        </intent-filter> 
-  </activity>
+<activity android:name=".MainActivity">
+  <intent-filter>
+    <action android:name="android.intent.action.MAIN" />
+    <category android:name="android.intent.category.LAUNCHER" />
+  </intent-filter>
+  <intent-filter> 
+    <action android:name="android.intent.action.VIEW" /> 
+    <category android:name="android.intent.category.DEFAULT" /> 
+    <category android:name="android.intent.category.BROWSABLE" /> 
+    <data android:scheme="myapp" android:host="myaction" />
+  </intent-filter> 
+</activity>
 ```
 
 In this example, you can set url as myapp://myaction?name=abc to launch MainActivity when user responds.
@@ -796,6 +800,7 @@ public void startActivity(Intent intent) {
     handleUri(uri);
   } 
 }
+```
 
 * * *
 
