@@ -731,6 +731,7 @@ Default is 5 seconds and you can set from 1 seconds to 5 seconds.
 ### Deep Link
 
 You can set your own URL Schema as a 'Deep Link' in the campaigns and you can navigate your users to the specific page or do some custom actions when the user clicks the image message. 
+
 To use this feature, add scheme in AndroidManifest.xml
 
 ```xml

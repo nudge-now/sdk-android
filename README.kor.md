@@ -852,26 +852,25 @@ public void onResume() {
 
 ### Deep Link
 
-캠페인의 Deep Link 설정 시에 Custom URL Schema를 지정할 수 있습니다.
+캠페인의 Deep Link 설정 시에 Custom URL Schema를 지정할 수 있습니다. 이를 통해 사용자가 인앱 메시지나 푸시 메시지를 탭할 때 자신이 원하는 특정 앱 페이지로 이동하거나 특정 액션을 실행하도록 지정할 수 있습니다.
 
-이를 통해 사용자가 콘텐츠를 클릭할 경우, 자신이 원하는 특정 앱 페이지로 이동하는 등의 액션을 지정할 수 있습니다.
-
-해당 기능을 지원하기 위해서는 AndroidManifest.xml 파일을 수정하여 scheme 정보를 추가해야 합니다.
+먼저 AndroidManifest.xml 파일을 수정하여 scheme 정보를 추가해야 합니다.
 
 ```xml
 <activity android:name=".MainActivity">
-    <intent-filter>
-      <action android:name="android.intent.action.MAIN" />
-      <category android:name="android.intent.category.LAUNCHER" />
-    </intent-filter>
-    <intent-filter> 
-      <action android:name="android.intent.action.VIEW" /> 
-      <category android:name="android.intent.category.DEFAULT" /> 
-      <category android:name="android.intent.category.BROWSABLE" /> 
-      <data android:scheme="myapp" android:host="myaction" />
-    </intent-filter> 
+  <intent-filter>
+    <action android:name="android.intent.action.MAIN" />
+    <category android:name="android.intent.category.LAUNCHER" />
+  </intent-filter>
+  <intent-filter> 
+    <action android:name="android.intent.action.VIEW" /> 
+    <category android:name="android.intent.category.DEFAULT" /> 
+    <category android:name="android.intent.category.BROWSABLE" /> 
+    <data android:scheme="myapp" android:host="myaction" />
+  </intent-filter> 
 </activity>
 ```
+
 위와 같이 설정한 경우, 캠페인의 _Deep Link_ 값을 myapp://myaction?item=abc 으로 설정하여 MainActivity가 바로 실행되도록 할 수 있습니다.
 
 함께 넘어온 파라미터 (item=abc) 값을 얻기 위해서는 MainActivity 아래와 같이 구현합니다.
