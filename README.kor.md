@@ -167,11 +167,13 @@ fresca.setPushRegistrationIdentifier("GCM_REGISTRATION_ID_OF_THIS_DEVICE");
 ```
 
 - 기존에 GCM Registration ID를 등록하고 가져오는 부분을 구현하지 않았다면, '[How to Get GCM Registration ID](https://gist.github.com/sunku/b47eecee77afe40aa515)' 내용을 참고하여 코드를 추가할 수 있습니다.
+- 앱 내에 Push On/Off 기능이 있는 경우, off 시 Registration ID 값을 null로 지정합니다.
 
 4) GCMIntentService 구현하기
 
 ```java
 protected void onRegistered(Context context, String registrationId) {
+ // 앱 내에 Push On/Off 기능이 있는 경우, off 시 registrationId 값을 null로 지정합니다.
  AdFresca.handlePushRegistration(registrationId);
 }
 

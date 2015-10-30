@@ -163,11 +163,13 @@ AdFresca fresca = AdFresca.getInstance(this);
 fresca.setPushRegistrationIdentifier("GCM_REGISTRATION_ID_OF_THIS_DEVICE");
 ```
 - If you don't have a GCM registration id yet, please refer to '[How to Get GCM Registration ID](https://gist.github.com/sunku/b47eecee77afe40aa515)'
+- if your app has push on/off configuration, you should set null value when 'off' is set by your user.
 
 4) Implement GCMIntentService
 
 ```java
 protected void onRegistered(Context context, String registrationId) {
+ // if your app has push on/off configuration, you should set nil value when 'off' is set by your user.
  AdFresca.handlePushRegistration(registrationId);
 }
 
