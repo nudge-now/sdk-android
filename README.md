@@ -464,76 +464,63 @@ AdFresca.setPromotionListener(new AFPromotionListener(){
 ```
 
 Our SDK will detect if users made a purchase using our [In-App Purchase Tracking](#in-app-purchase-tracking) features. Therefore, you should implement it to complete this promotion feature. Please make sure that you implement 'cancelPromotionPurchase()' method when the users cancelled or failed to purchase items.
+
 * * *
 
 ## Dynamic Targeting
 
 ### Custom Parameter
 
-Our SDK can collect user specific profiles such as level, stage, maximum score, etc. We use it to deliver a personalized and targeted message in real time to specific user segments that you can define.
+Custom Parameter is a user attribute used to classify users for marketing purpose. You can use any custom values (e.g. user level, stage, and play count) to define a user segment and monitor it in real time. You can achieve better campaign performance when targeting users with higher accuracy. (Nudge SDK automatically collects default values such as device id, language, country, app version, and others so you don’t need to define those values as custom parameters.)
 
-To implement codes, simply call setCustomParameterValue method with passing parameter's unique key and its value.
+Nudge SDK provides two tracking methods by types of custom parameters. 
 
-You will call the method after your app is launched and the values have changed. (if you can't set the values without user sign in, you may set them right after users sign in.)
+- To track the current status of a user
+  - It is used to track the current value of specific user attributes
+  - ex: level, current stage, facebook sign-in flag
+  - SDK Code: Use **setCustomParameterValue** method to pass the current status (Integer, Boolean type) to SDK.
+
+- To track specific event count
+  - It is used to track count for a specific event.
+  - ex: play count, a number of gacha count
+  - SDK Code: Use **incrCustomParameterValue** method to pass increased value (Integer) to SDK after an event occurred.
+
+First, you need to define ‘Unique Key’ string value to define a custom parameter. (e.g. "level", "facebook_flag", "play_count") Then write the tracking codes when an user launches your app or signs in to your server.
 
 ```java
-  public void onCreate() {
-    AdFresca fresca = AdFresca.getInstance(this);     
-    fresca.setCustomParameterValue("level", User.level);
-    fresca.setCustomParameterValue("age", User.age);
-    fresca.setCustomParameterValue("facebook_flag", User.hasFacebookAccount);
-    fresca.startSession();
-  }
-  
-  .....
-  
-  public void onUserLevelChanged(int level) {
-    User.level = level
-    
-    AdFresca fresca = AdFresca.getInstance(this);     
-    fresca.setCustomParameterValue("level", User.level);
-  }
+public void onCreate() {
+  AdFresca fresca = AdFresca.getInstance(this);     
+  fresca.setCustomParameterValue("level", User.level);
+  fresca.setCustomParameterValue("facebook_flag", User.hasFacebookAccount);
+  fresca.startSession();
+}
 ```
 
-After you write the codes, you will be able to see a list of custom parameters you added on [Dashboard](https://dashboard.nudge.do). 1) Select a App 2) In 'Overview' menu, click 'Settings - Custom Parameters' button.
-
-<img src="https://s3-ap-northeast-1.amazonaws.com/file.adfresca.com/guide/sdk/custom_parameter_index.png">
-
-You need to set 'Name' value of each custom parameter to activate. You can activate custom parameters up to 20. Nudge only allows activated custom parameters to collect data and provide targeting features.
-
-* * *
-
-### Stickiness Custom Parameter
-
-(Stickiness Custom Parameter is currently in beta. To use this feature, contact our [support team](mailto:support@nudge.do))
-
-If your app has any value to measure user stickiness such as ‘play count’ in a stage based game, you can use it to create a  'Stickiness Custom Parameter' with Nudge. ou can define user segments such as 'users who played 30 times in a week' and 'Users who played 5 times today'.
-
-To begin, you first need to set a new custom parameter such as 'play count’, and then configure it to a stickiness mode (stickiness mode can only be configured by Nudge team currently).
-
-To implement codes, simply pass the value to **incrCustomParameterValue(key, amount)** method whenever the stickiness value is increased. Our SDK will automatically calculate the accumulated value and daily increased value and update user profiles.
-
-After you write the code, you can now use 'Today's play count, 'Average play count in a week', and 'Total play count in a week' conditions to define your user segments in our dashboard.
+Then you need to put tracking codes whenever its value changes.
 
 ```java
-public void OnGameFinished {
+public void onUserLevelChanged(int level) {  
+  AdFresca fresca = AdFresca.getInstance(this);     
+  fresca.setCustomParameterValue("level", level);
+}
+
+public void onGameFinished {
   AdFresca fresca = AdFresca.getInstance(this);     
   fresca.incrCustomParameterValue("play_count", 1);
 }
 ```
 
-If your app was already launched to app stores, you need to set the accumulated value before you call incrCustomParameterValue method. You can check if the custom parameter value is already set or not by using **hasCustomParameterValue(key)** method. If the value is not set yet, set the accumulated value from your app server.
+If you successfully writes codes and set custom parameters, you will see a list of custom parameters you added on [Dashboard](https://admin.adfresca.com). 1) Select an App 2) In 'Overview' menu, click 'Settings - Custom Parameters' button.
 
-```java
-public void onUserSignIn {
-  ....
+<img src="https://s3-ap-northeast-1.amazonaws.com/file.adfresca.com/guide/sdk/custom_parameter_index.png">
 
-  AdFresca fresca = AdFresca.getInstance(this);     
-  if (!fresca.hasCustomParameterValue("play_count")) {
-    fresca.setCustomParameterValue("play_count", User.totalPlayCount);
-  }
-}
-```
+In order to activate a custom parameter, you need to set ‘Name’.. (You can activate custom parameters up to 20.) Nudge only stores data of activated custom parameters and use them for targeting.
+
+#### Stickiness Custom Parameter
+
+Stickiness custom parameter is a special custom parameter to measure a user’s stickiness. For example, if you set ‘play count’ as stickiness custom parameter in a stage-based game, You can define user segments with filters like ‘Today’s play count, ‘Play count in a week’, and ‘Average play count in a week’. Stickiness custom parameter will help you to classify user groups by their loyalty and to monitor their activities in real time. 
+
+You must use **incrCustomParameterValue* method for stickiness custom parameters. If you want to use stickiness custom parameters, please send an email to support@nudge.do after you activate your custom parameter in your dashboard.
 
 * * *
 
