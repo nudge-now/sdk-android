@@ -275,8 +275,6 @@ Nudge SDK는 테스트 모드 기능을 지원합니다. 테스트 모드를 활
 
 ### In-App Purchase Tracking
 
-_**(현재 In-App-Purchase Tracking 기능은 SDK 2.4.0 버전에서만 지원됩니다.)**_
-
 _In-App-Purchase Tracking_  기능을 통하여 현재 앱에서 발생하고 있는 모든 인-앱 결제를 분석하고 캠페인 타겟팅에 이용할 수 있습니다.
 
 Nudge의 In-App-Purchase Tracking은 2가지 유형이 있습니다.
