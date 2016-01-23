@@ -2,7 +2,7 @@
 - [Basic Integration](#basic-integration)
   - [Installation](#installation)
   - [Start Session](#start-session)
-  - [Sign In & Sign Out](#sign-in--sign-out)    
+  - [Sign In](#sign-in)    
   - [In-App Messaging](#in-app-messaging)
   - [Push Messaging](#push-messaging)
   - [Test Device Registration](#test-device-registration)
@@ -96,31 +96,25 @@ protected void onCreate(Bundle savedInstanceState) {
 }
 ```
 
-### Sign In & Sign Out
+### Sign In
 
-Sign In, Sign Out 기능은 사용자의 로그인, 로그아웃 액션을 트랙킹합니다. 이를 통해 넛지는 회원 ID를 이용하여 사용자를 구분합니다. 회원ID를 통해 사용자를 구분하면 1명의 회원이 복수 개의 디바이스를 이용하는경우 중복으로 캠페인을 노출하거나 리워드를 지급하는 경우를 방지할 수 있습니다. 또한, 현재 사용자의 로그인 / 비로그인 여부를 트랙킹하여 현재 로그인하거나 로그인하지 않은 사용자를 대상으로 캠페인을 진행할 수 있습니다. 
+Sign In 기능은 사용자의 로그인 액션을 트랙킹합니다. 넛지는 이 메소드를 통해 전달된 회원 ID를 이용하여 사용자를 구분합니다. 회원 ID를 이용하여 1명의 회원이 복수 개의 디바이스를 사용하는 경우에도 중복으로 캠페인에 노출되거나 리워드를 지급 받는 경우를 방지할 수 있습니다. 또한 로그인한 사용자, 로그인하지 않은 사용자 등을 대상으로 캠페인을 실행할 수 있습니다.
 
-로그인 이벤트 (자동 로그인 포함) 발생 시 signIn(string) 메소드에 회원 ID (문자열) 값을 인자로 넘겨 호출합니다. 로그아웃 이벤트 발생 시에는 signOut() 메소드를 호출합니다.
-
-```java
-public void onSignIn {
-  AdFresca.getInstance(currentActivity).signIn("user_id");
-}
-
-public void onSignOut {
-  AdFresca.getInstance(currentActivity).signOut();
-}
-```
-
-넛지는 게스트 로그인 기능도 지원합니다. 게스트 ID 로그인 시에는 signInAsGuest(string) 메소드를 호출합니다
+사용자는 반드시 회원 또는 비회원으로 Sign In 되어야 하며 다른 사용자가 로그인을 하면 이전의 사용자는 자동으로 로그아웃됩니다. (따라서 별도의 Sign Out은 필요하지 않습니다.) 회원의 경우 로그인 이벤트 (자동 로그인 포함) 발생 시 **signIn(string)** 메소드에 회원 ID를 인자로 넘겨 호출하며 비회원의 경우 **signInAsGuest(string)** 메소드에 게스트 ID를 인자로 넘겨 호출합니다. 비회원을 트랙킹하기 위해 별도의 게스트ID를 사용하지 않는다면 인자 없이 **signInAsGuest()** 메소드를 호출하면 됩니다.
 
 ```java
-public void onGuestSignIn {
-  AdFresca.getInstance(currentActivity).signInAsGuest("guest_user_id");
+public onAppStart() {
+  if(isSignedIn) {
+    // 직접 로그인하거나, 자동로그인 모두 호출되도록 함
+    AdFresca.getInstance(currentActivity).signIn("user_id");
+  } else {
+    // 비회원을 별도의 guest_id로 트랙킹하고 있다면 인자로 설정 가능
+    // 비회원을 별도의 ID로 트랙킹하지 않는다면 인자를 설정하지 않아야 함
+    AdFresca.getInstance(currentActivity).signInAsGuest(“guest_id”);
+  }
 }
-```
 
-getSignedUserId() 메소드를 사용하면 가장 최근 로그인한 유저의 ID를 리턴합니다. 로그아웃이 된 경우에는 디바이스 ID 값이 리턴됩니다. 이 메소드를 사용하여 정상적으로 로그인이 기록되어 있는지 테스트할 수 있습니다.
+getSignedUserId() 메소드를 사용하면 현재 로그인되어 있는 사용자의 ID를 리턴합니다 (게스트 ID를 지정하지 않은 비로그인 사용자의 경우는 디바이스 ID 값이 리턴). 이 메소드를 사용하여 정상적으로 로그인이 기록되어 있는지 테스트할 수 있습니다.
 
 ### In-App Messaging
 
