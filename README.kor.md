@@ -393,61 +393,46 @@ AdFresca.getInstance(this).logPurchase(purchase, new AFPurchaseExceptionListener
 
 ### Give Reward
 
-Reward 지급 기능을 적용하여 현재 사용자에게 지급 가능한 보상 아이템이 있는지 검사하고, 보상 아이템을 사용자에게 지급할 수 있습니다.
+리워드 지급 기능을 이용하여 사용자에게 인앱 아이템을 보상으로 지급할 수 있습니다.
 
-Reward 캠페인에서 'Reward Item' 항목을 설정하거나, Incentivized CPI & CPA 캠페인의 'Incentive Item' 을 설정한 경우 사용자에게 보상 아이템이 지급됩니다.
+리워드 지급에는 2가지 과정이 필요합니다.
 
-먼저 AndroidManifest.xml 내용을 확인합니다.
+1. 리워드 지급 요청: 사용자에게 지급해야 할 리워드가 있는 경우 SDK에서 리워드 지급 요청 이벤트를 발생시킵니다. 해당 이벤트 발생 시에 게임 서버를 통해 사용자에게 리워드를 지급합니다.
+2. 리워드 지급 완료: 사용자에게 리워드를 지급한 후 SDK에서 지급 완료 사실을 알립니다.
 
-```xml
-<manifest>   
-  <application>
-      <activity android:name="com.adfresca.sdk.reward.AFRewardActivity" />
-   </application>
-</manifest>
-```
-
-이제 구현을 위해서 아래 2가지 코드를 이용합니다.
-- checkRewardItems 메소드 호출: 현재 지급 가능한 보상 아이템이 있는지 검사합니다. 사용자가 앱을 실행할 호출하는 것을 권장합니다.
-- AFRewardItemListener 구현: 아이템 지급 조건이 만족되면 onReward 이벤트가 발생됩니다. 인자로 넘어온 아이템 정보를 이용하여 사용자에게 아이템을 지급합니다.
+먼저 AFRewardClaimListener를 구현합니다. 사용자에게 지급해야 할 리워드가 있는 경우 onRewardClaim 이벤트가 발생됩니다. 인자로 넘어온 아이템 정보를 이용하여 사용자에게 아이템을 지급합니다.
 
 ```java
-@Override
-public void onResume() {
-  super.onResume();
-
-  AdFresca.setRewardItemListener(new AFRewardItemListener(){
+  AdFresca.setRewardClaimListener(new AFRewardClaimListener(){
       @Override
-      public void onReward(AFRewardItem item) {
+      public void onRewardClaim(AFRewardItem item) {
         String logMessage = String.format("You got the reward item! (%s)", item.toJson());
         Log.d(TAG, logMessage);
         
         // 아이템 정보를 이용하여 현재 사용자에게 아이템을 지급합니다.
-        sendItemToUser(currentUserId, item.getUniqueValue(), item.getQuantity(), item.getSecurityToken());		
+        sendItemToUser(currentUserId, item.getUniqueValue(), item.getQuantity(), item.getSecurityToken(), item.getRewardToken()));        
       }});
-          
-  AdFresca fresca = AdFresca.getInstance(this);
-  fresca.checkRewardItems();
+```
+
+사용자에게 아이템을 지급한 후 finishRewardClaim() 메소드를 호출하여 넛지에 리워드 지급 완료를 통보해야 합니다. 넛지는 리워드 지급 완료 기록을 전달 받아야만 리워드가 정상적으로 지급된 것으로 처리합니다. 즉 게임서버나 클라이언트에서 에러가 발생하여 리워드 지급이 실패한 경우 넛지 SDK에서는 다시 리워드 지급 요청을 합니다. 넛지 SDK에서는 3분 이상 지급 확인 기록이 전달되지 않은 경우 다음 번 마케팅 모멘트가 실행될 때 다시 리워드 지급 요청을 합니다. 이는 지급 처리 중에 다시 지급요청을 해서 중복 지급되는 것을 막기 위함입니다.
+
+```java
+public onRewardClaimSuccess(AFRewardItem item, ...)
+  ....
+  String token = item.getRewardToken();
+  AdFresca.getInstance(this).finishRewardClaim(token);
 }
 ```
 
-캠페인 종류에 따라 onReward 이벤트의 발생 조건이 다릅니다.
-
-- Reward 캠페인: 캠페인이 앱 사용자에게 매칭되어 노출될 때 이벤트가 발생합니다
-- Incentivized CPI 캠페인: 사용자의 Advertising App 설치가 확인된 후 이벤트가 발생합니다.
-- Incentivized CPA 캠페인: 사용자의 Advertising App 설치가 확인되고 보상 조건으로 지정된 마케팅 이벤트가 호출된 후에 발생합니다.
-
-만일 디바이스의 네트워크 단절이 발생한 경우 SDK는 데이터를 로컬에 보관하여 다음 앱 실행에서 아이템 지급이 가능하도록 구현되어 있기 때문에 항상 100% 지급을 보장합니다.
-
 ##### sendItemToUser() 메소드의 구현
 
-SDK에서 요청한 아이템을 사용자에게 지급해야 합니다. 클라이언트에서 직접 지급하거나, 백엔드 서버와 통신하여 사용자의 선물함으로 보상을 지급하는 방식을 이용할 수 있습니다. 아이팀의 고유 값, 수량, 그리고 시큐리티 토큰값을 이용하여 현재 로그인된 사용자에게 아이템을 지급합니다.
+SDK에서 요청한 아이템을 사용자에게 지급해야 합니다. 클라이언트에서 직접 지급하거나, 백엔드 서버와 통신하여 사용자의 선물함으로 보상을 지급하는 방식 등을 이용할 수 있습니다. 아이팀의 고유 값, 수량, 그리고 시큐리티 토큰값을 이용하여 현재 로그인된 사용자에게 아이템을 지급합니다.
 
 ##### 백엔드 서버를 통해 아이템을 지급할 경우 보안 이슈 해결하기
 
-저희 SDK에서는 특정 사용자가 동일한 캠페인에서 1회 이상 아이템이 지급되지 않도록 처리하고 있습니다. 하지만 클라이언트에서 백엔드 서버와 통신하는 과정이 노출된다면 외부 공격에 의해 아이템이 중복으로 지급되는 보안 이슈가 발생할 수도 있습니다. 해당 문제를 방지하기 위하여 시큐리티 토큰값을 제공하고 있습니다. 시큐리티 토큰값은 대쉬보드에서 캠페인 생성 시에 자동으로 생성 혹은 직접 지정할 수 있는 고유 값입니다. 해당 값을 이용하여 아래와 같은 처리를 할 수 있습니다.
+저희 SDK에서는 특정 사용자가 동일한 캠페인에서 1회 이상 아이템이 지급되지 않도록 처리하고 있습니다. 하지만 클라이언트에서 백엔드 서버와 통신하는 과정이 노출된다면 해킹외부 공격에 의해 아이템이 중복으로 지급되는 보안 이슈가 발생할 수도 있습니다. 해당 문제를 방지하기 위하여 시큐리티 토큰값을 제공하고 있습니다. 시큐리티 토큰값은 대쉬보드에서 캠페인 생성 시에 자동으로 생성되며 필요에 따라 직접 지정할 수도 있습니다. 시큐리티 토큰값은 다음과 같이 이용할 수 있습니다.
 
-1. 백엔드 서버에서는 진행하려는 리워드 캠페인의 시큐리티 토큰값을 데이터베이스에 미리 보관하여, 존재하지 않는 토큰값이 포함된 요청을 거절합니다.
+1. 게임 서버에서는 리워드 캠페인의 시큐리티 토큰값을 데이터베이스에 미리 저장하고 있다가 클라이언트에서 리워드 지급 요청시에 올라온 토큰값과 비교하여 정상적인 요청인지를 검증할 수 있습니다.
 2. 특정 사용자가 동일한 토큰값으로 1회 이상 지급 요청을 하는 경우 요청을 거절합니다. 
 3. 만약 토큰값이 외부에 노출되었다고 판단될 경우, 대쉬보드에서 토큰값을 새로 생성하거나 수정합니다.
 
@@ -1110,7 +1095,9 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 * * *
 
 ## Release Notes
-- **v2.4.8 _(2015/03/20 Updated)_**
+- **v2.5.5 _(2016/01/23 Updated)_**
+  - [리워드 지급 기능](#give-reward)이 개선되어 지급 완료 확인이 가능해졌습니다. 기존의 메소드가 삭제 되었기 때문에 반드시 새로운 가이드를 참고하여 코드를 변경해야 합니다.
+- v2.4.8
   - [Image Push Notification](#image-push-notification) 전송 시 대쉬보드에 업로드된 이미지를 내려받아 표시하는 기능을 제공합니다.
 - v2.4.7
   - [Custom Parameter](#custom-parameter) 설정 시 정수 형태의 고유 인덱스 값이 아닌 문자열 형태의 고유 키 값을 사용할 수 있도록 변경되었습니다. (인덱스를 이용하는 기존 방식도 그대로 지원합니다.)
