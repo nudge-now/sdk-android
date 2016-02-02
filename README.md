@@ -2,7 +2,7 @@
 - [Basic Integration](#basic-integration)
   - [Installation](#installation)
   - [Start Session](#start-session)
-  - [Sign In & Sign Out](#sign-in--sign-out)
+  - [Sign In](#sign-in)
   - [In-App Messaging](#in-app-messaging)
   - [Push Messaging](#push-messaging)
   - [Test Device Registration](#test-device-registration)
@@ -94,31 +94,27 @@ protected void onCreate(Bundle savedInstanceState) {
 }
 ```
 
-### Sign In & Sign Out
+### Sign In
 
-You can track a user’s sign in or sign out actions using these Sign In and Sign Out functions. Nudge will use a string passed using signIn or signOut method as a user identifier and track users with multiple devices, which makes statistics more accurate and campaigns will recognize users, not devices so they will run more effectively. (Users will no longer claim the same rewards multiple times by using different devices.)
+Sign In feature allows you to track a user’s sign in or sign out actions. Nudge identifies a user with user_id, a string passed by signIn method so Nudge can recognize a user with multiple devices as a single user, not as multiple users, which is a more accurate way and also prevents a user from claiming multiple rewards by using different devices. You can also launch a campaign targeting users based on their signed-in status. (ie. signed-in users or guest users)
 
-You need to pass a user identifier (string) to **signIn()** method when a user signs in to your server (including auto sign-in). You also need to put **signOut()** method when a user signs out.
+A user should be signed in at all times, either as a member or as a guest. If another user signs in, the signed-in user will be signed out automatically. You need to pass a user identifier (string) to **signIn(string)** method when a user signs in to your server (including auto sign-in). You also need to put **signInAsGuest(string)** for a guest user who has not signed up or signed in with existing accounts yet.
 
 ```java
-public void onSignIn {
-  AdFresca.getInstance(currentActivity).signIn("user_id");
-}
-
-public void onSignOut {
-  AdFresca.getInstance(currentActivity).signOut();
+public onAppStart() {
+  if(isSignedIn) {
+    // It should be called on both auto sign-in and manual sign-in
+    AdFresca.getInstance(currentActivity).signIn("user_id");
+  } else {
+	 // If you use a separate guest_id to track a guest user, you can pass it as an argument 
+  	 // If you don’t use a separate identifier to track a guest user, you don’t need to set guest_id
+    AdFresca.getInstance(currentActivity).signInAsGuest(“guest_id”);
+  }
 }
 ```
 
-Nudge also supports 'guest sign in' with signInAsGuest() method.
+**getSignedUserId()** method will return a user_id for a signed-in user, a guest_id for a signed-in guest user, or a device identifier for a guest user without guest_id. You can use this method to test your codes.
 
-```java
-public void onGuestSignIn {
-  AdFresca.getInstance(currentActivity).signInAsGuest("guest_user_id");
-}
-```
-
-You can check a user’s current sign-in status by calling **getSignedUserId()** method. This method which returns an user identifier used in last sign in, and device identifier after the user signed out. Please use this method to test your codes.
 
 ### In-App Messaging
 
@@ -389,54 +385,53 @@ AdFresca.getInstance(this).logPurchase(purchase, new AFPurchaseExceptionListener
 
 ### Give Reward
 
-When you set the 'Reward Item' section of the reward campaign or 'Inventive item' section of the incentivized CPI & CPA campaign, you should implement this 'reward item' code to give a reward item to your users.
+You can reward a free item to a user with a reward campaign or an incentivised CPI/CPA campaign.
 
-When implementing reward item codes, you can check if your user has any reward to receive, and then a notice will be sent with reward item info.
+There are two steps of reward claim process:
 
-To implement codes, we use two codes below:
+1. Reward Claim Request: Nudge SDK triggers a reward claim event when the current user is matched for reward campaign. On this event, you need to claim a reward for the user.
+2. Finish Reward Claim: When you finish to claim a reward,  you should inform it to Nudge SDK. 
 
-- checkRewardItems method: This method is to check if any item is available to receive. We recommend to put this code when the app becomes active. 
-- AFRewardItemListener implementation: When the reward condition is completed with the current user, onReward event is automatically called with AFRewardItem object from our SDK. You can give an item to the user with AFRewardItem object.
+If there is a reward item for a user, onRewardClaim event is triggered and the item information is passed along, which you will use to give the item to a user.
 
 ```java
-public void onResume() {
-  ...
-
-  AdFresca.setRewardItemListener(new AFRewardItemListener(){
+  AdFresca.setRewardClaimListener(new AFRewardClaimListener(){
       @Override
-      public void onReward(AFRewardItem item) {
-        String logMessage = String.format("You got the reward item! (%s)", item.getName());
+      public void onRewardClaim(AFRewardItem item) {
+        String logMessage = String.format("You got the reward item! (%s)", item.toJson());
         Log.d(TAG, logMessage);
         
-        // Now, you can give an item to users.  
-        sendItemToUser(currentUserId, item.getUniqueValue(), item.getQuantity(), item.getSecurityToken());		
+  		  // Give an item to a user.  
+        sendItemToUser(currentUserId, item.getUniqueValue(), item.getQuantity(), item.getSecurityToken(), item.getRewardToken()));        
       }});
-          
-  AdFresca fresca = AdFresca.getInstance(this);
-  fresca.checkRewardItems();
+```
+
+You need to inform Nudge SDK that you have given a reward to a user successfully by calling finishRewardClaim() method. Unless Nudge SDK receives the confirmation of the reward claim, Nudge SDK will assume the claim has failed due to some error on the client-side or the server-side then re-trigger onRewardClaim event. It won't happen until the next marketing moment is called and 3 minutes have passed after the previous event was triggered, which prevents giving a reward multiple times by triggering onRewardClaim event again while the previous event is being handled.
+
+```java
+public onRewardClaimSuccess(AFRewardItem item, ...)
+  ....
+  String token = item.getRewardToken();
+  AdFresca.getInstance(this).finishRewardClaim(token);
 }
 ```
 
-onReward event is called when each type of campaign's reward condition is completed.
+#### Implementing SendItemToUser()
 
-- Reward Campaign: The event is called when your user sees the campaign contents.
-- Incentivized CPI Campaign: The event is called when our SDK checks Advertising App's install.
-- Incentivized CPA Campaign: The event is called after our SDK checks Advertising App's install and the user called the targeted marketing event in Advertising App.
- 
-If your users have any network connectivity issues, our SDK stores the reward data in the app's local storage, and then re-checks at the next app session. So, we guarantee every user will always get the reward they are entitled to.
+You need to give a reward item to the user using your own client code or back-end server API. Your client may send an API request with a unique value of a reward item, a quantity and a security token to your server. Then the server application will add a reward item to the user's item inventory or inbox.
 
+#### Hack Proof Code
 
-#### implementing sendItemToUser()
+You can prevent client-side hacking using a security token and a reward claim limit count for a campaign. A security token is automatically created when a campaign is created using our dashboard and you can set it manually if needed. You can set a reward claim limit count for a campaign via our dashboard.
 
-You should give a reward item to your user using your own client code or back-end server api. Your client may send an api request with an unique value of item, quantity and security token values to your server. Then the server application will add a reward item to the user's item inventory.
+1. You can store a security token on your own database and compare it with a security token passed from a client.
+2. If you think a security token is exposed, you can create a new one or change it on our dashboard.
+3. If a user requests a reward item more than the reward claim limit count, the server should reject the request.
 
-#### Hack Proof
+If you want Nudge to send a security token and a reward claim limit count for a campaign to your server via RESTful API automatically, please email us at support@nudge.do
 
-Our SDK never calls itemRewarded event more than once per campaign. We always check with device identifiers to avoid abuse. However, It is still possible for hackers to hijack your api request between your client and back-end server. To prevent this issue, we provide a security token value. A security token is an unique value per campaign. You can generate the token while you're creating a reward campaign. You can provide hack-proof rewards using the security token as follows:
+* * *
 
-1. You will store a security token to your own database before starting a reward campaign. You should reject any reward requests with an invalid token value.
-2. If some users are trying to request with the same token value more than once, you should reject those requests.
-3. If you think your security token is exposed to hackers, you can always change the value in our dashboard.
 
 ### Sales Promotion
 
@@ -932,8 +927,9 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 * * *
 
 ## Release Notes
-
-- **v2.4.9 _(2015/03/27 Updated)_**
+- **v2.5.5 _(2016/01/23 Updated)_**
+  - Added OnRewardClaim and finishRewardClaim methods and onReward has been deprecated. Please refer to [Give Reward](#give-reward) section.
+- v2.4.9 (2015/03/27 Updated)
   - [Test Mode](#test-mode) is added.
 - v2.4.8
   - for [Image Push Notification](#image-push-notification), SDK can download an image uploaded in dashboard.
