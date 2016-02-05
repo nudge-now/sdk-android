@@ -252,7 +252,7 @@ After you have your test device ID, you have to register it to [Dashboard](https
 
 ### Test Mode
 
-Nudge SDK supports a test mode feature. With the test mode feature, you can verify your SDK codes. When you add **setTestMode(true)** code, SDK will print a log message with a result for each your SDK code. 
+Nudge SDK supports a test mode feature. With the test mode feature, you can verify your SDK codes. When you add **setTestMode(true)** code, SDK will print a log message with a result for each SDK code. 
 
   ```java
  AdFresca.setTestMode(true);
