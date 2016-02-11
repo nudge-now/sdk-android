@@ -418,7 +418,7 @@ AdFresca.getInstance(this).logPurchase(purchase, new AFPurchaseExceptionListener
 사용자에게 아이템을 지급한 후 finishRewardClaim() 메소드를 호출하여 넛지에 리워드 지급 완료를 통보해야 합니다. 넛지는 리워드 지급 완료 기록을 전달 받아야만 리워드가 정상적으로 지급된 것으로 처리합니다. 즉 게임서버나 클라이언트에서 에러가 발생하여 리워드 지급이 실패한 경우 넛지 SDK에서는 다시 리워드 지급 요청을 합니다. 넛지 SDK에서는 3분 이상 지급 확인 기록이 전달되지 않은 경우 다음 번 마케팅 모멘트가 실행될 때 다시 리워드 지급 요청을 합니다. 이는 지급 처리 중에 다시 지급요청을 해서 중복 지급되는 것을 막기 위함입니다.
 
 ```java
-public onRewardClaimSuccess(AFRewardItem item, ...)
+public onRewardClaimSuccess(AFRewardItem item, ...) {
   ....
   String token = item.getRewardToken();
   AdFresca.getInstance(this).finishRewardClaim(token);
