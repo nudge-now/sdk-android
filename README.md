@@ -409,7 +409,7 @@ If there is a reward item for a user, onRewardClaim event is triggered and the i
 You need to inform Nudge SDK that you have given a reward to a user successfully by calling finishRewardClaim() method. Unless Nudge SDK receives the confirmation of the reward claim, Nudge SDK will assume the claim has failed due to some error on the client-side or the server-side then re-trigger onRewardClaim event. It won't happen until the next marketing moment is called and 3 minutes have passed after the previous event was triggered, which prevents giving a reward multiple times by triggering onRewardClaim event again while the previous event is being handled.
 
 ```java
-public onRewardClaimSuccess(AFRewardItem item, ...)
+public onRewardClaimSuccess(AFRewardItem item, ...) {
   ....
   String token = item.getRewardToken();
   AdFresca.getInstance(this).finishRewardClaim(token);
