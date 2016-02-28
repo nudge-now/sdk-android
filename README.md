@@ -532,7 +532,7 @@ public void onFinishStage() {
 
 #### Manage Custom User Profile
 
-Nudge SDK transfers custom parameters and event counters to Nudge servers whenever necessary. But Nudge server will only store actived custom parameters and event counters so you need to activate them using [Dashboard](https://admin.adfresca.com). (You can activate up-to 20 custom parameters and event counters in total.)
+Nudge SDK transfers custom parameters and event counters to Nudge servers whenever necessary. But Nudge server will only store activated custom parameters and event counters so you need to activate them using [Dashboard](https://admin.adfresca.com). (You can activate up-to 20 custom parameters and event counters in total.)
 
 <img src="https://s3-ap-northeast-1.amazonaws.com/file.adfresca.com/guide/sdk/custom_parameter_index.png">
 
