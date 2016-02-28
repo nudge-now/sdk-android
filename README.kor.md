@@ -531,13 +531,13 @@ public void onUserLevelChanged(int level) {
 
 #### Event Counters
 
-**IncrEventCounterValue** 메소드를 이용해서 특정 이벤트의 횟수를 셀 수 있습니다. 파라미터로는 키 스트링 (Unique Key, 예. "play_count", "winning_streak" 등), 증가된 횟수(옵션. 정수값) 등이 있습니다.
+**incrEventCounter** 메소드를 이용해서 특정 이벤트의 횟수를 셀 수 있습니다. 파라미터로는 키 스트링 (Unique Key, 예. "play_count", "winning_streak" 등), 증가된 횟수(옵션. 정수값) 등이 있습니다.
 
 ```java
 public void onFinishStage() {
   AdFresca fresca = AdFresca.getInstance(currentActivity);     
   fresca.incrEventCounter("play_count");
-  fresca.incrEventCounter("winning_streak", 2); // 횟수를 2번째 파라미터로 전달할 수 있습니다.
+  fresca.incrEventCounter("winning_streak", 2); // 2번째 파라미터로 증가된 횟수를 전달할 수 있습니다.
 }
 ```
 

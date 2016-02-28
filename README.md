@@ -520,7 +520,7 @@ public void onUserLevelChanged(int level) {
 
 #### Event Counters
 
-Use **IncrEventCounterValue** method with a ‘Unique Key’ string value (and an increment if necessary.) to count a specific event.
+Use **incrEventCounter** method with a ‘Unique Key’ string value (and an increment if necessary.) to count a specific event.
 
 ```java
 public void onFinishStage() {
