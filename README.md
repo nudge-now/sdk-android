@@ -913,7 +913,9 @@ If you use Proguard to protect your APK, you should add exception configurations
 
 ## Troubleshooting
 
-if our SDK can't show any message or raise errors, you can debug by implementing AFExceptionListener.
+
+#### No in-app message is displayed or an error is raised
+If our SDK displays no in-app message or raises an error you can debug by implementing AFExceptionListener.
 
 ```java
 AdFresca.setExceptionListener(new AFExceptionListener(){
@@ -923,6 +925,11 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
   }
 });
 ```
+
+#### If you have a compile error related to Gson library
+If you use Gson library in your app you will have a compile error during build. Please use SDK without Gson library using the link below:
+
+[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip)
 
 * * *
 

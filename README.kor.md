@@ -38,8 +38,6 @@
 
 [Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip)
 
-[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip)
-
 SDK를 프로젝트에 설치하기 위하여 아래의 과정을 진행합니다.
 
 1) **AdFresca.jar** 파일은 **lib** 폴더에, **adfresca_attr.xml** 파일은 **res/values** 폴더에 각각 복사합니다.
@@ -1086,7 +1084,8 @@ Proguard 툴을 이용하여 APK 파일을 보호하는 경우 몇 가지 예외
 
 ## Troubleshooting
 
-콘텐츠츠 제대로 출력되지 않거나, 에러가 발생한다면 AdExceptionListener 인터페이스를 구현하여, 에러 정보를 확인 할 수 있습니다.
+#### 인-앱 메시지가 노출되지 않거나 에러가 발생하는 경우
+인-앱 메시지가 노출되지 않거나 에러가 발생한다면 AdExceptionListener 인터페이스를 구현하여 에러 정보를 확인할 수 있습니다.
 
 ```java
 AdFresca.setExceptionListener(new AFExceptionListener(){
@@ -1096,6 +1095,11 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
   }
 });
 ```
+
+#### Gson 라이브러리 관련 컴파일 에러가 발생하는 경우
+이미 앱에서 Gson 라이브러리를 이용 중인 경우 빌드 시 컴파일 에러가 발생합니다. 이 경우 아래 링크를 통해 Gson을 제거한 SDK를 다운로드 받으세요
+
+[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip)
 
 * * *
 
