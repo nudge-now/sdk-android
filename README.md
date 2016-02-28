@@ -501,15 +501,21 @@ You can create segements using custom paramters and/or event counters then targe
 Set a custom parameter with a ‘Unique Key’ string value (e.g. "level", "facebook_flag") and a current value (integer or boolean) using **setCustomParameterValue** method. When your app supports signing in to multiple devices, Please make sure to set Custom Parameters with the values stored in your server when a user signs in, which can prevent data discrepancy in the situation that a game client was killed or paused on one device before finishing the sync between Nudge SDK and Nudge servers then she runs the app on other device.
 
 ```java
-
-
+public void onSignIn {
+  AdFresca fresca = AdFresca.getInstance(currentActivity);     
+  fresca.setCustomParameterValue("level", User.level);
+  fresca.setCustomParameterValue("facebook_flag", User.hasFacebookAccount);
+  fresca.signIn("user_id");
+}
 ```
 
 Please use the same method to update the value whenever its value changes.
 
 ```java
-
-
+public void onUserLevelChanged(int level) {
+  AdFresca fresca = AdFresca.getInstance(currentActivity);     
+  fresca.setCustomParameterValue("level", User.level);
+}
 ```
 
 #### Event Counters
@@ -517,8 +523,11 @@ Please use the same method to update the value whenever its value changes.
 Use **IncrEventCounterValue** method with a ‘Unique Key’ string value (and an increment if necessary.) to count a specific event.
 
 ```java
-
-
+public void onFinishStage() {
+  AdFresca fresca = AdFresca.getInstance(currentActivity);     
+  fresca.incrEventCounter("play_count");
+  fresca.incrEventCounter("winning_streak", 2); // you can pass multiple counts (integer) using the 2nd parameter
+}
 ```
 
 #### Manage Custom User Profile
@@ -919,7 +928,7 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 
 ## Release Notes
 - **v2.5.6 _(2016/02/27 Updated)_**
-  - Added incrEventCounterValue method and deprecated incrCustomParameterValue. Please refer to [Custom User Profile](#custom-user-profile) section.
+  - Added incrEventCounter method and deprecated incrCustomParameterValue. Please refer to [Custom User Profile](#custom-user-profile) section.
 - v2.5.5 (2016/01/23 Updated)
   - Added OnRewardClaim and finishRewardClaim methods and onReward has been deprecated. Please refer to [Give Reward](#give-reward) section.
 - v2.4.9 (2015/03/27 Updated)

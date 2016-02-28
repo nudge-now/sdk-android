@@ -510,15 +510,21 @@ SDK가 사용자의 실제 구매 여부를 트랙킹하기 위해서는 [In-App
 **setCustomParameterValue** 메소드를 이용해서 특정 속성의 현재 값을 설정할 수 있습니다. 파라미터로는 키 스트링 (Unique Key, 예. "level", "facebook_flag" 등), 현재 값 (정수 또는 boolean) 등이 있습니다. 만약 여러분의 앱이 여러 기기에서의 sign-in을 지원한다면 사용자가 sign-in할 때 반드시 서버에 저장된 최신 값을 이용하여 커스텀 파라미터를 설정해야만 합니다. 이는 사용자가 하나의 단말에서 앱을 사용하다 앱을 포즈시켰거나 앱을 강제 종료한 경우에 Nudge SDK와 Nudge 서버 간의 데이터가 싱크되지 않는 문제를 해결하기 위함입니다.
 
 ```java
-
-
+public void onSignIn {
+  AdFresca fresca = AdFresca.getInstance(currentActivity);     
+  fresca.setCustomParameterValue("level", User.level);
+  fresca.setCustomParameterValue("facebook_flag", User.hasFacebookAccount);
+  fresca.signIn("user_id");
+}
 ```
 
 또한 커스텀 파라미터의 값이 변경되면 동일한 방법으로 변경된 값을 설정해 주세요.
 
 ```java
-
-
+public void onUserLevelChanged(int level) {
+  AdFresca fresca = AdFresca.getInstance(currentActivity);     
+  fresca.setCustomParameterValue("level", User.level);
+}
 ```
 
 #### Event Counters
@@ -526,8 +532,11 @@ SDK가 사용자의 실제 구매 여부를 트랙킹하기 위해서는 [In-App
 **IncrEventCounterValue** 메소드를 이용해서 특정 이벤트의 횟수를 셀 수 있습니다. 파라미터로는 키 스트링 (Unique Key, 예. "play_count", "winning_streak" 등), 증가된 횟수(옵션. 정수값) 등이 있습니다.
 
 ```java
-
-
+public void onFinishStage() {
+  AdFresca fresca = AdFresca.getInstance(currentActivity);     
+  fresca.incrEventCounter("play_count");
+  fresca.incrEventCounter("winning_streak", 2); // you can pass multiple counts (integer) using the 2nd parameter
+}
 ```
 
 #### Manage Custom User Profile
@@ -1090,7 +1099,7 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 
 ## Release Notes
 - **v2.5.6 _(2016/02/27 Updated)_**
-  - IncrEventCounterValue 메소드가 추가되었고 incrCustomParameterValue를 더 이상 지원하지 않습니다. [Custom User Profile](#custom-user-profile) 섹션을 참고하세요.
+  - incrEventCounter 메소드가 추가되었고 incrCustomParameterValue를 더 이상 지원하지 않습니다. [Custom User Profile](#custom-user-profile) 섹션을 참고하세요.
 - v2.5.5 (2016/01/23 Updated)
   - [Give Reward](#give-reward)이 개선되어 지급 완료 확인이 가능해졌습니다. 기존의 OnReward 메소드가 deprecated 되었기 때문에 반드시 새로운 가이드를 참고하여 코드를 변경해야 합니다.
 - v2.4.8
