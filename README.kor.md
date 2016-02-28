@@ -119,7 +119,7 @@ public onAppStart() {
 
 ### In-App Messaging
 
-인-앱 메시징 기능을 이용하여 타겟 사용자에게 원하는 메시지를 노출할 수 있습니다. 메시지를 노출하고자 하는 시점에 Load(), Show() 메소드를 호출하세요. 메시지는 전면 interstitial 이미지, 텍스트, 혹은 iframe 웹페이지 형태를 지원합니다. 또한 인-앱 메시징을 이용해서 사용자에게 리워드를 지급할 수도 있습니다. ([Give Reward](#give-reward) 섹션 참조.) 메시지는 현재 앱을 실행 중인 사용자의 프로화일이 인-앱 메시징 캠페인의 조건을 만족하는 경우에만 화면에 표시됩니다. 조건을 만족하는 캠페인이 없다면 사용자는 아무런 화면을 보지 않고 자연스럽게 게임 플레이를 이어갑니다. 매칭과 관련한 인-앱 메시징의 다이나믹 타겟팅 기능은 아래의 [Dynamic Targeting](#dynamic-targeting) 항목에서 보다 자세히 설명하고 있습니다.
+인-앱 메시징 기능을 이용하여 타겟 사용자에게 원하는 메시지를 노출할 수 있습니다. 메시지를 노출하고자 하는 시점에 Load(), Show() 메소드를 호출하세요. 메시지는 전면 이미지 (interstitial), 텍스트, 혹은 iframe 웹페이지 등을 지원합니다. 또한 인-앱 메시징을 이용해서 사용자에게 리워드를 지급할 수도 있습니다. ([Give Reward](#give-reward) 섹션 참조) 메시지는 현재 앱을 실행 중인 사용자의 프로화일이 인-앱 메시징 캠페인의 조건을 만족하는 경우에만 화면에 표시됩니다. 조건을 만족하는 캠페인이 없다면 사용자는 아무런 변화 없이 자연스럽게 게임 플레이를 할 것입니다. 매칭과 관련한 인-앱 메시징의 다이나믹 타겟팅 기능은 아래의 [Dynamic Targeting](#dynamic-targeting) 항목에서 보다 자세히 설명하고 있습니다.
 
 ```java
 protected void onCreate(Bundle savedInstanceState) {
@@ -501,9 +501,11 @@ SDK가 사용자의 실제 구매 여부를 트랙킹하기 위해서는 [In-App
 
 ## Dynamic Targeting
 
-### Custom Parameter
+### Custom User Profile
 
-커스텀 파라미터는 마케팅 목적으로 사용자를 분류하기 위해 사용하는 속성을 말하며 마케터가 임의로 정의할 수 있습니다. (예. 사용자의 레벨, 스테이지, 플레이 횟수 등) 커스텀 파라미터를 이용하면 사용자의 특정 속성에 따라 세그먼트를 정의하고 실시간으로 모니터링할 수 있습니다. 또한 캠페인 실행 시에는 보다 더 정교한 타겟팅을 통해 높은 성과를 거둘 수 있습니다. (Nudge SDK에서 자동적으로 수집하는 단말 ID, 기본 언어, 국가, 앱 버전 등의 정보는 커스텀 파라미터로 설정할 필요가 없습니다.)
+Nudge SDK는 커스텀 사용자 프로화일을 추적하기 위해 2가지 방법을 제공합니다: 커스텀 파라미터 (Custom Parameter)와 이벤트 카운터 (Event Counter). 커스텀 파라미터는 사용자의 특정 속성 (예. 레벨, 현재 스테이지, 페이스북 로그인 여부 등)의 현재 값을 추적하기 위해 사용하며 이벤트 카운터는 사용자의 앱내 특정 이벤트 (예. 플레이 횟수, 가챠 뽑기 횟수 등)의 횟수를 세기 위해 사용합니다.
+
+커스텀 파라미터와 이벤트 카운터를 이용하여 세그먼트를 만든 다음, 해당 세그먼트를 타겟팅하거나 그들의 행동을 실시간으로 추적할 수 있습니다. 더 많은 필터를 이용해서 타겟을 명확하게 하면 더 좋은 캠페인 결과를 얻을 수 있습니다. (Nudge SDK가 기본적으로 제공하는 필터들 - 언어, 국가, 앱버전, SDK 버전, 앱실행 횟수, 구매 횟수, 기타 등등 - 은 커스텀 파라미터나 이벤트 카운터로 정의할 필요가 없습니다.)
 
 #### Custom Parameters
 
@@ -535,21 +537,21 @@ public void onUserLevelChanged(int level) {
 public void onFinishStage() {
   AdFresca fresca = AdFresca.getInstance(currentActivity);     
   fresca.incrEventCounter("play_count");
-  fresca.incrEventCounter("winning_streak", 2); // you can pass multiple counts (integer) using the 2nd parameter
+  fresca.incrEventCounter("winning_streak", 2); // 횟수를 2번째 파라미터로 전달할 수 있습니다.
 }
 ```
 
 #### Manage Custom User Profile
 
-SDK는 전달 받은 커스텀 파라미터와 이벤트 카운터 정보를 Nudge 서버로 전송합니다. 하지만 Nudge 서버는 활성화된 커스텀 파라미터와 이벤트 카운터의 값만을 저장하기 때문에 반드시 [Dashboard](https://dashboard.nudge.do)에 접속하여 커스텀 파라미터와 이벤트 카운터를 활성화 (Activate)해야 합니다. (커스텀 파라미터와 이벤트 카운터를 합쳐서 최대 20개까지 활성화할 수 있습니다.)
+Nudge SDK는 전달 받은 커스텀 파라미터와 이벤트 카운터 정보를 Nudge 서버로 전송합니다. 하지만 Nudge 서버는 활성화 (activate)된 커스텀 파라미터와 이벤트 카운터의 값만을 저장하기 때문에 반드시 [Dashboard](https://dashboard.nudge.do)에 접속하여 커스텀 파라미터와 이벤트 카운터를 활성화해야 합니다. (커스텀 파라미터와 이벤트 카운터를 합쳐서 최대 20개까지 활성화할 수 있습니다.)
 
 <img src="https://s3-ap-northeast-1.amazonaws.com/file.adfresca.com/guide/sdk/custom_parameter_index.png">
 
-Overview 메뉴 -> Settings - Custom Parameters 메뉴를 선택하면 커스텀 파라미터 목록이 표시됩니다. 해당 커스텀 파라미터의 Unique Key를 찾은 다음, 이름 ('Name')을 입력하고 활성화 (Activate)합니다.
+Overview 메뉴 -> Settings - Custom Parameters 메뉴를 선택하면 커스텀 파라미터 목록이 표시됩니다. 해당 커스텀 파라미터의 Unique Key를 찾은 다음 이름 ('Name')을 입력하고 "Activate" (활성화) 버튼을 클릭합니다.
 
 #### Stickiness Event Counters
 
-스티키니스 이벤트 카운터는 사용자의 앱에 대한 충성도를 가지고 있는지 측정하는 데 사용합니다. 예를 들어 스테이지 기반의 게임에서 "플레이 횟수"를 스티키니스 이벤트 카운터로 설정하면 "총 플레이 횟수", "최근 7일간의 총 플레이 횟수", "최근 7일간의 일평균 플레이 횟수" 등을 이용하여 세그먼트를 생성할 수 있습니다. 사용자의 충성도 (최근 플레이 횟수)에 따라 다른 세그먼트를 생성하여 타겟팅하거나 모니터링할 수 있습니다. 
+스티키니스 이벤트 카운터는 사용자가 앱에 대해 얼마나 충성도를 가지고 있는지 측정하는 데 사용합니다. 예를 들어 스테이지 기반의 게임에서 "플레이 횟수"를 이용해서 충성도를 측정한다고 하면 스티키니스 이벤트 카운터에서 제공하는 "총 플레이 횟수", "최근 7일간의 총 플레이 횟수", "최근 7일간의 일평균 플레이 횟수" 등의 3가지 필터를 이용하여 충성도에 따라 다른 세그먼트를 생성할 수 있습니다. 이를 이용해서 충성도에 따라 세그먼트를 나누거나 해당 세그먼트의 행동을 실시간으로 모니터링할 수 있습니다.
 
 스티키니스 이벤트 카운터를 사용하고자 하는 경우 해당 이벤트 카운터를 활성화한 후 support@nudge.do로 메일 주시기 바랍니다.
 
