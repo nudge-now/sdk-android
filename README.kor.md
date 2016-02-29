@@ -12,7 +12,7 @@
   - [Give Reward](#give-reward)
   - [Sales Promotion](#sales-promotion)
 - [Dynamic Targeting](#dynamic-targeting)
-  - [Custom User Profile](#custom-user-profile)
+  - [Custom Profile Attributes](#custom-profile-attributes)
   - [Marketing Moment](#marketing-moment)
 - [Advanced](#advanced)
   - [Custom Banner (Android Only)](#custom-banner)
@@ -499,9 +499,9 @@ SDK가 사용자의 실제 구매 여부를 트랙킹하기 위해서는 [In-App
 
 ## Dynamic Targeting
 
-### Custom User Profile
+### Custom Profile Attributes
 
-Nudge SDK는 커스텀 사용자 프로화일을 추적하기 위해 2가지 방법을 제공합니다: 커스텀 파라미터 (Custom Parameter)와 이벤트 카운터 (Event Counter). 커스텀 파라미터는 사용자의 특정 속성 (예. 레벨, 현재 스테이지, 페이스북 로그인 여부 등)의 현재 값을 추적하기 위해 사용하며 이벤트 카운터는 사용자의 앱내 특정 이벤트 (예. 플레이 횟수, 가챠 뽑기 횟수 등)의 횟수를 세기 위해 사용합니다.
+Nudge SDK는 커스텀 프로화일 속성을 추적하기 위해 2가지 방법을 제공합니다: 커스텀 파라미터 (Custom Parameter)와 이벤트 카운터 (Event Counter). 커스텀 파라미터는 사용자의 특정 속성 (예. 레벨, 현재 스테이지, 페이스북 로그인 여부 등)의 현재 값을 추적하기 위해 사용하며 이벤트 카운터는 사용자의 앱내 특정 이벤트 (예. 플레이 횟수, 가챠 뽑기 횟수 등)의 횟수를 세기 위해 사용합니다.
 
 커스텀 파라미터와 이벤트 카운터를 이용하여 세그먼트를 만든 다음, 해당 세그먼트를 타겟팅하거나 그들의 행동을 실시간으로 추적할 수 있습니다. 더 많은 필터를 이용해서 타겟을 명확하게 하면 더 좋은 캠페인 결과를 얻을 수 있습니다. (Nudge SDK가 기본적으로 제공하는 필터들 - 언어, 국가, 앱버전, SDK 버전, 앱실행 횟수, 구매 횟수, 기타 등등 - 은 커스텀 파라미터나 이벤트 카운터로 정의할 필요가 없습니다.)
 
@@ -539,13 +539,13 @@ public void onFinishStage() {
 }
 ```
 
-#### Manage Custom User Profile
+#### Manage Custom Profile Attributes
 
-Nudge SDK는 전달 받은 커스텀 파라미터와 이벤트 카운터 정보를 Nudge 서버로 전송합니다. 하지만 Nudge 서버는 활성화 (activate)된 커스텀 파라미터와 이벤트 카운터의 값만을 저장하기 때문에 반드시 [Dashboard](https://dashboard.nudge.do)에 접속하여 커스텀 파라미터와 이벤트 카운터를 활성화해야 합니다. (커스텀 파라미터와 이벤트 카운터를 합쳐서 최대 20개까지 활성화할 수 있습니다.)
+Nudge SDK는 전달 받은 커스텀 프로화일 속성들을 Nudge 서버로 전송합니다. 하지만 Nudge 서버는 활성화 (activate)된 커스텀 프로화일 속성들의 값만을 저장하기 때문에 반드시 [Dashboard](https://dashboard.nudge.do)에 접속하여 커스텀 파라미터와 이벤트 카운터를 활성화해야 합니다. (커스텀 파라미터와 이벤트 카운터를 합쳐서 최대 20개까지 활성화할 수 있습니다.)
 
 <img src="https://s3-ap-northeast-1.amazonaws.com/file.adfresca.com/guide/sdk/custom_parameter_index.png">
 
-Overview 메뉴 -> Settings - Custom Parameters 메뉴를 선택하면 커스텀 파라미터 목록이 표시됩니다. 해당 커스텀 파라미터의 Unique Key를 찾은 다음 이름 ('Name')을 입력하고 "Activate" (활성화) 버튼을 클릭합니다.
+Overview 메뉴 -> Settings - Custom Profile Attrs 메뉴를 선택하면 커스텀 프로화일 속성의 목록이 표시됩니다. 해당 커스텀 파라미터의 Unique Key를 찾은 다음 이름 ('Name')을 입력하고 "Activate" (활성화) 버튼을 클릭합니다.
 
 #### Stickiness Event Counters
 
@@ -1105,7 +1105,7 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 
 ## Release Notes
 - **v2.5.6 _(2016/02/27 Updated)_**
-  - incrEventCounter 메소드가 추가되었고 incrCustomParameterValue를 더 이상 지원하지 않습니다. [Custom User Profile](#custom-user-profile) 섹션을 참고하세요.
+  - incrEventCounter 메소드가 추가되었고 incrCustomParameterValue를 더 이상 지원하지 않습니다. [Custom Profile Attributes](#custom-profile-attributes) 섹션을 참고하세요.
 - v2.5.5 (2016/01/23 Updated)
   - [Give Reward](#give-reward)이 개선되어 지급 완료 확인이 가능해졌습니다. 기존의 OnReward 메소드가 deprecated 되었기 때문에 반드시 새로운 가이드를 참고하여 코드를 변경해야 합니다.
 - v2.4.8
