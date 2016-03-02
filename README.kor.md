@@ -505,16 +505,18 @@ Nudge SDK는 커스텀 프로화일 속성을 추적하기 위해 2가지 방법
 
 커스텀 파라미터와 이벤트 카운터를 이용하여 세그먼트를 만든 다음, 해당 세그먼트를 타겟팅하거나 그들의 행동을 실시간으로 추적할 수 있습니다. 더 많은 필터를 이용해서 타겟을 명확하게 하면 더 좋은 캠페인 결과를 얻을 수 있습니다. (Nudge SDK가 기본적으로 제공하는 필터들 - 언어, 국가, 앱버전, SDK 버전, 앱실행 횟수, 구매 횟수, 기타 등등 - 은 커스텀 파라미터나 이벤트 카운터로 정의할 필요가 없습니다.)
 
+**주의**: 커스텀 파라미터와 이벤트 카운터는 반드시 사용자가 sign in한 이후에 값을 설정해야 합니다.
+
 #### Custom Parameters
 
-**setCustomParameterValue** 메소드를 이용해서 특정 속성의 현재 값을 설정할 수 있습니다. 파라미터로는 키 스트링 (Unique Key, 예. "level", "facebook_flag" 등), 현재 값 (정수 또는 boolean) 등이 있습니다. 만약 여러분의 앱이 여러 기기에서의 sign-in을 지원한다면 사용자가 sign-in할 때 반드시 서버에 저장된 최신 값을 이용하여 커스텀 파라미터를 설정해야만 합니다. 이는 사용자가 하나의 단말에서 앱을 사용하다 앱을 포즈시켰거나 앱을 강제 종료한 경우에 Nudge SDK와 Nudge 서버 간의 데이터가 싱크되지 않는 문제를 해결하기 위함입니다.
+**setCustomParameterValue** 메소드를 이용해서 특정 속성의 현재 값을 설정할 수 있습니다. 파라미터로는 키 스트링 (Unique Key, 예. "level", "facebook_flag" 등), 현재 값 (정수 또는 boolean) 등이 있습니다. 만약 여러분의 앱이 여러 기기에서의 sign-in을 지원한다면 반드시 사용자가 sign-in한 직후에 서버에 저장된 최신 값을 이용하여 커스텀 파라미터를 설정해야 합니다. 이는 사용자가 하나의 단말에서 앱을 사용하다 앱을 포즈시켰거나 앱을 강제 종료한 경우에 Nudge SDK와 Nudge 서버 간의 데이터가 싱크되지 않는 문제를 해결하기 위함입니다.
 
 ```java
 public void onSignIn {
   AdFresca fresca = AdFresca.getInstance(currentActivity);     
+  fresca.signIn("user_id");  // or signInAsGuest(“guest_id”)
   fresca.setCustomParameterValue("level", User.level);
   fresca.setCustomParameterValue("facebook_flag", User.hasFacebookAccount);
-  fresca.signIn("user_id");
 }
 ```
 

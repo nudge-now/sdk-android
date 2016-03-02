@@ -496,16 +496,18 @@ Nudge SDK provides two tracking methods for custom profile attributes: Custom Pa
 
 You can create segements using custom paramters and/or event counters then target them for campaigns and/or monitor their activities in real time. You can achieve better campaign performance when targeting specific users with more filters. (Nudge SDK collect values of default filters such as device id, language, country, app version, run_count, purchase_count, etc so you don’t need to define those values as custom parameters or event counters.)
 
+**NOTICE**: Please make sure that you set custom parmeters or increase event counters after a user signs in.
+
 #### Custom Parameters
 
-Set a custom parameter with a ‘Unique Key’ string value (e.g. "level", "facebook_flag") and a current value (integer or boolean) using **setCustomParameterValue** method. When your app supports signing in to multiple devices, Please make sure to set Custom Parameters with the values stored in your server when a user signs in, which can prevent data discrepancy in the situation that a game client was killed or paused on one device before finishing the sync between Nudge SDK and Nudge servers then she runs the app on other device.
+Set a custom parameter with a ‘Unique Key’ string value (e.g. "level", "facebook_flag") and a current value (integer or boolean) using **setCustomParameterValue** method. When your app supports signing in to multiple devices, Please make sure to set Custom Parameters with the values stored in your server after a user signs in using **signIn** method, which can prevent data discrepancy in the situation that a game client was killed or paused on one device before finishing the sync between Nudge SDK and Nudge servers then she runs the app on other device.
 
 ```java
 public void onSignIn {
   AdFresca fresca = AdFresca.getInstance(currentActivity);     
+  fresca.signIn("user_id");  // or signInAsGuest(“guest_id”)
   fresca.setCustomParameterValue("level", User.level);
   fresca.setCustomParameterValue("facebook_flag", User.hasFacebookAccount);
-  fresca.signIn("user_id");
 }
 ```
 
