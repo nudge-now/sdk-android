@@ -12,8 +12,7 @@
   - [Give Reward](#give-reward)
   - [Sales Promotion](#sales-promotion)
 - [Dynamic Targeting](#dynamic-targeting)
-  - [Custom Parameter](#custom-parameter)
-  - [Stickiness Custom Parameter](#stickiness-custom-parameter)
+  - [Custom Profile Attributes](#custom-profile-attributes)
   - [Marketing Moment](#marketing-moment)
 - [Advanced](#advanced)
   - [Custom Banner (Android Only)](#custom-banner)
@@ -118,7 +117,7 @@ public onAppStart() {
 
 ### In-App Messaging
 
-With the in-app messaging feature, you can deliver a message to your in-app users in real time. Simply put 'load()' and 'show()' methods where you want to deliver a message. The type of message can be an interstitial image, text, and iframe webpage. The message is only shown when your user matches the in-app messaging campaign's target logics. We will discuss in more detail about the in-app messaging's dynamic targeting features in the [Dynamic Targeting](#dynamic-targeting) section.
+With in-app messaging, you can deliver a message to targeted users. Simply put 'Load()' and 'Show()' methods where and when you want to display a message. The type of message can be an interstitial image, text, or iFrame webpage. You can also reward an item to a user with in-app messaging. (Please refer to the [Give Reward](#give-reward) section.) The message is only displayed when a user's profile matches the in-app messaging campaign's target logics. We will discuss more details of the dynamic targeting features in the [Dynamic Targeting](#dynamic-targeting) section.
 
 ```java
 protected void onCreate(Bundle savedInstanceState) {
@@ -491,58 +490,61 @@ Our SDK will detect if users made a purchase using our [In-App Purchase Tracking
 
 ## Dynamic Targeting
 
-### Custom Parameter
+### Custom Profile Attributes
 
-Custom Parameter is a user attribute used to classify users for marketing purpose. You can use any custom values (e.g. user level, stage, and play count) to define a user segment and monitor it in real time. You can achieve better campaign performance when targeting users with higher accuracy. (Nudge SDK automatically collects default values such as device id, language, country, app version, and others so you don’t need to define those values as custom parameters.)
+Nudge SDK provides two tracking methods for custom profile attributes: Custom Parameter and Event Counter. Custom Parameter is used to track the current value of specific user attributes. (ex: level, current stage, facebook sign-in flag) while Event Counter is used to count a user's specific event in the app. (ex: play count, a number of gacha count)
 
-Nudge SDK provides two tracking methods by types of custom parameters. 
+You can create segements using custom paramters and/or event counters then target them for campaigns and/or monitor their activities in real time. You can achieve better campaign performance when targeting specific users with more filters. (Nudge SDK collect values of default filters such as device id, language, country, app version, run_count, purchase_count, etc so you don’t need to define those values as custom parameters or event counters.)
 
-- To track the current status of a user
-  - It is used to track the current value of specific user attributes
-  - ex: level, current stage, facebook sign-in flag
-  - SDK Code: Use **setCustomParameterValue** method to pass the current status (Integer, Boolean type) to SDK.
+**NOTICE**: Please make sure that you set custom parmeters or increase event counters after a user signs in.
 
-- To track specific event count
-  - It is used to track count for a specific event.
-  - ex: play count, a number of gacha count
-  - SDK Code: Use **incrCustomParameterValue** method to pass increased value (Integer) to SDK after an event occurred.
+#### Custom Parameters
 
-First, you need to define ‘Unique Key’ string value to define a custom parameter. (e.g. "level", "facebook_flag", "play_count") Then write the tracking codes when an user launches your app or signs in to your server.
+Set a custom parameter with a ‘Unique Key’ string value (e.g. "level", "facebook_flag") and a current value (integer or boolean) using **setCustomParameterValue** method. When your app supports signing in to multiple devices, Please make sure to set Custom Parameters with the values stored in your server after a user signs in using **signIn** method, which can prevent data discrepancy in the situation that a game client was killed or paused on one device before finishing the sync between Nudge SDK and Nudge servers then she runs the app on other device.
 
 ```java
-public void onCreate() {
-  AdFresca fresca = AdFresca.getInstance(this);     
+public void onSignIn {
+  AdFresca fresca = AdFresca.getInstance(currentActivity);     
+  fresca.signIn("user_id");  // or signInAsGuest(“guest_id”)
   fresca.setCustomParameterValue("level", User.level);
   fresca.setCustomParameterValue("facebook_flag", User.hasFacebookAccount);
-  fresca.startSession();
 }
 ```
 
-Then you need to put tracking codes whenever its value changes.
+Please use the same method to update the value whenever its value changes.
 
 ```java
-public void onUserLevelChanged(int level) {  
-  AdFresca fresca = AdFresca.getInstance(this);     
-  fresca.setCustomParameterValue("level", level);
-}
-
-public void onGameFinished {
-  AdFresca fresca = AdFresca.getInstance(this);     
-  fresca.incrCustomParameterValue("play_count", 1);
+public void onUserLevelChanged(int level) {
+  AdFresca fresca = AdFresca.getInstance(currentActivity);     
+  fresca.setCustomParameterValue("level", User.level);
 }
 ```
 
-If you successfully writes codes and set custom parameters, you will see a list of custom parameters you added on [Dashboard](https://admin.adfresca.com). 1) Select an App 2) In 'Overview' menu, click 'Settings - Custom Parameters' button.
+#### Event Counters
+
+Use **incrEventCounter** method with a ‘Unique Key’ string value (and an increment if necessary.) to count a specific event.
+
+```java
+public void onFinishStage() {
+  AdFresca fresca = AdFresca.getInstance(currentActivity);     
+  fresca.incrEventCounter("play_count");
+  fresca.incrEventCounter("winning_streak", 2); // you can pass multiple counts (integer) using the 2nd parameter
+}
+```
+
+#### Manage Custom Profile Attributes
+
+Nudge SDK transfers custom profile attributes to Nudge servers whenever necessary. But Nudge server will only store activated custom profile attributes so you need to activate them using [Dashboard](https://admin.adfresca.com). (You can activate up to 20 custom parameters and event counters in total.)
 
 <img src="https://s3-ap-northeast-1.amazonaws.com/file.adfresca.com/guide/sdk/custom_parameter_index.png">
 
-In order to activate a custom parameter, you need to set ‘Name’.. (You can activate custom parameters up to 20.) Nudge only stores data of activated custom parameters and use them for targeting.
+Under 'Overview' tab, click 'Settings - Custom Profile Attrs' menu. Locate the unique key of a custom parameter or an event counter and set its 'Name' then you can activate it by clicking "Activate" button.
 
-#### Stickiness Custom Parameter
+#### Stickiness Event Counters
 
-Stickiness custom parameter is a special custom parameter to measure a user’s stickiness. For example, if you set ‘play count’ as stickiness custom parameter in a stage-based game, You can define user segments with filters like ‘Today’s play count, ‘Play count in a week’, and ‘Average play count in a week’. Stickiness custom parameter will help you to classify user groups by their loyalty and to monitor their activities in real time. 
+A stickiness event counter is a special event counter to measure a user’s stickiness to your app. For example, if you set ‘play count’ as a stickiness custom parameter in a stage-based game, You can define user segments with 3 additional filters: ‘Today’s play count, ‘Total Play count in a week’, and ‘Average play count in a week’. Stickiness event counters will help you to classify user groups by their loyalty and to monitor their activities in real time. 
 
-You must use **incrCustomParameterValue* method for stickiness custom parameters. If you want to use stickiness custom parameters, please send an email to support@nudge.do after you activate your custom parameter in your dashboard.
+If you want to use stickiness event counters, please send an email to support@nudge.do after you activate your event counter in your dashboard.
 
 * * *
 
@@ -913,7 +915,9 @@ If you use Proguard to protect your APK, you should add exception configurations
 
 ## Troubleshooting
 
-if our SDK can't show any message or raise errors, you can debug by implementing AFExceptionListener.
+
+#### No in-app message is displayed or an error is raised
+If our SDK displays no in-app message or raises an error you can debug by implementing AFExceptionListener.
 
 ```java
 AdFresca.setExceptionListener(new AFExceptionListener(){
@@ -924,10 +928,17 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 });
 ```
 
+#### If you have a compile error related to Gson library
+If you use Gson library in your app you will have a compile error during build. Please use SDK without Gson library using the link below:
+
+[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip)
+
 * * *
 
 ## Release Notes
-- **v2.5.5 _(2016/01/23 Updated)_**
+- **v2.5.6 _(2016/02/27 Updated)_**
+  - Added incrEventCounter method and deprecated incrCustomParameterValue. Please refer to [Custom Profile Attributes](#custom-profile-attributes) section.
+- v2.5.5 (2016/01/23 Updated)
   - Added OnRewardClaim and finishRewardClaim methods and onReward has been deprecated. Please refer to [Give Reward](#give-reward) section.
 - v2.4.9 (2015/03/27 Updated)
   - [Test Mode](#test-mode) is added.

@@ -12,7 +12,7 @@
   - [Give Reward](#give-reward)
   - [Sales Promotion](#sales-promotion)
 - [Dynamic Targeting](#dynamic-targeting)
-  - [Custom Parameter](#custom-parameter)
+  - [Custom Profile Attributes](#custom-profile-attributes)
   - [Marketing Moment](#marketing-moment)
 - [Advanced](#advanced)
   - [Custom Banner (Android Only)](#custom-banner)
@@ -37,8 +37,6 @@
 아래 링크를 통해 SDK 파일을 다운로드 합니다.
 
 [Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip)
-
-[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip)
 
 SDK를 프로젝트에 설치하기 위하여 아래의 과정을 진행합니다.
 
@@ -119,7 +117,7 @@ public onAppStart() {
 
 ### In-App Messaging
 
-인-앱 메시징 기능을 이용하여, 사용자에게 원하는 메시지를 실시간으로 전달할 수 있습니다. 메시지를 전달하고자 하는 시점에 load(), show() 메소드만을 호출하여 적용이 가능합니다. 메시지는 전면 interstitial 이미지, 텍스트, 혹은 iframe 웹페이지 형태로 화면에 표시될 수 있습니다. 메시지는 현재 플레이 중인 사용자가 인-앱 메시징 캠페인의 조건과 매칭된 경우에만 화면에 표시됩니다. 조건에 만족하는 캠페인이 없다면 사용자는 아무런 화면을 보지 않고 자연스럽게 플레이를 이어갑니다. 매칭과 관련한 인-앱 메시징의 다이나믹 타겟팅 기능은 아래의 [Dynamic Targeting](#dynamic-targeting) 항목에서 보다 자세히 설명하고 있습니다.
+인-앱 메시징 기능을 이용하여 타겟 사용자에게 원하는 메시지를 노출할 수 있습니다. 메시지를 노출하고자 하는 시점에 Load(), Show() 메소드를 호출하세요. 메시지는 전면 이미지 (interstitial), 텍스트, 혹은 iframe 웹페이지 등을 지원합니다. 또한 인-앱 메시징을 이용해서 사용자에게 리워드를 지급할 수도 있습니다. ([Give Reward](#give-reward) 섹션 참조) 메시지는 현재 앱을 실행 중인 사용자의 프로화일이 인-앱 메시징 캠페인의 조건을 만족하는 경우에만 화면에 표시됩니다. 조건을 만족하는 캠페인이 없다면 사용자는 아무런 변화 없이 자연스럽게 게임 플레이를 할 것입니다. 매칭과 관련한 인-앱 메시징의 다이나믹 타겟팅 기능은 아래의 [Dynamic Targeting](#dynamic-targeting) 항목에서 보다 자세히 설명하고 있습니다.
 
 ```java
 protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +128,7 @@ protected void onCreate(Bundle savedInstanceState) {
 }
 ```
 
-첫 번째로 인-앱 메시징 코드를 적용한 경우, 아래와 같이 테스트 이미지 메시지가 표시됩니다. 해당 이미지를 터치하면 앱스토어 페이지로 이동합니다. 현재 보고 있는 테스트 메시지는 이후 테스트 모드 설정을 변경하여 더이상 보이지 않도록 설정하게 됩니다.
+처음 인-앱 메시징 코드를 적용한 경우, 아래와 같이 테스트 이미지 메시지가 표시됩니다. 해당 이미지를 터치하면 앱스토어 페이지로 이동합니다. 현재 보고 있는 테스트 메시지는 이후 테스트 모드 설정을 변경하여 더이상 보이지 않도록 설정할 수 있습니다.
 
 <img src="https://adfresca.zendesk.com/attachments/token/zngvftbmcccyajk/?name=device-2013-03-18-133517.png" width="240" />
 &nbsp;
@@ -501,58 +499,61 @@ SDK가 사용자의 실제 구매 여부를 트랙킹하기 위해서는 [In-App
 
 ## Dynamic Targeting
 
-### Custom Parameter
+### Custom Profile Attributes
 
-커스텀 파라미터는 마케팅 목적으로 사용자를 분류하기 위해 사용하는 속성을 말하며 마케터가 임의로 정의할 수 있습니다. (예. 사용자의 레벨, 스테이지, 플레이 횟수 등) 커스텀 파라미터를 이용하면 사용자의 특정 속성에 따라 세그먼트를 정의하고 실시간으로 모니터링할 수 있습니다. 또한 캠페인 실행 시에는 보다 더 정교한 타겟팅을 통해 높은 성과를 거둘 수 있습니다. (Nudge SDK에서 자동적으로 수집하는 단말 ID, 기본 언어, 국가, 앱 버전 등의 정보는 커스텀 파라미터로 설정할 필요가 없습니다.)
+Nudge SDK는 커스텀 프로화일 속성을 추적하기 위해 2가지 방법을 제공합니다: 커스텀 파라미터 (Custom Parameter)와 이벤트 카운터 (Event Counter). 커스텀 파라미터는 사용자의 특정 속성 (예. 레벨, 현재 스테이지, 페이스북 로그인 여부 등)의 현재 값을 추적하기 위해 사용하며 이벤트 카운터는 사용자의 앱내 특정 이벤트 (예. 플레이 횟수, 가챠 뽑기 횟수 등)의 횟수를 세기 위해 사용합니다.
 
-Nudge SDK는 트랙킹하려고 하는 커스텀 파라미터의 유형에 따라 아래 2가지 방법을 제공합니다.
+커스텀 파라미터와 이벤트 카운터를 이용하여 세그먼트를 만든 다음, 해당 세그먼트를 타겟팅하거나 그들의 행동을 실시간으로 추적할 수 있습니다. 더 많은 필터를 이용해서 타겟을 명확하게 하면 더 좋은 캠페인 결과를 얻을 수 있습니다. (Nudge SDK가 기본적으로 제공하는 필터들 - 언어, 국가, 앱버전, SDK 버전, 앱실행 횟수, 구매 횟수, 기타 등등 - 은 커스텀 파라미터나 이벤트 카운터로 정의할 필요가 없습니다.)
 
-- 현재 상태 값을 트랙킹하는 경우
-  - 특정 속성의 현재 상태 값을 트랙킹할 때 사용합니다. 
-  - 예) 레벨, 최종 스테이지, 친구수 등
-  - 사용 코드: **setCustomParameterValue** 메소드를 이용하여 현재 상태 값 (Integer, Boolean 지원)을 SDK에 전달합니다.
+**주의**: 커스텀 파라미터와 이벤트 카운터는 반드시 사용자가 sign in한 이후에 값을 설정해야 합니다.
 
-- 특정 이벤트의 횟수를 트랙킹하는 경우
-  - 특정 이벤트마다 증가하는 횟수를 트랙킹할 때 사용합니다.
-  - 예) 플레이 횟수, 가챠 이용 횟수 등
-  - 사용 코드: **incrCustomParameterValue** 메소드를 이용하여 이벤트 발생시 증가된 횟수 (Integer)을 SDK에 전달합니다.
+#### Custom Parameters
 
-먼저 커스텀 파라미터를 특정할 수 있는 문자열 형태의 Unique Key 값을 정합니다. (예: "level", "facebook_flag", "play_count") 앱을 처음 실행하는 시점 또는 사용자가 로그인하는 시점에 커스텀 파라미터의 현재 상태 값을 설정합니다.
+**setCustomParameterValue** 메소드를 이용해서 특정 속성의 현재 값을 설정할 수 있습니다. 파라미터로는 키 스트링 (Unique Key, 예. "level", "facebook_flag" 등), 현재 값 (정수 또는 boolean) 등이 있습니다. 만약 여러분의 앱이 여러 기기에서의 sign-in을 지원한다면 반드시 사용자가 sign-in한 직후에 서버에 저장된 최신 값을 이용하여 커스텀 파라미터를 설정해야 합니다. 이는 사용자가 하나의 단말에서 앱을 사용하다 앱을 포즈시켰거나 앱을 강제 종료한 경우에 Nudge SDK와 Nudge 서버 간의 데이터가 싱크되지 않는 문제를 해결하기 위함입니다.
 
 ```java
-public void onCreate() {
-  AdFresca fresca = AdFresca.getInstance(this);     
+public void onSignIn {
+  AdFresca fresca = AdFresca.getInstance(currentActivity);     
+  fresca.signIn("user_id");  // or signInAsGuest(“guest_id”)
   fresca.setCustomParameterValue("level", User.level);
   fresca.setCustomParameterValue("facebook_flag", User.hasFacebookAccount);
-  fresca.startSession();
 }
 ```
 
-커스텀 파라미터의 값이 변경되는 시점 (이벤트 발생 시)에 상태 값을 갱신하거나 횟수를 증가시킵니다.
-  
+또한 커스텀 파라미터의 값이 변경되면 동일한 방법으로 변경된 값을 설정해 주세요.
+
 ```java
-public void onUserLevelChanged(int level) {  
-  AdFresca fresca = AdFresca.getInstance(this);     
-  fresca.setCustomParameterValue("level", level);
-}
-
-public void onGameFinished {
-  AdFresca fresca = AdFresca.getInstance(this);     
-  fresca.incrCustomParameterValue("play_count", 1);
+public void onUserLevelChanged(int level) {
+  AdFresca fresca = AdFresca.getInstance(currentActivity);     
+  fresca.setCustomParameterValue("level", User.level);
 }
 ```
 
-위와 같이 코딩을 마치고 앱을 실행하면 SDK는 저장한 커스텀 파라미터 값을 Nudge 서버로 전송합니다.  Nudge 서버는 활성화된 커스텀 파라미터의 값만을 저장하기 때문에 반드시 [Dashboard](https://dashboard.nudge.do)에 접속하여 해당 커스텀 파라미터를 활성화 (Activate)해야 합니다.
+#### Event Counters
+
+**incrEventCounter** 메소드를 이용해서 특정 이벤트의 횟수를 셀 수 있습니다. 파라미터로는 키 스트링 (Unique Key, 예. "play_count", "winning_streak" 등), 증가된 횟수(옵션. 정수값) 등이 있습니다.
+
+```java
+public void onFinishStage() {
+  AdFresca fresca = AdFresca.getInstance(currentActivity);     
+  fresca.incrEventCounter("play_count");
+  fresca.incrEventCounter("winning_streak", 2); // 2번째 파라미터로 증가된 횟수를 전달할 수 있습니다.
+}
+```
+
+#### Manage Custom Profile Attributes
+
+Nudge SDK는 전달 받은 커스텀 프로화일 속성들을 Nudge 서버로 전송합니다. 하지만 Nudge 서버는 활성화 (activate)된 커스텀 프로화일 속성들의 값만을 저장하기 때문에 반드시 [Dashboard](https://dashboard.nudge.do)에 접속하여 커스텀 파라미터와 이벤트 카운터를 활성화해야 합니다. (커스텀 파라미터와 이벤트 카운터를 합쳐서 최대 20개까지 활성화할 수 있습니다.)
 
 <img src="https://s3-ap-northeast-1.amazonaws.com/file.adfresca.com/guide/sdk/custom_parameter_index.png">
 
- Overview 메뉴 -> Settings - Custom Parameters 버튼을 클릭하면 커스텀 파라미터 목록이 표시됩니다. 해당 커스텀 파라미터의 Unique Key를 찾은 다음, 이름 ('Name')을 입력하고 활성화 (Activate)합니다.
+Overview 메뉴 -> Settings - Custom Profile Attrs 메뉴를 선택하면 커스텀 프로화일 속성의 목록이 표시됩니다. 해당 커스텀 파라미터의 Unique Key를 찾은 다음 이름 ('Name')을 입력하고 "Activate" (활성화) 버튼을 클릭합니다.
 
-#### Stickiness Custom Parameter
+#### Stickiness Event Counters
 
-Stickiness 커스텀 파라미터는 사용자의 stickiness를 측정하기 위해 사용하는 특수한 형태의 커스텀 파라미터입니다. 예를 들어 사용자의 플레이 횟수를 커스텀 파라미터로 지정하고 Stickiness 커스텀 파라미터로 설정하면 해당 사용자의 '오늘 총 플레이 횟수', '최근 7일간의 총 플레이 횟수', '최근 7일간의 일평균 플레이 횟수' 등을 세그먼트 필터로 사용할 수 있습니다. Stickiness 커스텀 파라미터를 이용하면 사용자들의 충성도 (또는 몰입도)에 따라 세그먼트를 나누고 모니터링할 수 있습니다.
+스티키니스 이벤트 카운터는 사용자가 앱에 대해 얼마나 충성도를 가지고 있는지 측정하는 데 사용합니다. 예를 들어 스테이지 기반의 게임에서 "플레이 횟수"를 이용해서 충성도를 측정한다고 하면 스티키니스 이벤트 카운터에서 제공하는 "총 플레이 횟수", "최근 7일간의 총 플레이 횟수", "최근 7일간의 일평균 플레이 횟수" 등의 3가지 필터를 이용하여 충성도에 따라 다른 세그먼트를 생성할 수 있습니다. 이를 이용해서 충성도에 따라 세그먼트를 나누거나 해당 세그먼트의 행동을 실시간으로 모니터링할 수 있습니다.
 
-Stickiness 커스텀 파라미터로 사용하고자 하는 커스텀 파라미터는 반드시 **incrCustomParameterValue** 메소드를 이용해야 합니다.  Stickiness 커스텀 파라미터를 사용하고자 하는 경우 해당 커스텀 파라미터를 활성화한 후 support@nudge.do 로 메일 주시기 바랍니다.
+스티키니스 이벤트 카운터를 사용하고자 하는 경우 해당 이벤트 카운터를 활성화한 후 support@nudge.do로 메일 주시기 바랍니다.
 
 * * *
 
@@ -1085,7 +1086,8 @@ Proguard 툴을 이용하여 APK 파일을 보호하는 경우 몇 가지 예외
 
 ## Troubleshooting
 
-콘텐츠츠 제대로 출력되지 않거나, 에러가 발생한다면 AdExceptionListener 인터페이스를 구현하여, 에러 정보를 확인 할 수 있습니다.
+#### 인-앱 메시지가 노출되지 않거나 에러가 발생하는 경우
+인-앱 메시지가 노출되지 않거나 에러가 발생한다면 AdExceptionListener 인터페이스를 구현하여 에러 정보를 확인할 수 있습니다.
 
 ```java
 AdFresca.setExceptionListener(new AFExceptionListener(){
@@ -1096,10 +1098,17 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 });
 ```
 
+#### Gson 라이브러리 관련 컴파일 에러가 발생하는 경우
+이미 앱에서 Gson 라이브러리를 이용 중인 경우 빌드 시 컴파일 에러가 발생합니다. 이 경우 아래 링크를 통해 Gson을 제거한 SDK를 다운로드 받으세요
+
+[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip)
+
 * * *
 
 ## Release Notes
-- **v2.5.5 _(2016/01/23 Updated)_**
+- **v2.5.6 _(2016/02/27 Updated)_**
+  - incrEventCounter 메소드가 추가되었고 incrCustomParameterValue를 더 이상 지원하지 않습니다. [Custom Profile Attributes](#custom-profile-attributes) 섹션을 참고하세요.
+- v2.5.5 (2016/01/23 Updated)
   - [Give Reward](#give-reward)이 개선되어 지급 완료 확인이 가능해졌습니다. 기존의 OnReward 메소드가 deprecated 되었기 때문에 반드시 새로운 가이드를 참고하여 코드를 변경해야 합니다.
 - v2.4.8
   - [Image Push Notification](#image-push-notification) 전송 시 대쉬보드에 업로드된 이미지를 내려받아 표시하는 기능을 제공합니다.
