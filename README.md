@@ -34,7 +34,7 @@
 
 Download our SDK with the following link:
 
-[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) 
+[Android SDK Download](http://file.nudge.do/distribution/sdk/nudge-sdk-for-Android.zip) 
 
 To add our SDK into your android project, please follow the instructions below:
 
@@ -496,7 +496,7 @@ Nudge SDK provides two tracking methods for custom profile attributes: Custom Pa
 
 You can create segements using custom paramters and/or event counters then target them for campaigns and/or monitor their activities in real time. You can achieve better campaign performance when targeting specific users with more filters. (Nudge SDK collect values of default filters such as device id, language, country, app version, run_count, purchase_count, etc so you don’t need to define those values as custom parameters or event counters.)
 
-**NOTICE**: Please make sure that you set custom parmeters or increase event counters after a user signs in.
+**NOTICE**: Please make sure that you set/increase custom parameters or increase event counters after a user signs in.
 
 #### Custom Parameters
 
@@ -514,21 +514,33 @@ public void onSignIn {
 Please use the same method to update the value whenever its value changes.
 
 ```java
-public void onUserLevelChanged(int level) {
+public void onUserLevelChanged() {
   AdFresca fresca = AdFresca.getInstance(currentActivity);     
   fresca.setCustomParameterValue("level", User.level);
+}
+```
+Or you can increase the value of a custom parameter using **incrCustomParameterValue** method with a ‘Unique Key’ string value and an increment if necessary.
+
+```java
+public void onWinningStreak() {
+  AdFresca fresca = AdFresca.getInstance(currentActivity);     
+  fresca.incrCustomParameterValue("winning_streak");
+}	
+
+public void onResetWinningStreak() {
+  AdFresca fresca = AdFresca.getInstance(currentActivity);     
+  fresca.setCustomParameterValue("winning_streak", 0);
 }
 ```
 
 #### Event Counters
 
-Use **incrEventCounter** method with a ‘Unique Key’ string value (and an increment if necessary.) to count a specific event.
+Event Counters stores a total count of specific events. Use **incrEventCounterValue** method with a ‘Unique Key’ string value and an increment if neccessary. 
 
 ```java
 public void onFinishStage() {
   AdFresca fresca = AdFresca.getInstance(currentActivity);     
-  fresca.incrEventCounter("play_count");
-  fresca.incrEventCounter("winning_streak", 2); // you can pass multiple counts (integer) using the 2nd parameter
+  fresca.incrEventCounterValue("play_count");
 }
 ```
 
@@ -931,12 +943,14 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 #### If you have a compile error related to Gson library
 If you use Gson library in your app you will have a compile error during build. Please use SDK without Gson library using the link below:
 
-[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip)
+[Android SDK Download without Gson Library](http://file.nudge.do/distribution/sdk/nudge-sdk-for-Android-wihtout-gson.zip)
 
 * * *
 
 ## Release Notes
-- **v2.5.6 _(2016/02/27 Updated)_**
+- **v2.5.7 _(2016/03/10 Updated)_**
+  - Renamed incrEventCounter method to **incrEventCounterValue** and revived the deprecated **incrCustomParameterValue** method. 
+- v2.5.6 (2016/02/27 Updated)
   - Added incrEventCounter method and deprecated incrCustomParameterValue. Please refer to [Custom Profile Attributes](#custom-profile-attributes) section.
 - v2.5.5 (2016/01/23 Updated)
   - Added OnRewardClaim and finishRewardClaim methods and onReward has been deprecated. Please refer to [Give Reward](#give-reward) section.
