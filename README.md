@@ -34,7 +34,7 @@
 
 Download our SDK with the following link:
 
-[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip) 
+[Android SDK Download](http://file.nudge.do/distribution/sdk/nudge-sdk-for-Android.zip) 
 
 To add our SDK into your android project, please follow the instructions below:
 
@@ -943,7 +943,7 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 #### If you have a compile error related to Gson library
 If you use Gson library in your app you will have a compile error during build. Please use SDK without Gson library using the link below:
 
-[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip)
+[Android SDK Download without Gson Library](http://file.nudge.do/distribution/sdk/nudge-sdk-for-Android-wihtout-gson.zip)
 
 * * *
 

@@ -36,7 +36,7 @@
 
 아래 링크를 통해 SDK 파일을 다운로드 합니다.
 
-[Android SDK Download](http://file.adfresca.com/distribution/sdk-for-Android.zip)
+[Android SDK Download](http://file.nudge.do/distribution/sdk/nudge-sdk-for-Android.zip) 
 
 SDK를 프로젝트에 설치하기 위하여 아래의 과정을 진행합니다.
 
@@ -1115,7 +1115,7 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 #### Gson 라이브러리 관련 컴파일 에러가 발생하는 경우
 이미 앱에서 Gson 라이브러리를 이용 중인 경우 빌드 시 컴파일 에러가 발생합니다. 이 경우 아래 링크를 통해 Gson을 제거한 SDK를 다운로드 받으세요
 
-[Android SDK Download without Gson Library](http://file.adfresca.com/distribution/sdk-for-Android-wihtout-gson.zip)
+[Android SDK Download without Gson Library](http://file.nudge.do/distribution/sdk/nudge-sdk-for-Android-wihtout-gson.zip)
 
 * * *
 
