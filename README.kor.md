@@ -520,24 +520,38 @@ public void onSignIn {
 }
 ```
 
-또한 커스텀 파라미터의 값이 변경되면 동일한 방법으로 변경된 값을 설정해 주세요.
+커스텀 파라미터의 값이 변경되면 동일한 방법으로 변경된 값을 설정해 주세요.
 
 ```java
-public void onUserLevelChanged(int level) {
+public void onUserLevelChanged() {
   AdFresca fresca = AdFresca.getInstance(currentActivity);     
   fresca.setCustomParameterValue("level", User.level);
 }
 ```
 
+또는 **incrCustomParameterValue** 메소드를 이용하여 값을 증가시킬 수 있습니다. 파라미터로는 키 스트링 (Unique Key), 증가된 횟수 (옵션, 정수값) 등이 있습니다.
+
+```java
+public void onWinningStreak() {
+  AdFresca fresca = AdFresca.getInstance(currentActivity);     
+  fresca.incrCustomParameterValue("winning_streak");
+}
+
+public void onResetWinningStreak() {
+  AdFresca fresca = AdFresca.getInstance(currentActivity);     
+  fresca.setCustomParameterValue("winning_streak", 0);
+}
+```
+
 #### Event Counters
 
-**incrEventCounter** 메소드를 이용해서 특정 이벤트의 횟수를 셀 수 있습니다. 파라미터로는 키 스트링 (Unique Key, 예. "play_count", "winning_streak" 등), 증가된 횟수(옵션. 정수값) 등이 있습니다.
+이벤트 카운터는 특정 이벤트의 횟수를 세어 총 누적값을 저장합니다. **incrEventCounterValue** 메소드를 이용하며 파라미터로는 키 스트링 (Unique Key), 증가된 횟수 (옵션, 정수값) 등이 있습니다.
+
 
 ```java
 public void onFinishStage() {
   AdFresca fresca = AdFresca.getInstance(currentActivity);     
-  fresca.incrEventCounter("play_count");
-  fresca.incrEventCounter("winning_streak", 2); // 2번째 파라미터로 증가된 횟수를 전달할 수 있습니다.
+  fresca.incrEventCounterValue("play_count");
 }
 ```
 
@@ -1106,7 +1120,9 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 * * *
 
 ## Release Notes
-- **v2.5.6 _(2016/02/27 Updated)_**
+- **v2.5.7 _(2016/03/10 Updated)_**
+  - incrEventCounter 메소드가 **incrEventCounterValue** 메소드로 대체되었고 지원하지 않기로 했던 **incrCustomParameterValue** 메소드가 다시 제공됩니다.
+- v2.5.6 (2016/02/27 Updated)
   - incrEventCounter 메소드가 추가되었고 incrCustomParameterValue를 더 이상 지원하지 않습니다. [Custom Profile Attributes](#custom-profile-attributes) 섹션을 참고하세요.
 - v2.5.5 (2016/01/23 Updated)
   - [Give Reward](#give-reward)이 개선되어 지급 완료 확인이 가능해졌습니다. 기존의 OnReward 메소드가 deprecated 되었기 때문에 반드시 새로운 가이드를 참고하여 코드를 변경해야 합니다.
