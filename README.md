@@ -11,6 +11,7 @@
   - [In-App Purchase Tracking](#in-app-purchase-tracking)
   - [Give Reward](#give-reward)
   - [Sales Promotion](#sales-promotion)
+  - [Limited Time Offer](#limited-time-offer)
 - [Dynamic Targeting](#dynamic-targeting)
   - [Custom Profile Attributes](#custom-profile-attributes)
   - [Marketing Moment](#marketing-moment)
@@ -488,6 +489,44 @@ Our SDK will detect if users made a purchase using our [In-App Purchase Tracking
 
 * * *
 
+### Limited Time Offer
+
+You can draw more attention from customers and create a sense of urgency with a limited time offer, which is a special sales promotion of **a hard currency item for a limited time period only**. Nudge SDK will display an interstitial with the remaining time on the top bar and will hide the intersitial when the time is over.
+
+<img src="http://file.nudge.do/guide/sdk/LTO_interstitial_landscape_sample.jpg">
+
+Once a limited time offer is displayed in a marketing moment, it will be no longer available in any marketing moment. You need to use the folllowing code to retreive information on acitve limited time offers and display their interstitials again.
+
+You can retreieve information of active limited time offers with **checkActiveLimitedTimeOffers**, which will return an array of JSON strings with a remaining time and a unique value of the promotion item, sorted by remaining time in ascending order. With these information, you can display the shortest remaining time of an offer (and the number of active limited time offers if neccessary) in the game UI.
+ 
+```java
+
+AdFresca fresca = AdFresca.getInstance(this);
+fresca.checkActiveLimitedTimeOffers(new AFJSONResponseListener(){
+  @Override
+  public void onJSONResponse(String jsonString) {
+    if(jsonString != null) {
+      // Parse JSON strings in the returned array and use them to display the remaining time and the number of active limited time offers if neccessary.
+      // JSON example: [{"remaining_time_in_seconds":1184, "item_unique_value":"item_03"}, ...]      
+    } else {
+ 	  // Nudge SDK will return nil when it fails to retrieve information of active limited time offers. You can re-try or display an error message to a user.
+    }
+  }
+});     
+
+```
+
+You can display one or more interstitials of active limited time offers using **displayActiveLimitedTimeOffers** method and control how many interstitials to display with a count parameter. Nudge SDK will display interstitials of the offers unless their remaining time is over.
+
+```java
+
+AdFresca fresca = AdFresca.getInstance(this);
+fresca.displayActiveLimitedTimeOffers(1);
+
+```
+
+* * *
+
 ## Dynamic Targeting
 
 ### Custom Profile Attributes
@@ -948,7 +987,9 @@ If you use Gson library in your app you will have a compile error during build. 
 * * *
 
 ## Release Notes
-- **v2.5.7 _(2016/03/10 Updated)_**
+- **v2.5.8 _(2016/03/13 Updated)_**
+  - Added [Limited Time Offer](#limited-time-offer) feature.
+- v2.5.7 (2016/03/10 Updated)
   - Renamed incrEventCounter method to **incrEventCounterValue** and revived the deprecated **incrCustomParameterValue** method. 
 - v2.5.6 (2016/02/27 Updated)
   - Added incrEventCounter method and deprecated incrCustomParameterValue. Please refer to [Custom Profile Attributes](#custom-profile-attributes) section.
