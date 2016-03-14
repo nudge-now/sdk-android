@@ -90,7 +90,7 @@ Put startSession() in your first activity class. Please make sure that this meth
 protected void onCreate(Bundle savedInstanceState) {
   ....
   AdFresca.setApiKey(API_KEY);
-  AdFresca.getInstance(this).startSession();
+  AdFresca.getInstance(currentActivity).startSession();
 }
 ```
 
@@ -123,7 +123,7 @@ With in-app messaging, you can deliver a message to targeted users. Simply put '
 ```java
 protected void onCreate(Bundle savedInstanceState) {
   ...
-  AdFresca fresca = AdFresca.getInstance(this);
+  AdFresca fresca = AdFresca.getInstance(currentActivity);
   fresca.load();
   fresca.show();
 }
@@ -182,7 +182,7 @@ Before you start, you need to have your GCM project number from Google API Conso
 3) Set GCM Registration ID
 
 ```java
-AdFresca fresca = AdFresca.getInstance(this);
+AdFresca fresca = AdFresca.getInstance(currentActivity);
 fresca.setPushRegistrationIdentifier("GCM_REGISTRATION_ID_OF_THIS_DEVICE");
 ```
 - If you don't have a GCM registration id yet, please refer to '[How to Get GCM Registration ID](https://gist.github.com/sunku/b47eecee77afe40aa515)'
@@ -232,7 +232,7 @@ To register your test device to our dashboard, you need to know your test device
   - After connecting your device with ADB, you can simply print out test device ID with a logger.
 
   ```java
-  AdFresca fresca = AdFresca.getInstance(this);
+  AdFresca fresca = AdFresca.getInstance(currentActivity);
   Log.d(TAG, "Nudge Test Device ID is = " + fresca.getTestDeviceId());
   ```
 
@@ -242,7 +242,7 @@ To register your test device to our dashboard, you need to know your test device
   - printTestDeviceId property must be set to false when you distribute your app on the store. 
 
   ```java
-  AdFresca fresca = AdFresca.getInstance(this);
+  AdFresca fresca = AdFresca.getInstance(currentActivity);
   fresca.setPrintTestDeviceId(true);
   fresca.load();
   fresca.show();
@@ -349,11 +349,11 @@ public void onSoftItemPurchased(Item item, Date purchasedDate) {
                   .setPrice(item.getPrice()) // 10
                   .build();
   
-  AdFresca.getInstance(this).logPurchase(softPurchase);
+  AdFresca.getInstance(currentActivity).logPurchase(softPurchase);
 }
 
 public void onPurchaseSoftItemFailure() {
-  AdFresca.getInstance(this).cancelPromotionPurchase();
+  AdFresca.getInstance(currentActivity).cancelPromotionPurchase();
 }
 ```
 
@@ -373,7 +373,7 @@ After you call logPurchase() method, the purchase data is updated to our dashboa
 If you can't see any data in our dashboard, your AFPurchase object may be invalid. To check it, you can implement  AFPurchaseExceptionListener and call log logPurchase(purchase, listener) method. 
 
 ```java
-AdFresca.getInstance(this).logPurchase(purchase, new AFPurchaseExceptionListener(){
+AdFresca.getInstance(currentActivity).logPurchase(purchase, new AFPurchaseExceptionListener(){
   public void onException(AFPurchase purchase, AFException e) {
     Log.e(TAG, (purchase == null ? "purchase=null" : purchase.toString()));
     Log.e(TAG, e.getMessage());
@@ -412,7 +412,7 @@ You need to inform Nudge SDK that you have given a reward to a user successfully
 public onRewardClaimSuccess(AFRewardItem item, ...) {
   ....
   String token = item.getRewardToken();
-  AdFresca.getInstance(this).finishRewardClaim(token);
+  AdFresca.getInstance(currentActivity).finishRewardClaim(token);
 }
 ```
 
@@ -501,7 +501,7 @@ You can retreieve information of active limited time offers with **checkActiveLi
  
 ```java
 
-AdFresca fresca = AdFresca.getInstance(this);
+AdFresca fresca = AdFresca.getInstance(currentActivity);
 fresca.checkActiveLimitedTimeOffers(new AFJSONResponseListener(){
   @Override
   public void onJSONResponse(String jsonString) {
@@ -520,7 +520,7 @@ You can display one or more interstitials of active limited time offers using **
 
 ```java
 
-AdFresca fresca = AdFresca.getInstance(this);
+AdFresca fresca = AdFresca.getInstance(currentActivity);
 fresca.displayActiveLimitedTimeOffers(1);
 
 ```
@@ -609,7 +609,7 @@ You will call the method after the moment has happened in the app.
 
 ```java
   public void OnUserDidEnterItemStore() {
-    AdFresca fresca = AdFresca.getInstance(this);
+    AdFresca fresca = AdFresca.getInstance(currentActivity);
     fresca.load(EVENT_INDEX_STORE_PAGE); 
     fresca.show();
   }
@@ -617,7 +617,7 @@ You will call the method after the moment has happened in the app.
   public void onUserLevelChanged(int level) {
     User.level = level
     
-    AdFresca fresca = AdFresca.getInstance(this);     
+    AdFresca fresca = AdFresca.getInstance(currentActivity);     
     fresca.setCustomParameterValue(CUSTOM_PARAM_INDEX_LEVEL, User.level);
     fresca.load(MOMENT_INDEX_LEVEL_UP); 
     fresca.show();
@@ -697,7 +697,7 @@ protected void onCreate(Bundle savedInstanceState) {
   setContentView(R.layout.activity_intro);
   
   AdFresca.setApiKey(API_KEY);
-  AdFresca fresca = AdFresca.getInstance(this);
+  AdFresca fresca = AdFresca.getInstance(currentActivity);
   fresca.startSession();
   fresca.load(EVENT_INDEX_MAIN_PAGE_FOR_BANNER); // load the content for Banner View of Main page
   fresca.load(EVENT_INDEX_MAIN_PAGE_FOR_INTERSTITIAL); // load the content for Interstitial View of Main page
@@ -722,7 +722,7 @@ You can differentiate these 2 cases by `view` that is given by `AFShowListener.s
 - if `view == null`, it was the second case.
 
 ```java
-AdFresca fresca = AdFresca.getInstance(this);
+AdFresca fresca = AdFresca.getInstance(currentActivity);
 fresca.startSession();
 fresca.load(EVENT_INDEX_STAGE_CLEAR);
 fresca.show(new AFShowListener(){
@@ -743,7 +743,7 @@ fresca.show(new AFShowListener(){
 **Example:** The following code shows content at _Intro Activity_ and will move to _Main Activity_ when it is finished.
 
 ```java
-AdFresca fresca = AdFresca.getInstance(this);
+AdFresca fresca = AdFresca.getInstance(currentActivity);
 fresca.startSession();
 fresca.load(EVENT_INDEX_INTRO);
 fresca.show(EVENT_INDEX_INTRO, new AFShowListener(){
@@ -769,7 +769,7 @@ In app codes, override Activity's onResume() method like below:
 public void onResume() {
   super.onResume();
 
-  AdFresca fresca = AdFresca.getInstance(this);
+  AdFresca fresca = AdFresca.getInstance(currentActivity);
   
   if (fresca.getDefaultViewVisibility() == View.VISIBLE && fresca.isUserClickedDefaultView()) {   
     fresca.closeAd();
@@ -784,7 +784,7 @@ You can set a timeout interval for a messaging request. If message is not loaded
 Default is 5 seconds and you can set from 1 seconds to 5 seconds.
 
 ```java
-  AdFresca fresca = AdFresca.getInstance(this);
+  AdFresca fresca = AdFresca.getInstance(currentActivity);
   AdFresca.setTimeoutInterval(5) // # 5 seconds
   fresca.load();
   fresca.show();
@@ -900,7 +900,7 @@ To integrate our SDK with this feature, you should set URL Schema value for the 
     
   ```java
   public void onUserFinishTutorial() {
-    AdFresca fresca = AdFresca.getInstance(this);     
+    AdFresca fresca = AdFresca.getInstance(currentActivity);     
     fresca.load(MOMENT_INDEX_TUTORIAL); 
     fresca.show();
   }
@@ -943,7 +943,7 @@ am broadcast -a com.android.vending.INSTALL_REFERRER -n YOUR_PACKAGE/com.adfresc
 3) Check if referrer was successfully set on our SDK
 
 ```java
-  AdFresca adfresca = AdFresca.getInstance(this);
+  AdFresca adfresca = AdFresca.getInstance(currentActivity);
   Log.v(TAG, "Google Referrer = " + adfresca.getReferrer());
 ``` 
 (Advanced) If you already use another broadcast receiver to handle INSTALL_REFERRER, you can manually set your referrer by calling setReferrer(string) method
