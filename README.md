@@ -485,7 +485,7 @@ AdFresca.setPromotionListener(new AFPromotionListener(){
 ); 
 ```
 
-Our SDK will detect if users made a purchase using our [In-App Purchase Tracking](#in-app-purchase-tracking) features. Therefore, you should implement it to complete this promotion feature. Please make sure that you implement 'cancelPromotionPurchase()' method when the users cancelled or failed to purchase items.
+Nudge SDK detects if a user makes a purchase using our [In-App Purchase Tracking](#in-app-purchase-tracking) feature. For better measurement, you need to implement **cancelPromotionPurchase()** method when the user cancelled during the purchase process or the transaction has failed. 
 
 * * *
 
@@ -497,7 +497,7 @@ You can draw more attention from customers and create a sense of urgency with a 
 
 Once a limited time offer is displayed in a marketing moment, it will be no longer available in any marketing moment. You need to use the folllowing code to retreive information on acitve limited time offers and display their interstitials again.
 
-You can retreieve information of active limited time offers with **checkActiveLimitedTimeOffers**, which will return an array of JSON strings with a remaining time and a unique value of the promotion item, sorted by remaining time in ascending order. With these information, you can display the shortest remaining time of an offer (and the number of active limited time offers if neccessary) in the game UI.
+You can retreieve information of active limited time offers with **checkActiveLimitedTimeOffers**, which will return an array of JSON strings with a remaining time and a unique value of the promotion item, sorted by remaining time in ascending order. With these information, you can display the shortest remaining time of an offer (and a number of active limited time offers if neccessary) in the game UI.
  
 ```java
 
@@ -516,7 +516,7 @@ fresca.checkActiveLimitedTimeOffers(new AFJSONResponseListener(){
 
 ```
 
-You can display one or more interstitials of active limited time offers using **displayActiveLimitedTimeOffers** method and control how many interstitials to display with a count parameter. Nudge SDK will display interstitials of the offers unless their remaining time is over.
+You can display interstitials of active limited time offers using **displayActiveLimitedTimeOffers** method with a count parameter. Nudge SDK will display interstitials of the offers unless their remaining time is over.
 
 ```java
 

@@ -11,6 +11,7 @@
   - [In-App Purchase Tracking](#in-app-purchase-tracking)
   - [Give Reward](#give-reward)
   - [Sales Promotion](#sales-promotion)
+  - [Limited Time Offer](#limited-time-offer)
 - [Dynamic Targeting](#dynamic-targeting)
   - [Custom Profile Attributes](#custom-profile-attributes)
   - [Marketing Moment](#marketing-moment)
@@ -493,7 +494,45 @@ AdFresca.setPromotionListener(new AFPromotionListener(){
 ); 
 ```
 
-SDK가 사용자의 실제 구매 여부를 트랙킹하기 위해서는 [In-App Purchase Tracking](#in-app-purchase-tracking) 기능이 미리 구현되어 있어야 합니다. 특히 사용자가 아이템을 구매를 하지 않거나 실패한 경우를 트랙킹 하기 위하여 cancelPromotionPurchase() 메소드가 반드시 적용되어 있어야 합니다.
+Nudge SDK는 [In-App Purchase Tracking](#in-app-purchase-tracking) 기능을 이용하여 사용자가 특정 캠페인을 통해서 아이템을 구매했는지를 추적합니다. 보다 정확한 측정을 위해, 사용자가 구매를 취소하거나 구매에 실패한 경우를 처리하는 **cancelPromotionPurchase()** 메소드를 구현해 주세요.
+
+* * *
+
+### Limited Time Offer
+
+제한 시간 동안만 구매할 수 있는 '시간 한정 판매' (Limited Time Offer)를 이용해서 사용자들의 관심을 끌거나 긴박감을 조성할 수 있습니다. Nudge SDK는 이미지 상단 바에 잔여 구매 가능 시간을 표시해 주고 시간이 종료하면 자동으로 이미지를 사라지게 합니다.
+
+<img src="http://file.nudge.do/guide/sdk/LTO_interstitial_landscape_sample.jpg">
+
+특정 마케팅 모먼트에서 시간 한정 판매가 한번 노출되면 다른 마케팅 모먼트에서 더 이상 노출되지 않습니다. 따라서 아래 코드를 이용하여 현재 유효한 시간 한정 판매의 정보를 조회하거나 이미지를 노출해야 합니다.
+
+**checkActiveLimitedTimeOffers**를 이용하여 활성화된 시간 한정 판매에 대한 정보를 조회할 수 있습니다. 결과값은 잔여 시간, 프로모션 아이템의 유니크 값으로 구성된 JSON 스트링이며 잔여 시간 오름차순으로 소팅되어 있습니다. 이 정보를 이용하여 게임 UI 상에 가장 짧은 잔여 시간, 활성화된 시간 한정 판매의 수 등을 표시할 수 있습니다.
+ 
+```java
+
+AdFresca fresca = AdFresca.getInstance(currentActivity);
+fresca.checkActiveLimitedTimeOffers(new AFJSONResponseListener(){
+  @Override
+  public void onJSONResponse(String jsonString) {
+    if(jsonString != null) {
+      // Parse JSON strings in the returned array and use them to display the remaining time and the number of active limited time offers if neccessary.
+      // JSON example: [{"remaining_time_in_seconds":1184, "item_unique_value":"item_03"}, ...]      
+    } else {
+ 	  // Nudge SDK will return nil when it fails to retrieve information of active limited time offers. You can re-try or display an error message to a user.
+    }
+  }
+});     
+
+```
+
+**displayActiveLimitedTimeOffers** 메소드를 이용해서 활성화된 시간 한정 판매 이미지를 표시할 수 있으며 카운트 파라미터를 이용해서 몇 개를 표시할지 설정할 수 있습니다. 잔여 구매 가능 시간이 남아 있는 시간 한정 판매의 이미지가 노출됩니다.
+
+```java
+
+AdFresca fresca = AdFresca.getInstance(currentActivity);
+fresca.displayActiveLimitedTimeOffers(1);
+
+```
 
 * * *
 
@@ -1120,7 +1159,9 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 * * *
 
 ## Release Notes
-- **v2.5.7 _(2016/03/10 Updated)_**
+- **v2.5.8 _(2016/03/13 Updated)_**
+  - [Limited Time Offer](#limited-time-offer) 기능이 추가되었습니다.
+- v2.5.7 (2016/03/10 Updated)
   - incrEventCounter 메소드가 **incrEventCounterValue** 메소드로 대체되었고 지원하지 않기로 했던 **incrCustomParameterValue** 메소드가 다시 제공됩니다.
 - v2.5.6 (2016/02/27 Updated)
   - incrEventCounter 메소드가 추가되었고 incrCustomParameterValue를 더 이상 지원하지 않습니다. [Custom Profile Attributes](#custom-profile-attributes) 섹션을 참고하세요.
