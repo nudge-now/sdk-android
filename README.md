@@ -987,7 +987,9 @@ If you use Gson library in your app you will have a compile error during build. 
 * * *
 
 ## Release Notes
-- **v2.5.8 _(2016/03/13 Updated)_**
+- **v2.5.9 _(2016/08/10 Updated)_**
+  - Supports Multivariate Testing for push campaigns. No need to update your code.
+- v2.5.8 (2016/03/13 Updated)
   - Added [Limited Time Offer](#limited-time-offer) feature.
 - v2.5.7 (2016/03/10 Updated)
   - Renamed incrEventCounter method to **incrEventCounterValue** and revived the deprecated **incrCustomParameterValue** method. 
@@ -1006,17 +1008,17 @@ If you use Gson library in your app you will have a compile error during build. 
 - v2.4.5
   - HARD_ITEM and SOFT_ITEM enums are added to AFPurchase class to replace ACTUAL_ITEM and VIRTUAL_ITEM which will be deprecated. Please refer to [In-App Purchase Tracking](#in-app-purchase-tracking) section.
 - v2.4.4
-  - Support A/B Test feature. No SDK cod is required.
+  - Supports A/B Test feature. No need to update your code.
 - v2.4.3 
-  - Support Stickiness Custom Parameter BETA.
+  - Supports Stickiness Custom Parameter BETA.
 - v2.4.2 
-  - Support soft currency item sales promotion campaign with discount options. Please refer to [Sales Promotion](#sales-promotion) section.
+  - Supports soft currency item sales promotion campaign with discount options. Please refer to [Sales Promotion](#sales-promotion) section.
   - SDK will match multiple campaigns and show multiple messages in one marketing moment request.
 - v2.4.1
-  - Support hard currency item sales promotion campaign. Please refer to [Sales Promotion](#sales-promotion) section.
-  - Support security token of reward campaign's hack proof. Please refer to [Give Reward](#give-reward) section.
+  - Supports hard currency item sales promotion campaign. Please refer to [Sales Promotion](#sales-promotion) section.
+  - Supports security token of reward campaign's hack proof. Please refer to [Give Reward](#give-reward) section.
   - Add cancelPromotionPurchase() method to [In-App Purchase Tracking](#in-app-purchase-tracking)
-  - Support tap area feature.
+  - Supports tap area feature.
   - Include IAP Beta features to 2.4.1
 - v2.4.04
   - Include v2.3.4
@@ -1039,9 +1041,9 @@ If you use Gson library in your app you will have a compile error during build. 
 - v2.3.1 
   - When GCM Registration ID is registred or changed, SDK now updates ID value to our service in real-time. (Previous SDKs only updated when app session started)
 - v2.3.0 
-  - Added a support for Baidu Push Notification. English version of Baidu push guide will be updated soon.
+  - Supports Baidu Push Notification. English version of Baidu push guide will be updated soon.
 - v2.2.3
-  - Added a support for title and ticker messages for Pus hNotification Campaign
+  - Supports title and ticker messages for Pus hNotification Campaign
   - Deprecated `AdFresca.generateNotification` method. Use `AdFresca.generateAFPushNotification()` instead
 - v2.2.2 
     - Improved local cache features
@@ -1080,13 +1082,13 @@ If you use Gson library in your app you will have a compile error during build. 
     - Display latest Ad. (It was not available to request while the previous request was in progress.
     - Added `onAdWillLoad` and `onAdClicked` to `AdListener`. You can close Ad when user click Ad.
 - v1.0.1
-    - SDK supports 'Push Notification' feature (See '9. Push Notification Setting' for detail)
+    - Supports 'Push Notification' feature (See '9. Push Notification Setting' for detail)
 - v1.0.0
     - The AD Caching feature is more optimized for better performance.
     - Bug fixed that user was not able to touch AD image when loadAd() and showAd() were called in different activities.
     - setPushRegistrationId() method is added. You can collect user's GCM ID to send a push notification in the near future. (More detailed guide will be available soon)
 - v0.9.9 
-    - SDK supports 'Custom Parameter' feature (See 'Custom Parameter Management')
+    - Supports 'Custom Parameter' feature (See 'Custom Parameter Management')
 - v0.9.8 
     - SDK Performance Improved
     - Bug fixed that onAdClosed() event was called twice after request timed out in specific condition.
@@ -1105,7 +1107,7 @@ If you use Gson library in your app you will have a compile error during build. 
     - AdFrescaView supports a shared object. Developers can use a single shared object and do not need to set API Key in different activities.
     - timeoutInterval property is added. You can set a timeout interval for AD request. If AD is not loaded within the time interval, AD won't be displayed to users.
     - testModeEnabled property is deprecated . All the test mode control will be proceed on our admin website from now on.
-    - SDK supports Android 4.1.
+    - Supports Android 4.1.
 - v0.9.3
     - setIsInAppPurchasedUser(boolean) method is added. You can manage your in-app purchased users with our service.
 - v0.9.2

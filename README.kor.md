@@ -1159,7 +1159,9 @@ AdFresca.setExceptionListener(new AFExceptionListener(){
 * * *
 
 ## Release Notes
-- **v2.5.8 _(2016/03/13 Updated)_**
+- **v2.5.9 _(2016/08/10 Updated)_**
+  - 푸시 캠페인의 다변량 테스트 (Multivariate Test) 기능이 추가되었습니다. 해당 기능은 별도의 코딩 작업 없이 이용 가능합니다.
+- v2.5.8 (2016/03/13 Updated)
   - [Limited Time Offer](#limited-time-offer) 기능이 추가되었습니다.
 - v2.5.7 (2016/03/10 Updated)
   - incrEventCounter 메소드가 **incrEventCounterValue** 메소드로 대체되었고 지원하지 않기로 했던 **incrCustomParameterValue** 메소드가 다시 제공됩니다.
